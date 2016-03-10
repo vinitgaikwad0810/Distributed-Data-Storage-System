@@ -83,6 +83,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		WorkMessage.Builder wb = WorkMessage.newBuilder();
 		wb.setHeader(hb);
 		wb.setBeat(bb);
+		wb.setSecret(1);
 
 		return wb.build();
 	}
