@@ -18,10 +18,10 @@ package gash.router.server.edges;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gash.router.client.CommConnection.ClientClosedListener;
 import gash.router.container.RoutingConf.RoutingEntry;
 import gash.router.server.ServerState;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -52,7 +52,6 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		if (state.getConf().getRouting() != null) {
 			for (RoutingEntry e : state.getConf().getRouting()) {
 				EdgeInfo ei = outboundEdges.addNode(e.getId(), e.getHost(), e.getPort());
-				onAdd(ei);
 			}
 		}
 
@@ -98,6 +97,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 						WorkMessage wm = createHB(ei);
 						ei.getChannel().writeAndFlush(wm);
 					} else {
+						onAdd(ei);
 						// TODO create a client to the node
 						logger.info("trying to connect to node " + ei.getRef());
 					}
@@ -115,14 +115,15 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 	public synchronized void onAdd(EdgeInfo ei) {
 		EventLoopGroup group = new NioEventLoopGroup();
 		Bootstrap b = new Bootstrap();
-		b.group(group).channel(NioSocketChannel.class).handler(si);
+		b.group(group).channel(NioSocketChannel.class);
 		b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
 		b.option(ChannelOption.TCP_NODELAY, true);
 		b.option(ChannelOption.SO_KEEPALIVE, true);
 
 		// Make the connection attempt.
-		channel = b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
-
+		ChannelFuture cf =  b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
+		ei.setChannel(cf.channel());
+		ei.setActive(true);
 	}
 
 	@Override
