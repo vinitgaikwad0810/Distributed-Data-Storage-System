@@ -99,6 +99,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 				for (EdgeInfo ei : this.outboundEdges.map.values()) {
 					if (ei.isActive() && ei.getChannel() != null) {
 						WorkMessage wm = createHB(ei);
+						logger.info("Sent Heartbeat to " + ei.getRef());
 						ei.getChannel().writeAndFlush(wm);
 					} else {
 						onAdd(ei);
