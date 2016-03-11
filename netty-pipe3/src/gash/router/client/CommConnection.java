@@ -130,8 +130,8 @@ public class CommConnection {
 
 		return true;
 	}
-
 	/**
+
 	 * abstraction of notification in the communication
 	 * 
 	 * @param listener

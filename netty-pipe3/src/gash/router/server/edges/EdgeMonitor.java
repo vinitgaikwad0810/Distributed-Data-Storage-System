@@ -100,7 +100,10 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 					if (ei.isActive() && ei.getChannel() != null) {
 						WorkMessage wm = createHB(ei);
 						logger.info("Sent Heartbeat to " + ei.getRef());
-						ei.getChannel().writeAndFlush(wm);
+						ChannelFuture cf = ei.getChannel().writeAndFlush(wm);
+						if (cf.isDone() && !cf.isSuccess()) {
+							logger.error("failed to send message to server");
+						}
 					} else {
 						onAdd(ei);
 						// TODO create a client to the node
@@ -129,8 +132,10 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 
 		// Make the connection attempt.
 		ChannelFuture cf =  b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
+		
 		ei.setChannel(cf.channel());
 		ei.setActive(true);
+		cf.channel().closeFuture();
 	}
 
 	@Override

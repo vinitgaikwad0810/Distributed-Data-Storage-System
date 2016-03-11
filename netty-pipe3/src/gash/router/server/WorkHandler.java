@@ -58,9 +58,10 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 			return;
 		}
 
-		if (debug)
+//		if (debug)
 			PrintUtil.printWork(msg);
-
+		
+		
 		// TODO How can you implement this without if-else statements?
 		try {
 			if (msg.hasBeat()) {
@@ -71,6 +72,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 				boolean p = msg.getPing();
 				WorkMessage.Builder rb = WorkMessage.newBuilder();
 				rb.setPing(true);
+				rb.setSecret(1);
 				channel.write(rb.build());
 			} else if (msg.hasErr()) {
 				Failure err = msg.getErr();
@@ -89,6 +91,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 			eb.setMessage(e.getMessage());
 			WorkMessage.Builder rb = WorkMessage.newBuilder(msg);
 			rb.setErr(eb);
+			rb.setSecret(1);
 			channel.write(rb.build());
 		}
 
@@ -109,6 +112,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, WorkMessage msg) throws Exception {
 		handleMessage(msg, ctx.channel());
+		System.out.println("");
 	}
 
 	@Override
