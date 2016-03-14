@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import gash.router.container.RoutingConf.RoutingEntry;
 import gash.router.server.ServerState;
 import gash.router.server.WorkHandler;
+import gash.router.server.WorkInit;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -33,6 +34,7 @@ import pipe.common.Common.Header;
 import pipe.work.Work.Heartbeat;
 import pipe.work.Work.WorkMessage;
 import pipe.work.Work.WorkState;
+import routing.Pipe.CommandMessage;
 
 public class EdgeMonitor implements EdgeListener, Runnable {
 	protected static Logger logger = LoggerFactory.getLogger("edge monitor");
@@ -68,24 +70,43 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 	}
 
 	private WorkMessage createHB(EdgeInfo ei) {
+//		WorkState.Builder sb = WorkState.newBuilder();
+//		sb.setEnqueued(-1);
+//		sb.setProcessed(-1);
+//
+//		Heartbeat.Builder bb = Heartbeat.newBuilder();
+//		bb.setState(sb);
+//
+//		Header.Builder hb = Header.newBuilder();
+//		hb.setNodeId(state.getConf().getNodeId());
+//		hb.setDestination(-1);
+//		hb.setTime(System.currentTimeMillis());
+//
+//		WorkMessage.Builder wb = WorkMessage.newBuilder();
+//		wb.setHeader(hb);
+//		wb.setBeat(bb);
+//		wb.setSecret(1);
+//
+//		return wb.build();
+
 		WorkState.Builder sb = WorkState.newBuilder();
 		sb.setEnqueued(-1);
 		sb.setProcessed(-1);
-
+		
 		Heartbeat.Builder bb = Heartbeat.newBuilder();
 		bb.setState(sb);
-
+		
 		Header.Builder hb = Header.newBuilder();
-		hb.setNodeId(state.getConf().getNodeId());
-		hb.setDestination(-1);
+		hb.setNodeId(999);
 		hb.setTime(System.currentTimeMillis());
+		hb.setDestination(-1);
 
 		WorkMessage.Builder wb = WorkMessage.newBuilder();
+		wb.setSecret(1);						
 		wb.setHeader(hb);
-		wb.setBeat(bb);
-		wb.setSecret(1);
-
-		return wb.build();
+		wb.setPing(true);
+		
+		return wb.build(); 
 	}
 
 	public void shutdown() {
@@ -125,7 +146,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		Bootstrap b = new Bootstrap();
 		b.handler(new WorkHandler(state));
 		
-		b.group(group).channel(NioSocketChannel.class);
+		b.group(group).channel(NioSocketChannel.class).handler(new WorkInit(state, false));
 		b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
 		b.option(ChannelOption.TCP_NODELAY, true);
 		b.option(ChannelOption.SO_KEEPALIVE, true);
