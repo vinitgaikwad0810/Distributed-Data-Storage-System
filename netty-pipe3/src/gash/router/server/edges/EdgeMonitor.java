@@ -70,43 +70,24 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 	}
 
 	private WorkMessage createHB(EdgeInfo ei) {
-//		WorkState.Builder sb = WorkState.newBuilder();
-//		sb.setEnqueued(-1);
-//		sb.setProcessed(-1);
-//
-//		Heartbeat.Builder bb = Heartbeat.newBuilder();
-//		bb.setState(sb);
-//
-//		Header.Builder hb = Header.newBuilder();
-//		hb.setNodeId(state.getConf().getNodeId());
-//		hb.setDestination(-1);
-//		hb.setTime(System.currentTimeMillis());
-//
-//		WorkMessage.Builder wb = WorkMessage.newBuilder();
-//		wb.setHeader(hb);
-//		wb.setBeat(bb);
-//		wb.setSecret(1);
-//
-//		return wb.build();
-
 		WorkState.Builder sb = WorkState.newBuilder();
 		sb.setEnqueued(-1);
 		sb.setProcessed(-1);
-		
+
 		Heartbeat.Builder bb = Heartbeat.newBuilder();
 		bb.setState(sb);
-		
+
 		Header.Builder hb = Header.newBuilder();
-		hb.setNodeId(999);
-		hb.setTime(System.currentTimeMillis());
+		hb.setNodeId(state.getConf().getNodeId());
 		hb.setDestination(-1);
+		hb.setTime(System.currentTimeMillis());
 
 		WorkMessage.Builder wb = WorkMessage.newBuilder();
-		wb.setSecret(1);						
 		wb.setHeader(hb);
-		wb.setPing(true);
-		
-		return wb.build(); 
+		wb.setBeat(bb);
+		wb.setSecret(1);
+
+		return wb.build();
 	}
 
 	public void shutdown() {
