@@ -20,18 +20,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.ShutdownSignalException;
 
 import gash.router.container.RoutingConf;
 import gash.router.server.edges.EdgeMonitor;
@@ -255,25 +261,66 @@ public class MessageServer {
 		}
 	}
 	
-	public void createQueue() throws IOException {
+	public void createQueue() throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
 		ConnectionFactory factory = new ConnectionFactory();
 	    factory.setHost("localhost");
 	    Connection connection = factory.newConnection();
 	    Channel channel = connection.createChannel();
+	    channel.queueDeclare("inbound_queue", false, false, false, null);	    
+	    channel.basicQos(1);
 
-	    channel.queueDeclare("inbound_queue", false, false, false, null);
-	    
-	    Consumer consumer = new DefaultConsumer(channel) {
-	        @Override
-	        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
-	            throws IOException {
-	        	//TODO keep this byte[] as it is
-	          String message = new String(body, "UTF-8");
-	          System.out.println(" [x] Received '" + message + "'");
-	        }
-	    };
-	    channel.basicConsume("inbound_queue", true, consumer);
-	}
+	    QueueingConsumer consumer = new QueueingConsumer(channel);
+	    channel.basicConsume("inbound_queue", false, consumer);
+	    Map<String, byte[]> map = new HashMap<String, byte[]>();
+	    while (true) {
+	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();	        
+	        BasicProperties props = delivery.getProperties();
+	        String request = props.getType();
+	        if (request != null) {
+	        	if (request.equals("get"))  {
+	        		String key = new String(delivery.getBody());	        		        	
+		        	BasicProperties replyProps = new BasicProperties
+		        	                                     .Builder()
+		        	                                     .correlationId(props.getCorrelationId())
+		        	                                     .build();
+		        	byte[] image = map.get(key);
+		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
+		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+		        }
+		        
+//		        if (headers.get("request_type").equals("put"))  {
+//		        	String key = UUID.randomUUID().toString();
+//		        	map.put(key, delivery.getBody());
+//		        	BasicProperties replyProps = new BasicProperties
+//		        	                                     .Builder()
+//		        	                                     .correlationId(props.getCorrelationId())
+//		        	                                     .build();
+//
+//		        	
+//		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
+//		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
+//		        }
+//		        
+//		        if (headers.get("request_type").equals("delete"))  {
+//		        	
+//		        }
+		        
+		        if (request.equals("post"))  {
+		        	String key = UUID.randomUUID().toString();
+		        	map.put(key, delivery.getBody());
+		        	BasicProperties replyProps = new BasicProperties
+		        	                                     .Builder()
+		        	                                     .correlationId(props.getCorrelationId())
+		        	                                     .build();
+
+		        	
+		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
+		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
+		        }	        
+
+	        }	
+	    }	        
+	 }
 
 	/**
 	 * help with processing the configuration information
