@@ -25,6 +25,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+
 import gash.router.container.RoutingConf;
 import gash.router.server.edges.EdgeMonitor;
 import gash.router.server.tasks.NoOpBalancer;
@@ -62,7 +70,7 @@ public class MessageServer {
 
 	public void release() {
 	}
-
+	
 	public void startServer() {
 		StartWorkCommunication comm = new StartWorkCommunication(conf);
 		logger.info("Work starting");
@@ -70,7 +78,7 @@ public class MessageServer {
 		// We always start the worker in the background
 		Thread cthread = new Thread(comm);
 		cthread.start();
-
+		
 		if (!conf.isInternalNode()) {
 			StartCommandCommunication comm2 = new StartCommandCommunication(conf);
 			logger.info("Command starting");
@@ -230,7 +238,7 @@ public class MessageServer {
 
 				// block until the server socket is closed.
 				f.channel().closeFuture().sync();
-
+				
 			} catch (Exception ex) {
 				// on bind().sync()
 				logger.error("Failed to setup handler.", ex);
@@ -245,6 +253,26 @@ public class MessageServer {
 					emon.shutdown();
 			}
 		}
+	}
+	
+	public void createQueue() throws IOException {
+		ConnectionFactory factory = new ConnectionFactory();
+	    factory.setHost("localhost");
+	    Connection connection = factory.newConnection();
+	    Channel channel = connection.createChannel();
+
+	    channel.queueDeclare("inbound_queue", false, false, false, null);
+	    
+	    Consumer consumer = new DefaultConsumer(channel) {
+	        @Override
+	        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+	            throws IOException {
+	        	//TODO keep this byte[] as it is
+	          String message = new String(body, "UTF-8");
+	          System.out.println(" [x] Received '" + message + "'");
+	        }
+	    };
+	    channel.basicConsume("inbound_queue", true, consumer);
 	}
 
 	/**

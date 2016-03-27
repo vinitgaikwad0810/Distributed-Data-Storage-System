@@ -35,6 +35,7 @@ public class MessageApp {
 		File cf = new File(args[0]);
 		try {
 			MessageServer svr = new MessageServer(cf);
+			svr.createQueue();
 			svr.startServer();
 		} catch (Exception e) {
 			e.printStackTrace();
