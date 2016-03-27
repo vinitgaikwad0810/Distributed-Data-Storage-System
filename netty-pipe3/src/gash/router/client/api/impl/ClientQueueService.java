@@ -38,7 +38,8 @@ public class ClientQueueService {
 	private ClientQueueService() {
 	    try {
 			ConnectionFactory factory = new ConnectionFactory();
-		    factory.setUri(queueURL);
+//		    factory.setUri(queueURL);
+			factory.setHost("localhost");
 	    	connection = factory.newConnection();
 		    channel = connection.createChannel();		    
 		    channel.queueDeclare(inbound_queue, false, false, false, null);
@@ -48,13 +49,14 @@ public class ClientQueueService {
 		    channel.basicConsume(callbackQueueName, true, consumer);
 		} catch (IOException e) {		    
 			e.printStackTrace();
-		} catch (KeyManagementException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		} 
+//	    catch (KeyManagementException e) {
+//			e.printStackTrace();
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//		} catch (URISyntaxException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	private void shutdown() throws IOException {
@@ -62,24 +64,19 @@ public class ClientQueueService {
 	    connection.close();
 	}
 		
-	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException {
-		Map<String, Object> headers = new HashMap<String, Object>();
-		headers.put("request_type", "put");
-		headers.put("key", key);
-		
+	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException {		
 		channel.basicPublish("", inbound_queue, new AMQP.BasicProperties().builder()
-				.headers(headers).build()
+				.type("put")
+				.build()
 				, message.getImageData().toByteArray());
 	}
 	
 	public String postMessage(ImageTransfer.ImageMsg message) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
-		Map<String, Object> headers = new HashMap<String, Object>();
-		headers.put("request_type", "post");
-		
 		String corrId = java.util.UUID.randomUUID().toString();
 
 	    BasicProperties props = new BasicProperties
 	                                .Builder()
+	                                .type("post")
 	                                .correlationId(corrId)
 	                                .replyTo(callbackQueueName)
 	                                .build();
@@ -93,22 +90,23 @@ public class ClientQueueService {
 	    }
 	}
 	
-	public void deleteMessage(ImageTransfer.ImageMsg message) throws IOException {
+	public void deleteMessage(String key) throws IOException {
 		Map<String, Object> headers = new HashMap<String, Object>();
 		headers.put("request_type", "delete");
+		headers.put("key", key);
+		
 		channel.basicPublish("", inbound_queue, new AMQP.BasicProperties().builder()
-				.headers(headers).build()
-				, message.getImageData().toByteArray());
+				.type("delete")
+				.build()
+				, null);
 	}
 	
-	public byte[] getMessage(String key) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
-		
-		Map<String, Object> headers = new HashMap<String, Object>();
-		headers.put("request_type", "get");
+	public byte[] getMessage(String key) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {		
 		String corrId = java.util.UUID.randomUUID().toString();
 
 	    BasicProperties props = new BasicProperties
 	                                .Builder()
+	                                .type("get")
 	                                .correlationId(corrId)
 	                                .replyTo(callbackQueueName)
 	                                .build();
@@ -120,6 +118,5 @@ public class ClientQueueService {
 	            return delivery.getBody();
 	        }
 	    }
-	}
-	
+	}	
 }

@@ -2,11 +2,12 @@ package gash.router.client.api;
 
 public interface ClientAPI {
 
-	public byte[] get(String key);
 	
-	public void put(String key, byte[] data);
-	
-	public String post(byte[] data);
-	
-	public void delete(String key);	
+	void get(String key, String outputPath);
+
+	void put(String key, String imagePath);
+
+	String post(String imagePath);
+
+	void delete(String key);	
 }
