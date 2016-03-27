@@ -4,8 +4,8 @@ import java.util.Map;
 
 public interface DatabaseClient {
 	
-	Map<String, Object> get(String key);
+	byte[] get(byte[] key);
 	
-	void put(String tableName, Map<String, Object> keyValue);
+	byte[] put(byte[] image);//String tableName, Map<String, Object> keyValue);
 	
 }
