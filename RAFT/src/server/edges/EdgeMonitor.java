@@ -31,6 +31,7 @@ import raft.proto.Ping.PingMessage;
 import raft.proto.Work.WorkMessage;
 import router.container.RoutingConf.RoutingEntry;
 import server.ServerState;
+import server.ServerUtils;
 import server.WorkHandler;
 import server.WorkInit;
 
@@ -72,6 +73,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		PingMessage.Builder pingMessage = PingMessage.newBuilder();
 		
 		pingMessage.setNodeId(state.getConf().getNodeId());
+		
 		try {
 			pingMessage.setIP(InetAddress.getLocalHost().getHostAddress());
 			pingMessage.setPort(0000);
@@ -79,6 +81,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 		work.setTrivialPing(pingMessage);
 		
 		return work.build();

@@ -25,6 +25,7 @@ import java.util.Date;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import logger.Logger;
 import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
@@ -66,7 +67,11 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 
 		// TODO How can you implement this without if-else statements?
 		try {
-			if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartbeat()) {
+			if(msg.hasTrivialPing()){
+				Logger.DEBUG(" The node: " + msg.getTrivialPing().getNodeId() + " Is Active to this IP: " + msg.getTrivialPing().getIP());
+			}
+			
+			else if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartbeat()) {
 				System.out.println(
 						"HeartBeatPacket is recieved from " + msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
 				WorkMessage.Builder work = WorkMessage.newBuilder();
