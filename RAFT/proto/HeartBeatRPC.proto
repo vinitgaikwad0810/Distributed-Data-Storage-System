@@ -1,0 +1,54 @@
+import "AppendEntriesRPC.proto";
+
+message HeartBeat{
+	required int32 leaderId = 1;
+	repeated LogEntries logEntries = 2;
+}
+
+message HeartBeatResponse{
+	required int32 nodeId = 1;
+	
+	repeated LogEntries logEntries = 3;
+	
+	enum IsAlive{
+	
+	YES = 1;
+	NO = 2;
+	
+	}
+}
+
+message HeartBeatPacket{
+	required int64 unixTimestamp  = 1;
+	
+	oneof payload {
+		 HeartBeat heartbeat = 2;
+		 HeartBeatResponse heartBeatResponse = 3;	
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

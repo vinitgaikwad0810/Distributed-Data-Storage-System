@@ -1,0 +1,16 @@
+import "AppendEntriesRPC.proto";
+import "HeartBeatRPC.proto";
+import "VoteRPC.proto";	
+
+message WorkMessage{
+
+	required int64 unixTimeStamp = 1;
+	oneof payload{
+	 
+	 AppendEntriesPacket appendEntriesPacket = 2;
+	 HeartBeatPacket heartBeatPacket = 3;
+	 VoteRPCPacket	voteRPCPacket =4;
+	 
+	}
+
+}
