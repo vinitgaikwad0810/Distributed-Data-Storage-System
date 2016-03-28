@@ -70,14 +70,14 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 				System.out.println(
 						"HeartBeatPacket is recieved from " + msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
 				WorkMessage.Builder work = WorkMessage.newBuilder();
-				work.setUnixTimeStamp(getCurrentUnixTimeStamp());
+				work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 				HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
-				heartBeatPacket.setUnixTimestamp(getCurrentUnixTimeStamp());
+				heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 				HeartBeatResponse.Builder heartBeatResponse = HeartBeatResponse.newBuilder();
 				heartBeatResponse.setNodeId(1234);
 				LogEntries.Builder logEntries = LogEntries.newBuilder();
 				logEntries.setKey(1);
-				logEntries.setUnixTimeStamp(getCurrentUnixTimeStamp());
+				logEntries.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 				heartBeatResponse.setLogEntries(0, logEntries);
 				heartBeatPacket.setHeartBeatResponse(heartBeatResponse);
 				work.setHeartBeatPacket(heartBeatPacket);
@@ -120,10 +120,6 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 		ctx.close();
 	}
 
-	public long getCurrentUnixTimeStamp() {
-		long unixTime = System.currentTimeMillis() / 1000L;
-		return unixTime;
-
-	}
+	
 
 }

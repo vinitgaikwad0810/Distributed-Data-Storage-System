@@ -15,29 +15,26 @@
  */
 package server.edges;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import gash.router.container.RoutingConf.RoutingEntry;
-import gash.router.server.ServerState;
-import gash.router.server.WorkHandler;
-import gash.router.server.WorkInit;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import pipe.common.Common.Header;
-import pipe.work.Work.Heartbeat;
-import pipe.work.Work.WorkMessage;
-import pipe.work.Work.WorkState;
-import routing.Pipe.CommandMessage;
+import logger.Logger;
+import raft.proto.Ping;
+import raft.proto.Ping.ping;
+import raft.proto.Work.WorkMessage;
+import router.container.RoutingConf.RoutingEntry;
+import server.ServerState;
+import server.WorkHandler;
+import server.WorkInit;
 
 public class EdgeMonitor implements EdgeListener, Runnable {
-	protected static Logger logger = LoggerFactory.getLogger("edge monitor");
 
 	private EdgeList outboundEdges;
 	private EdgeList inboundEdges;
@@ -69,25 +66,19 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		inboundEdges.createIfNew(ref, host, port);
 	}
 
-	private WorkMessage createHB(EdgeInfo ei) {
-		WorkState.Builder sb = WorkState.newBuilder();
-		sb.setEnqueued(-1);
-		sb.setProcessed(-1);
+	private ping createHB(EdgeInfo ei) {
 
-		Heartbeat.Builder bb = Heartbeat.newBuilder();
-		bb.setState(sb);
+		Ping.ping.Builder ping = Ping.ping.newBuilder();
+		ping.setNodeId(state.getConf().getNodeId());
+		try {
+			ping.setIP(InetAddress.getLocalHost().getHostAddress());
+			ping.setPort(0000);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		Header.Builder hb = Header.newBuilder();
-		hb.setNodeId(state.getConf().getNodeId());
-		hb.setDestination(-1);
-		hb.setTime(System.currentTimeMillis());
-
-		WorkMessage.Builder wb = WorkMessage.newBuilder();
-		wb.setHeader(hb);
-		wb.setBeat(bb);
-		wb.setSecret(1);
-
-		return wb.build();
+		return ping.build();
 	}
 
 	public void shutdown() {
@@ -100,16 +91,17 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 			try {
 				for (EdgeInfo ei : this.outboundEdges.map.values()) {
 					if (ei.isActive() && ei.getChannel() != null) {
-						WorkMessage wm = createHB(ei);
-						logger.info("Sent Heartbeat to " + ei.getRef());
-						ChannelFuture cf = ei.getChannel().writeAndFlush(wm);
+						ping ping = createHB(ei);
+						Logger.DEBUG("Sent Heartbeat to " + ei.getRef());
+						ChannelFuture cf = ei.getChannel().writeAndFlush(ping);
 						if (cf.isDone() && !cf.isSuccess()) {
-							logger.error("failed to send message to server");
+							Logger.DEBUG("failed to send message to server");
 						}
 					} else {
 						onAdd(ei);
+
 						// TODO create a client to the node
-						logger.info("trying to connect to node " + ei.getRef());
+						Logger.DEBUG("Connection made");
 					}
 				}
 
@@ -117,6 +109,9 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
 			}
 		}
 	}
@@ -126,15 +121,15 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		EventLoopGroup group = new NioEventLoopGroup();
 		Bootstrap b = new Bootstrap();
 		b.handler(new WorkHandler(state));
-		
+
 		b.group(group).channel(NioSocketChannel.class).handler(new WorkInit(state, false));
 		b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
 		b.option(ChannelOption.TCP_NODELAY, true);
 		b.option(ChannelOption.SO_KEEPALIVE, true);
 
 		// Make the connection attempt.
-		ChannelFuture cf =  b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
-		
+		ChannelFuture cf = b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
+
 		ei.setChannel(cf.channel());
 		ei.setActive(true);
 		cf.channel().closeFuture();
