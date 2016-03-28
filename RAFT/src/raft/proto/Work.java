@@ -59,6 +59,19 @@ public final class Work {
      * <code>optional .VoteRPCPacket voteRPCPacket = 4;</code>
      */
     VoteRPC.VoteRPCPacketOrBuilder getVoteRPCPacketOrBuilder();
+
+    /**
+     * <code>optional .PingMessage trivialPing = 5;</code>
+     */
+    boolean hasTrivialPing();
+    /**
+     * <code>optional .PingMessage trivialPing = 5;</code>
+     */
+    Ping.PingMessage getTrivialPing();
+    /**
+     * <code>optional .PingMessage trivialPing = 5;</code>
+     */
+    Ping.PingMessageOrBuilder getTrivialPingOrBuilder();
   }
   /**
    * Protobuf type {@code WorkMessage}
@@ -156,6 +169,19 @@ public final class Work {
               payloadCase_ = 4;
               break;
             }
+            case 42: {
+              Ping.PingMessage.Builder subBuilder = null;
+              if (payloadCase_ == 5) {
+                subBuilder = ((Ping.PingMessage) payload_).toBuilder();
+              }
+              payload_ = input.readMessage(Ping.PingMessage.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((Ping.PingMessage) payload_);
+                payload_ = subBuilder.buildPartial();
+              }
+              payloadCase_ = 5;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -203,6 +229,7 @@ public final class Work {
       APPENDENTRIESPACKET(2),
       HEARTBEATPACKET(3),
       VOTERPCPACKET(4),
+      TRIVIALPING(5),
       PAYLOAD_NOT_SET(0);
       private int value = 0;
       private PayloadCase(int value) {
@@ -213,6 +240,7 @@ public final class Work {
           case 2: return APPENDENTRIESPACKET;
           case 3: return HEARTBEATPACKET;
           case 4: return VOTERPCPACKET;
+          case 5: return TRIVIALPING;
           case 0: return PAYLOAD_NOT_SET;
           default: throw new java.lang.IllegalArgumentException(
             "Value is undefined for this oneof enum.");
@@ -322,6 +350,32 @@ public final class Work {
       return VoteRPC.VoteRPCPacket.getDefaultInstance();
     }
 
+    public static final int TRIVIALPING_FIELD_NUMBER = 5;
+    /**
+     * <code>optional .PingMessage trivialPing = 5;</code>
+     */
+    public boolean hasTrivialPing() {
+      return payloadCase_ == 5;
+    }
+    /**
+     * <code>optional .PingMessage trivialPing = 5;</code>
+     */
+    public Ping.PingMessage getTrivialPing() {
+      if (payloadCase_ == 5) {
+         return (Ping.PingMessage) payload_;
+      }
+      return Ping.PingMessage.getDefaultInstance();
+    }
+    /**
+     * <code>optional .PingMessage trivialPing = 5;</code>
+     */
+    public Ping.PingMessageOrBuilder getTrivialPingOrBuilder() {
+      if (payloadCase_ == 5) {
+         return (Ping.PingMessage) payload_;
+      }
+      return Ping.PingMessage.getDefaultInstance();
+    }
+
     private void initFields() {
       unixTimeStamp_ = 0L;
     }
@@ -353,6 +407,12 @@ public final class Work {
           return false;
         }
       }
+      if (hasTrivialPing()) {
+        if (!getTrivialPing().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -371,6 +431,9 @@ public final class Work {
       }
       if (payloadCase_ == 4) {
         output.writeMessage(4, (VoteRPC.VoteRPCPacket) payload_);
+      }
+      if (payloadCase_ == 5) {
+        output.writeMessage(5, (Ping.PingMessage) payload_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -396,6 +459,10 @@ public final class Work {
       if (payloadCase_ == 4) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, (VoteRPC.VoteRPCPacket) payload_);
+      }
+      if (payloadCase_ == 5) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, (Ping.PingMessage) payload_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -571,6 +638,13 @@ public final class Work {
             result.payload_ = voteRPCPacketBuilder_.build();
           }
         }
+        if (payloadCase_ == 5) {
+          if (trivialPingBuilder_ == null) {
+            result.payload_ = payload_;
+          } else {
+            result.payload_ = trivialPingBuilder_.build();
+          }
+        }
         result.bitField0_ = to_bitField0_;
         result.payloadCase_ = payloadCase_;
         onBuilt();
@@ -604,6 +678,10 @@ public final class Work {
             mergeVoteRPCPacket(other.getVoteRPCPacket());
             break;
           }
+          case TRIVIALPING: {
+            mergeTrivialPing(other.getTrivialPing());
+            break;
+          }
           case PAYLOAD_NOT_SET: {
             break;
           }
@@ -631,6 +709,12 @@ public final class Work {
         }
         if (hasVoteRPCPacket()) {
           if (!getVoteRPCPacket().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasTrivialPing()) {
+          if (!getTrivialPing().isInitialized()) {
             
             return false;
           }
@@ -1109,6 +1193,141 @@ public final class Work {
         return voteRPCPacketBuilder_;
       }
 
+      private com.google.protobuf.SingleFieldBuilder<
+          Ping.PingMessage, Ping.PingMessage.Builder, Ping.PingMessageOrBuilder> trivialPingBuilder_;
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public boolean hasTrivialPing() {
+        return payloadCase_ == 5;
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Ping.PingMessage getTrivialPing() {
+        if (trivialPingBuilder_ == null) {
+          if (payloadCase_ == 5) {
+            return (Ping.PingMessage) payload_;
+          }
+          return Ping.PingMessage.getDefaultInstance();
+        } else {
+          if (payloadCase_ == 5) {
+            return trivialPingBuilder_.getMessage();
+          }
+          return Ping.PingMessage.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Builder setTrivialPing(Ping.PingMessage value) {
+        if (trivialPingBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          payload_ = value;
+          onChanged();
+        } else {
+          trivialPingBuilder_.setMessage(value);
+        }
+        payloadCase_ = 5;
+        return this;
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Builder setTrivialPing(
+          Ping.PingMessage.Builder builderForValue) {
+        if (trivialPingBuilder_ == null) {
+          payload_ = builderForValue.build();
+          onChanged();
+        } else {
+          trivialPingBuilder_.setMessage(builderForValue.build());
+        }
+        payloadCase_ = 5;
+        return this;
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Builder mergeTrivialPing(Ping.PingMessage value) {
+        if (trivialPingBuilder_ == null) {
+          if (payloadCase_ == 5 &&
+              payload_ != Ping.PingMessage.getDefaultInstance()) {
+            payload_ = Ping.PingMessage.newBuilder((Ping.PingMessage) payload_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            payload_ = value;
+          }
+          onChanged();
+        } else {
+          if (payloadCase_ == 5) {
+            trivialPingBuilder_.mergeFrom(value);
+          }
+          trivialPingBuilder_.setMessage(value);
+        }
+        payloadCase_ = 5;
+        return this;
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Builder clearTrivialPing() {
+        if (trivialPingBuilder_ == null) {
+          if (payloadCase_ == 5) {
+            payloadCase_ = 0;
+            payload_ = null;
+            onChanged();
+          }
+        } else {
+          if (payloadCase_ == 5) {
+            payloadCase_ = 0;
+            payload_ = null;
+          }
+          trivialPingBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Ping.PingMessage.Builder getTrivialPingBuilder() {
+        return getTrivialPingFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      public Ping.PingMessageOrBuilder getTrivialPingOrBuilder() {
+        if ((payloadCase_ == 5) && (trivialPingBuilder_ != null)) {
+          return trivialPingBuilder_.getMessageOrBuilder();
+        } else {
+          if (payloadCase_ == 5) {
+            return (Ping.PingMessage) payload_;
+          }
+          return Ping.PingMessage.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .PingMessage trivialPing = 5;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          Ping.PingMessage, Ping.PingMessage.Builder, Ping.PingMessageOrBuilder> 
+          getTrivialPingFieldBuilder() {
+        if (trivialPingBuilder_ == null) {
+          if (!(payloadCase_ == 5)) {
+            payload_ = Ping.PingMessage.getDefaultInstance();
+          }
+          trivialPingBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              Ping.PingMessage, Ping.PingMessage.Builder, Ping.PingMessageOrBuilder>(
+                  (Ping.PingMessage) payload_,
+                  getParentForChildren(),
+                  isClean());
+          payload_ = null;
+        }
+        payloadCase_ = 5;
+        return trivialPingBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:WorkMessage)
     }
 
@@ -1135,12 +1354,13 @@ public final class Work {
   static {
     java.lang.String[] descriptorData = {
       "\n\nWork.proto\032\026AppendEntriesRPC.proto\032\022He" +
-      "artBeatRPC.proto\032\rVoteRPC.proto\"\272\001\n\013Work" +
-      "Message\022\025\n\runixTimeStamp\030\001 \002(\003\0223\n\023append" +
-      "EntriesPacket\030\002 \001(\0132\024.AppendEntriesPacke" +
-      "tH\000\022+\n\017heartBeatPacket\030\003 \001(\0132\020.HeartBeat" +
-      "PacketH\000\022\'\n\rvoteRPCPacket\030\004 \001(\0132\016.VoteRP" +
-      "CPacketH\000B\t\n\007payload"
+      "artBeatRPC.proto\032\rVoteRPC.proto\032\nPing.pr" +
+      "oto\"\337\001\n\013WorkMessage\022\025\n\runixTimeStamp\030\001 \002" +
+      "(\003\0223\n\023appendEntriesPacket\030\002 \001(\0132\024.Append" +
+      "EntriesPacketH\000\022+\n\017heartBeatPacket\030\003 \001(\013" +
+      "2\020.HeartBeatPacketH\000\022\'\n\rvoteRPCPacket\030\004 " +
+      "\001(\0132\016.VoteRPCPacketH\000\022#\n\013trivialPing\030\005 \001" +
+      "(\0132\014.PingMessageH\000B\t\n\007payload"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1156,16 +1376,18 @@ public final class Work {
           AppendEntriesRPC.getDescriptor(),
           HeartBeatRPC.getDescriptor(),
           VoteRPC.getDescriptor(),
+          Ping.getDescriptor(),
         }, assigner);
     internal_static_WorkMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_WorkMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_WorkMessage_descriptor,
-        new java.lang.String[] { "UnixTimeStamp", "AppendEntriesPacket", "HeartBeatPacket", "VoteRPCPacket", "Payload", });
+        new java.lang.String[] { "UnixTimeStamp", "AppendEntriesPacket", "HeartBeatPacket", "VoteRPCPacket", "TrivialPing", "Payload", });
     AppendEntriesRPC.getDescriptor();
     HeartBeatRPC.getDescriptor();
     VoteRPC.getDescriptor();
+    Ping.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

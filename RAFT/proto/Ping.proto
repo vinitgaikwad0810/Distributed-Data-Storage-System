@@ -1,4 +1,4 @@
-message ping{
+message PingMessage{
 	required int32 nodeId =1;
 	required string IP = 2;
 	required int32 port =3;

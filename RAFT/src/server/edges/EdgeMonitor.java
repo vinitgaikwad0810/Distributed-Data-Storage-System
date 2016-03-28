@@ -27,7 +27,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import logger.Logger;
 import raft.proto.Ping;
-import raft.proto.Ping.ping;
+import raft.proto.Ping.PingMessage;
 import raft.proto.Work.WorkMessage;
 import router.container.RoutingConf.RoutingEntry;
 import server.ServerState;
@@ -66,19 +66,22 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		inboundEdges.createIfNew(ref, host, port);
 	}
 
-	private ping createHB(EdgeInfo ei) {
+	private WorkMessage createHB(EdgeInfo ei) {
 
-		Ping.ping.Builder ping = Ping.ping.newBuilder();
-		ping.setNodeId(state.getConf().getNodeId());
+		WorkMessage.Builder work = WorkMessage.newBuilder();
+		PingMessage.Builder pingMessage = PingMessage.newBuilder();
+		
+		pingMessage.setNodeId(state.getConf().getNodeId());
 		try {
-			ping.setIP(InetAddress.getLocalHost().getHostAddress());
-			ping.setPort(0000);
+			pingMessage.setIP(InetAddress.getLocalHost().getHostAddress());
+			pingMessage.setPort(0000);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return ping.build();
+		work.setTrivialPing(pingMessage);
+		
+		return work.build();
 	}
 
 	public void shutdown() {
@@ -91,9 +94,9 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 			try {
 				for (EdgeInfo ei : this.outboundEdges.map.values()) {
 					if (ei.isActive() && ei.getChannel() != null) {
-						ping ping = createHB(ei);
+						WorkMessage workMessage = createHB(ei);
 						Logger.DEBUG("Sent Heartbeat to " + ei.getRef());
-						ChannelFuture cf = ei.getChannel().writeAndFlush(ping);
+						ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
 						if (cf.isDone() && !cf.isSuccess()) {
 							Logger.DEBUG("failed to send message to server");
 						}
