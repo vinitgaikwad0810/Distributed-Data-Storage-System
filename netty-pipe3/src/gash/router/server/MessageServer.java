@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
 import gash.router.container.RoutingConf;
+import gash.router.server.db.PostgreSQL;
 import gash.router.server.edges.EdgeMonitor;
 import gash.router.server.tasks.NoOpBalancer;
 import gash.router.server.tasks.TaskList;
@@ -49,10 +51,11 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.internal.SystemPropertyUtil;
 
 public class MessageServer {
 	protected static Logger logger = LoggerFactory.getLogger("server");
-
+	
 	protected static HashMap<Integer, ServerBootstrap> bootstrap = new HashMap<Integer, ServerBootstrap>();
 
 	// public static final String sPort = "port";
@@ -60,6 +63,13 @@ public class MessageServer {
 
 	protected RoutingConf conf;
 	protected boolean background = false;
+	
+	protected String url="jdbc:postgresql://localhost:5432/db275";
+	protected String username="faisal";
+	protected String password="6992";
+	protected String dbname="db275";
+	protected String ssl="false";
+	protected PostgreSQL postgre;
 
 	/**
 	 * initialize the server with a configuration of it's resources
@@ -261,13 +271,14 @@ public class MessageServer {
 		}
 	}
 	
-	public void createQueue() throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
+	public void createQueue() throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException, SQLException {
 		ConnectionFactory factory = new ConnectionFactory();
 	    factory.setHost("localhost");
 	    Connection connection = factory.newConnection();
 	    Channel channel = connection.createChannel();
 	    channel.queueDeclare("inbound_queue", false, false, false, null);	    
 	    channel.basicQos(1);
+		postgre=new PostgreSQL(url, username, password, dbname, ssl);
 
 	    QueueingConsumer consumer = new QueueingConsumer(channel);
 	    channel.basicConsume("inbound_queue", false, consumer);
@@ -283,7 +294,7 @@ public class MessageServer {
 		        	                                     .Builder()
 		        	                                     .correlationId(props.getCorrelationId())
 		        	                                     .build();
-		        	byte[] image = map.get(key);
+		        	byte[] image = postgre.get(key);
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
 		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		        }
@@ -306,8 +317,10 @@ public class MessageServer {
 //		        }
 		        
 		        if (request.equals("post"))  {
-		        	String key = UUID.randomUUID().toString();
-		        	map.put(key, delivery.getBody());
+		        
+		        	//System.out.println(delivery.getBody());
+		        	String key=postgre.put(delivery.getBody());
+		        	//map.put(key, delivery.getBody());
 		        	BasicProperties replyProps = new BasicProperties
 		        	                                     .Builder()
 		        	                                     .correlationId(props.getCorrelationId())
