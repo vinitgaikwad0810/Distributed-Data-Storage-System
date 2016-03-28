@@ -71,9 +71,8 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		PingMessage.Builder pingMessage = PingMessage.newBuilder();
-		
+
 		pingMessage.setNodeId(state.getConf().getNodeId());
-		
 		try {
 			pingMessage.setIP(InetAddress.getLocalHost().getHostAddress());
 			pingMessage.setPort(0000);
@@ -83,7 +82,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		}
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 		work.setTrivialPing(pingMessage);
-		
+
 		return work.build();
 	}
 
@@ -124,6 +123,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 
 	@Override
 	public synchronized void onAdd(EdgeInfo ei) {
+		try{
 		EventLoopGroup group = new NioEventLoopGroup();
 		Bootstrap b = new Bootstrap();
 		b.handler(new WorkHandler(state));
@@ -139,6 +139,13 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		ei.setChannel(cf.channel());
 		ei.setActive(true);
 		cf.channel().closeFuture();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			//Vinit --- > Nullifying the exception so that it further sends the PingMessage
+		}
+		
 	}
 
 	@Override
