@@ -1,5 +1,6 @@
 package gash.router.server.db;
 
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.sql.*;
 import java.sql.Statement;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.util.UUID;
 
 public class PostgreSQL implements DatabaseClient {
 
@@ -24,14 +26,18 @@ public class PostgreSQL implements DatabaseClient {
 	}
 
 	@Override
-	public byte[] get(byte[] key) {
+	public byte[] get(String key) {
 		Statement stmt = null;
+		byte[] image=null; 
+		System.out.println(key);
 		try {
-			String sql="SELECT image FROM testtable where key="+key;
-			ResultSet rs = stmt.executeQuery(sql);
-
+			stmt = conn.createStatement();
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT image FROM testtable where key = \""+key+"\";");
+			ResultSet rs = stmt.executeQuery(sql.toString());
 			while (rs.next()) {
-				//
+				image=rs.getBytes(0);
+				System.out.println("Image found");
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -39,22 +45,22 @@ public class PostgreSQL implements DatabaseClient {
 		} finally {
 			// TODO connection handling
 		}
-
-		return null;
+		return image;
+		
 	}
 
 	@Override
-	public byte[] put(byte[] image){
+	public String put(byte[] image){
 		Statement stmt = null;
-		Random rand=new Random();
-		char images= 'a';//ByteBuffer.allocate(4).putInt(rand.nextInt(200) + 1).array();
-		char keys='s';
-		byte[] key= ByteBuffer.allocate(4).putInt(rand.nextInt(200) + 1).array();
+		//Random rand=new Random();
+		//byte[] key=ByteBuffer.allocate(4).putInt(rand.nextInt(200) + 1).array();
+		String key = UUID.randomUUID().toString();
+		//byte[] key= ByteBuffer.allocate(4).putInt(rand.nextInt(200) + 1).array();
 		try {
 			stmt = conn.createStatement();
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO testtable VALUES ( '");
-			sql.append(keys + "' , '" + images + "' );");
+			sql.append(key + "' , '" + image + "' );");
 			
 			stmt.executeUpdate(sql.toString());
 			
