@@ -36,11 +36,14 @@ public class ImageClient implements ClientAPI{
 			ImageTransfer.ImageMsg.Builder imageMsg = ImageTransfer.ImageMsg.newBuilder();
 			imageMsg.setVersion(1);
 			imageMsg.setImageData(imageReader.getByteString());
-
 			queue.putMessage(key, imageMsg.build());
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}catch (ConsumerCancelledException e) {
+			e.printStackTrace();
+		} catch (ShutdownSignalException e) {
+			e.printStackTrace();
+		}  
 	}
 
 	@Override

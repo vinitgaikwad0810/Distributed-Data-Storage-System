@@ -279,14 +279,15 @@ public class MessageServer {
 	    channel.queueDeclare("inbound_queue", false, false, false, null);	    
 	    channel.basicQos(1);
 		postgre=new PostgreSQL(url, username, password, dbname, ssl);
-
 	    QueueingConsumer consumer = new QueueingConsumer(channel);
 	    channel.basicConsume("inbound_queue", false, consumer);
-	    Map<String, byte[]> map = new HashMap<String, byte[]>();
+//	    Map<String, byte[]> map = new HashMap<String, byte[]>();
 	    while (true) {
-	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();	        
+	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();	 
 	        BasicProperties props = delivery.getProperties();
 	        String request = props.getType();
+	        System.out.println(request);
+
 	        if (request != null) {
 	        	if (request.equals("get"))  {
 	        		String key = new String(delivery.getBody());	        		        	
@@ -299,28 +300,20 @@ public class MessageServer {
 		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		        }
 		        
-//		        if (headers.get("request_type").equals("put"))  {
-//		        	String key = UUID.randomUUID().toString();
-//		        	map.put(key, delivery.getBody());
-//		        	BasicProperties replyProps = new BasicProperties
-//		        	                                     .Builder()
-//		        	                                     .correlationId(props.getCorrelationId())
-//		        	                                     .build();
-//
-//		        	
-//		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
-//		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
-//		        }
-//		        
-//		        if (headers.get("request_type").equals("delete"))  {
-//		        	
-//		        }
-		        
+		        if (request.equals("put"))  {
+		        	byte[] image = delivery.getBody();
+		        	postgre.put(props.getUserId(),image);
+		        	BasicProperties replyProps = new BasicProperties
+		        	                                     .Builder()
+		        	                                     .correlationId(props.getCorrelationId())
+		        	                                     .build();
+
+		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
+		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
+		        }
 		        if (request.equals("post"))  {
-		        
-		        	//System.out.println(delivery.getBody());
-		        	String key=postgre.put(delivery.getBody());
-		        	//map.put(key, delivery.getBody());
+		        System.out.println("Message Server");
+		        	String key=postgre.post(delivery.getBody());
 		        	BasicProperties replyProps = new BasicProperties
 		        	                                     .Builder()
 		        	                                     .correlationId(props.getCorrelationId())
@@ -329,7 +322,11 @@ public class MessageServer {
 		        	
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
 		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
-		        }	        
+		        }
+		        if (request.equals("delete"))  {
+	        		String key = new String(delivery.getBody());
+		        	postgre.delete(key);
+		        }
 
 	        }	
 	    }	        

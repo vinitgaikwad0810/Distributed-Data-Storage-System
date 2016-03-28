@@ -24,7 +24,7 @@ public class ClientQueueService {
 	Connection connection = null;
 	Channel channel = null;	
 	String inbound_queue = "inbound_queue";
-	String queueURL = "amqp://jagruti:linux2015@localhost:5672";
+	String queueURL = "amqp://faisal:6992@localhost:5672";
 	String callbackQueueName = null;
 	QueueingConsumer consumer = null;
 	
@@ -50,13 +50,6 @@ public class ClientQueueService {
 		} catch (IOException e) {		    
 			e.printStackTrace();
 		} 
-//	    catch (KeyManagementException e) {
-//			e.printStackTrace();
-//		} catch (NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		} catch (URISyntaxException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 	private void shutdown() throws IOException {
@@ -65,10 +58,14 @@ public class ClientQueueService {
 	}
 		
 	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException {		
-		channel.basicPublish("", inbound_queue, new AMQP.BasicProperties().builder()
-				.type("put")
-				.build()
-				, message.getImageData().toByteArray());
+	    BasicProperties props = new BasicProperties
+	                                .Builder()
+	                                .type("put")
+	                                .userId(key)
+	                                .replyTo(callbackQueueName)
+	                                .build();
+	    System.out.println("Client Queue Server put");
+		channel.basicPublish("", inbound_queue, props, message.getImageData().toByteArray());
 	}
 	
 	public String postMessage(ImageTransfer.ImageMsg message) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
@@ -80,7 +77,7 @@ public class ClientQueueService {
 	                                .correlationId(corrId)
 	                                .replyTo(callbackQueueName)
 	                                .build();
-		
+	    System.out.println("Client Queue Server post");
 		channel.basicPublish("", inbound_queue, props, message.getImageData().toByteArray());
 		while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
@@ -91,14 +88,13 @@ public class ClientQueueService {
 	}
 	
 	public void deleteMessage(String key) throws IOException {
-		Map<String, Object> headers = new HashMap<String, Object>();
-		headers.put("request_type", "delete");
-		headers.put("key", key);
-		
-		channel.basicPublish("", inbound_queue, new AMQP.BasicProperties().builder()
-				.type("delete")
-				.build()
-				, null);
+		 BasicProperties props = new BasicProperties
+                 .Builder()
+                 .type("delete")
+                 .replyTo(callbackQueueName)
+                 .build();
+
+		 channel.basicPublish("", inbound_queue, props, key.getBytes());
 	}
 	
 	public byte[] getMessage(String key) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {		

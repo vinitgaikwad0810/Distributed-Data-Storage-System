@@ -4,8 +4,12 @@ import java.util.Map;
 
 public interface DatabaseClient {
 	
-	byte[] get(byte[] key);
+	byte[] get(String key);
 	
-	byte[] put(byte[] image);//String tableName, Map<String, Object> keyValue);
+	String post(byte[] image);
+	
+	public void put(String key, byte[] image);
+	
+	public void delete(String key);
 	
 }

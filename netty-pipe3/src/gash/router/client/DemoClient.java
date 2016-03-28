@@ -7,8 +7,16 @@ public class DemoClient {
 	public static void main(String args[]) {		
 		 ImageClient client = new ImageClient();
 		 
-		 String key = client.post("/home/jagruti/Pictures/2_1_after_Assigning_IP.png");
-		 client.get(key, "/home/jagruti/workspace/ProjectFluffy/ImageTransfer/src");
+		 String key = client.post("/home/faisal/image1.jpg");
+		 System.out.println("post done");
+     	 client.get(key, "/home/src");
+		 System.out.println("get done");
+		 client.put(key, "/home/faisal/image1.jpg");
+		 System.out.println("update done");
+		 client.delete(key);
+		 System.out.println("delete done");
+		 
+		 
 		
 	}
 }

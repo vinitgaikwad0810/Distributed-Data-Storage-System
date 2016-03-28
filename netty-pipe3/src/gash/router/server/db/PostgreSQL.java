@@ -32,12 +32,10 @@ public class PostgreSQL implements DatabaseClient {
 		System.out.println(key);
 		try {
 			stmt = conn.createStatement();
-			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT image FROM testtable where key = \""+key+"\";");
-			ResultSet rs = stmt.executeQuery(sql.toString());
+			ResultSet rs = stmt.executeQuery("Select * FROM testtable WHERE \"key\" LIKE '"+key+"'");
+			
 			while (rs.next()) {
-				image=rs.getBytes(0);
-				System.out.println("Image found");
+				image=rs.getBytes(1);
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -50,12 +48,9 @@ public class PostgreSQL implements DatabaseClient {
 	}
 
 	@Override
-	public String put(byte[] image){
+	public String post(byte[] image){
 		Statement stmt = null;
-		//Random rand=new Random();
-		//byte[] key=ByteBuffer.allocate(4).putInt(rand.nextInt(200) + 1).array();
 		String key = UUID.randomUUID().toString();
-		//byte[] key= ByteBuffer.allocate(4).putInt(rand.nextInt(200) + 1).array();
 		try {
 			stmt = conn.createStatement();
 			StringBuilder sql = new StringBuilder();
@@ -71,6 +66,43 @@ public class PostgreSQL implements DatabaseClient {
 			// initiate new everytime
 		}
 		return key;
+	}
+	
+	@Override
+	public void put(String key, byte[] image){
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE testtable SET image= '");
+			sql.append(image + "' WHERE key LIKE '"+key+"';");
+			
+			stmt.executeUpdate(sql.toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// TODO close connection, decide if need to keep open all time or
+			// initiate new everytime
+		}
+	}
+	
+	@Override
+	public void delete(String key){
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM testtable WHERE key LIKE '"+key+"';");
+			
+			stmt.executeUpdate(sql.toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// TODO close connection, decide if need to keep open all time or
+			// initiate new everytime
+		}
 	}
 
 }
