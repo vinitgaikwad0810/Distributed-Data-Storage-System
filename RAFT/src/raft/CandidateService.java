@@ -142,9 +142,7 @@ public class CandidateService extends Service implements Runnable {
 		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
 		
 		NodeState.getInstance().setState(NodeState.FOLLOWER);
-		
-/*
-		*/
+
 
 	}
 

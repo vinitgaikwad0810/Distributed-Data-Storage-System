@@ -13,7 +13,7 @@ public class ServerUtils {
 	
 	public static long getElectionTimeout(){
 		Random random = new Random();
-		long variableTimeout= random.nextInt((int) ((10000L - 1000L)+1L))+1000L;
+		long variableTimeout= random.nextInt((int) ((10000L - 1000L)+1L))+1000L + 10000L;
 		long currentTimeout = 60000L + (long) variableTimeout;
 		return currentTimeout;
 		

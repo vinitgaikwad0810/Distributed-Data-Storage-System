@@ -74,7 +74,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 						+ msg.getTrivialPing().getIP());
 			} else if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartbeat()) {
 				System.out.println(
-						"HeartBeatPacket is recieved from " + msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
+						"Ping recieved from " + msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
 				
 				WorkMessage.Builder work = WorkMessage.newBuilder();
 				work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());

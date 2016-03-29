@@ -90,7 +90,7 @@ public class FollowerService extends Service implements Runnable {
 	public void handleHeartBeat(WorkMessage wm)
 	{
 		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
-
+		onReceivingHeartBeatPacket();
 		WorkMessage heartBeatResponse = prepareHeartBeatResponse();
 
 		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
