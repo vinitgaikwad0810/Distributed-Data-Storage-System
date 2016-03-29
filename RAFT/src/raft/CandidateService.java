@@ -19,6 +19,7 @@ public class CandidateService extends Service implements Runnable {
 	private static CandidateService INSTANCE = null;
 	private int numberOfYESResponses;
 	private int TotalResponses;
+	NodeTimer timer = new NodeTimer();
 
 	private CandidateService() {
 		// TODO Auto-generated constructor stub
@@ -56,7 +57,6 @@ public class CandidateService extends Service implements Runnable {
 			}
 		}
 
-		NodeTimer timer = new NodeTimer();
 
 		timer.schedule(new Runnable() {
 			@Override
@@ -175,6 +175,7 @@ public class CandidateService extends Service implements Runnable {
 	}
 
 	public void stopService() {
+		timer.cancel();
 		running = Boolean.FALSE;
 
 	}
