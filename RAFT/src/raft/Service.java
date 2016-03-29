@@ -28,8 +28,16 @@ public  class Service {
 		return null;
 	}
 
+	public  void sendHeartBeat(){
+		
+	}
 	
-
+	
+	public void handleHeartBeat(WorkMessage wm)
+	{
+		
+		
+	}
 
 	
 }

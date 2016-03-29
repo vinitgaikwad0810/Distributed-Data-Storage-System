@@ -2,6 +2,9 @@ package raft;
 
 import logger.Logger;
 import node.timer.NodeTimer;
+import raft.proto.AppendEntriesRPC.LogEntries;
+import raft.proto.HeartBeatRPC.HeartBeat;
+import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
@@ -82,6 +85,12 @@ public class FollowerService extends Service implements Runnable {
 		
 	}
 
+	public WorkMessage handleHeartBeat(WorkMessage wm)
+	{
+		return null;
+		
+	}
+	
 	@Override
 	public void startService(Service service) {
 

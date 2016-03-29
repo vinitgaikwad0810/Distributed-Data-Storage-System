@@ -75,7 +75,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 		inboundEdges.createIfNew(ref, host, port);
 	}
 
-	private WorkMessage createHB(EdgeInfo ei) {
+	private WorkMessage createPingMessage(EdgeInfo ei) {
 
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		PingMessage.Builder pingMessage = PingMessage.newBuilder();
@@ -104,7 +104,7 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 			try {
 				for (EdgeInfo ei : this.outboundEdges.map.values()) {
 					if (ei.isActive() && ei.getChannel() != null) {
-						WorkMessage workMessage = createHB(ei);
+						WorkMessage workMessage = createPingMessage(ei);
 						Logger.DEBUG("Sent Heartbeat to " + ei.getRef());
 						ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
 						if (cf.isDone() && !cf.isSuccess()) {

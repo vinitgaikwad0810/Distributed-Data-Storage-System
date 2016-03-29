@@ -4,6 +4,9 @@ import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import node.timer.NodeTimer;
 import raft.proto.AppendEntriesRPC.LogEntries;
+import raft.proto.HeartBeatRPC.HeartBeat;
+import raft.proto.HeartBeatRPC.HeartBeatPacket;
+import raft.proto.HeartBeatRPC.HeartBeatResponse;
 import raft.proto.VoteRPC.RequestVoteRPC;
 import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
@@ -91,7 +94,8 @@ public class CandidateService extends Service implements Runnable {
 		logEntries.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 		logEntries.setKey(1234);
 
-		requestVoteRPC.setLogEntries(0, logEntries.build());
+		requestVoteRPC.addLogEntriesBuilder(0);
+		requestVoteRPC.setLogEntries(0, logEntries);
 
 		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
 		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -131,6 +135,52 @@ public class CandidateService extends Service implements Runnable {
 
 		return work.build();
 
+	}
+
+	@Override
+	public void handleHeartBeat(WorkMessage wm) {
+		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
+		
+		NodeState.getInstance().setState(NodeState.FOLLOWER);
+		
+/*
+		WorkMessage heartBeatResponse = prepareHeartBeatResponse();
+
+		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
+
+			if (ei.isActive() && ei.getChannel() != null
+					&& ei.getRef() == wm.getHeartBeatPacket().getHeartbeat().getLeaderId()) {
+
+				Logger.DEBUG("Sent HeartBeatResponse to " + ei.getRef());
+				ChannelFuture cf = ei.getChannel().writeAndFlush(heartBeatResponse);
+				if (cf.isDone() && !cf.isSuccess()) {
+					Logger.DEBUG("failed to send message (HeartBeatResponse) to server");
+				}
+			}
+		}*/
+
+	}
+
+	public WorkMessage prepareHeartBeatResponse() {
+		WorkMessage.Builder work = WorkMessage.newBuilder();
+		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
+		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
+
+		LogEntries.Builder logEntry = LogEntries.newBuilder();
+		logEntry.setKey(1);
+		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		heartbeatResponse.addLogEntries(logEntry);
+
+		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
+		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
+		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
+
+		work.setHeartBeatPacket(heartBeatPacket);
+
+		return work.build();
 	}
 
 	public void startService(Service service) {
