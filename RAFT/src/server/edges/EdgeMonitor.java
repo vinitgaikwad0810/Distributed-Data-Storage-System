@@ -105,10 +105,10 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 				for (EdgeInfo ei : this.outboundEdges.map.values()) {
 					if (ei.isActive() && ei.getChannel() != null) {
 						WorkMessage workMessage = createPingMessage(ei);
-						Logger.DEBUG("Sent Heartbeat to " + ei.getRef());
+						Logger.DEBUG("Sent Ping Message to " + ei.getRef());
 						ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
 						if (cf.isDone() && !cf.isSuccess()) {
-							Logger.DEBUG("failed to send message to server");
+							Logger.DEBUG("failed to send Ping Message  to server");
 						}
 					} else {
 						onAdd(ei);
