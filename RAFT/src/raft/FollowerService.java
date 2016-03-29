@@ -3,6 +3,9 @@ package raft;
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import node.timer.NodeTimer;
+import raft.proto.AppendEntriesRPC.LogEntries;
+import raft.proto.HeartBeatRPC.HeartBeatPacket;
+import raft.proto.HeartBeatRPC.HeartBeatResponse;
 import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
@@ -105,6 +108,29 @@ public class FollowerService extends Service implements Runnable {
 		
 		
 	}
+	
+	public WorkMessage prepareHeartBeatResponse() {
+		WorkMessage.Builder work = WorkMessage.newBuilder();
+		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
+		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
+
+		LogEntries.Builder logEntry = LogEntries.newBuilder();
+		logEntry.setKey(1);
+		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		heartbeatResponse.addLogEntries(logEntry);
+
+		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
+		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
+		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
+
+		work.setHeartBeatPacket(heartBeatPacket);
+
+		return work.build();
+	}
+
 	
 	@Override
 	public void startService(Service service) {
