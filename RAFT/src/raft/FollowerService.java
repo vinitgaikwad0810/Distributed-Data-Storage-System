@@ -1,14 +1,13 @@
 package raft;
 
+import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import node.timer.NodeTimer;
-import raft.proto.AppendEntriesRPC.LogEntries;
-import raft.proto.HeartBeatRPC.HeartBeat;
-import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
 import server.ServerUtils;
+import server.edges.EdgeInfo;
 
 public class FollowerService extends Service implements Runnable {
 
@@ -85,9 +84,25 @@ public class FollowerService extends Service implements Runnable {
 		
 	}
 
-	public WorkMessage handleHeartBeat(WorkMessage wm)
+	public void handleHeartBeat(WorkMessage wm)
 	{
-		return null;
+		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
+
+		WorkMessage heartBeatResponse = prepareHeartBeatResponse();
+
+		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
+
+			if (ei.isActive() && ei.getChannel() != null
+					&& ei.getRef() == wm.getHeartBeatPacket().getHeartbeat().getLeaderId()) {
+
+				Logger.DEBUG("Sent HeartBeatResponse to " + ei.getRef());
+				ChannelFuture cf = ei.getChannel().writeAndFlush(heartBeatResponse);
+				if (cf.isDone() && !cf.isSuccess()) {
+					Logger.DEBUG("failed to send message (HeartBeatResponse) to server");
+				}
+			}
+		}
+		
 		
 	}
 	

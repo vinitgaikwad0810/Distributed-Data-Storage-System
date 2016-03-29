@@ -144,20 +144,7 @@ public class CandidateService extends Service implements Runnable {
 		NodeState.getInstance().setState(NodeState.FOLLOWER);
 		
 /*
-		WorkMessage heartBeatResponse = prepareHeartBeatResponse();
-
-		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
-
-			if (ei.isActive() && ei.getChannel() != null
-					&& ei.getRef() == wm.getHeartBeatPacket().getHeartbeat().getLeaderId()) {
-
-				Logger.DEBUG("Sent HeartBeatResponse to " + ei.getRef());
-				ChannelFuture cf = ei.getChannel().writeAndFlush(heartBeatResponse);
-				if (cf.isDone() && !cf.isSuccess()) {
-					Logger.DEBUG("failed to send message (HeartBeatResponse) to server");
-				}
-			}
-		}*/
+		*/
 
 	}
 
