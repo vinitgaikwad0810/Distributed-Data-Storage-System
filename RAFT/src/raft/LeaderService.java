@@ -1,10 +1,40 @@
 package raft;
 
-public class LeaderService implements Runnable{
+import logger.Logger;
+
+public class LeaderService extends Service implements Runnable {
+
+	private static LeaderService INSTANCE = null;
+
+	private LeaderService() {
+		// TODO Auto-generated constructor stub
+
+	}
+
+	public static LeaderService getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new LeaderService();
+		}
+		return INSTANCE;
+	}
 
 	@Override
 	public void run() {
-		System.out.println("Leader Service Started");
+		Logger.DEBUG("Leader Service Started");
+		while (running) {
+
+		}
+	}
+
+	public void startService(Service service) {
+		running = Boolean.TRUE;
+		cthread = new Thread((LeaderService) service);
+		cthread.start();
+	}
+
+	public void stopService() {
+		running = Boolean.FALSE;
+
 	}
 
 }

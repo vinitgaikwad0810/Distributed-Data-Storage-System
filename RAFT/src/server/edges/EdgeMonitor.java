@@ -37,6 +37,14 @@ import server.WorkInit;
 
 public class EdgeMonitor implements EdgeListener, Runnable {
 
+	public EdgeList getOutboundEdges() {
+		return outboundEdges;
+	}
+
+	public EdgeList getInboundEdges() {
+		return inboundEdges;
+	}
+
 	private EdgeList outboundEdges;
 	private EdgeList inboundEdges;
 	private long dt = 2000;
@@ -106,7 +114,8 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 						onAdd(ei);
 
 						// TODO create a client to the node
-						Logger.DEBUG("Connection made");
+						// Logger.DEBUG("Connection made 1234" +
+						// ei.getChannel().config().hashCode());
 					}
 				}
 
@@ -123,29 +132,28 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 
 	@Override
 	public synchronized void onAdd(EdgeInfo ei) {
-		try{
-		EventLoopGroup group = new NioEventLoopGroup();
-		Bootstrap b = new Bootstrap();
-		b.handler(new WorkHandler(state));
+		try {
+			EventLoopGroup group = new NioEventLoopGroup();
+			Bootstrap b = new Bootstrap();
+			b.handler(new WorkHandler(state));
 
-		b.group(group).channel(NioSocketChannel.class).handler(new WorkInit(state, false));
-		b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-		b.option(ChannelOption.TCP_NODELAY, true);
-		b.option(ChannelOption.SO_KEEPALIVE, true);
+			b.group(group).channel(NioSocketChannel.class).handler(new WorkInit(state, false));
+			b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
+			b.option(ChannelOption.TCP_NODELAY, true);
+			b.option(ChannelOption.SO_KEEPALIVE, true);
 
-		// Make the connection attempt.
-		ChannelFuture cf = b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
+			// Make the connection attempt.
+			ChannelFuture cf = b.connect(ei.getHost(), ei.getPort()).syncUninterruptibly();
 
-		ei.setChannel(cf.channel());
-		ei.setActive(true);
-		cf.channel().closeFuture();
-		}
-		catch(Exception ex)
-		{
+			ei.setChannel(cf.channel());
+			ei.setActive(true);
+			cf.channel().closeFuture();
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			//Vinit --- > Nullifying the exception so that it further sends the PingMessage
+			// Vinit --- > Nullifying the exception so that it further sends the
+			// PingMessage
 		}
-		
+
 	}
 
 	@Override

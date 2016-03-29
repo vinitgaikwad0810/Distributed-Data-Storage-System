@@ -8,6 +8,8 @@ public class ServerState {
 	private EdgeMonitor emon;
 //	private TaskList tasks;
 
+
+	
 	public RoutingConf getConf() {
 		return conf;
 	}

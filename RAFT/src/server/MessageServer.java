@@ -30,6 +30,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import logger.Logger;
+import raft.CandidateService;
+import raft.NodeState;
 import router.container.RoutingConf;
 import server.edges.EdgeMonitor;
 
@@ -113,6 +115,12 @@ public class MessageServer {
 				}
 			}
 		}
+		
+		//LEADER ELECTION
+		NodeState.getInstance().setState(NodeState.FOLLOWER);
+		
+		
+		
 	}
 
 	private boolean verifyConf(RoutingConf conf) {
@@ -195,6 +203,11 @@ public class MessageServer {
 		//	state.setTasks(tasks);
 			
 			EdgeMonitor emon = new EdgeMonitor(state);
+			
+			//LEADER ELECTION
+			NodeState.getInstance().setServerState(state);
+			
+			// 
 			Thread t = new Thread(emon);
 			t.start();
 		}

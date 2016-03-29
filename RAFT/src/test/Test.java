@@ -1,11 +1,14 @@
 package test;
 
+import logger.Logger;
 import node.timer.NodeTimer;
 import raft.CandidateService;
 import raft.NodeState;
+import server.ServerUtils;
 
 public class Test {
 	public static void main(String args[]) {
+	
 		NodeTimer timer = new NodeTimer();
 		
 		System.out.println("Before updating state" + System.currentTimeMillis());
@@ -13,10 +16,10 @@ public class Test {
 			@Override
 			public void run() {				
 				NodeState.getInstance().setState(NodeState.CANDIDATE);;
-				Thread candidateThread = new Thread(new CandidateService());
+				Thread candidateThread = new Thread(CandidateService.getInstance());
 				candidateThread.start();
 			}			
-		}, 1000);
+		}, ServerUtils.getElectionTimeout());
 		
 		try {
             Thread.sleep(12000);

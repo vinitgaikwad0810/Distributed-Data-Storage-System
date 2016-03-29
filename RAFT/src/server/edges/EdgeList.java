@@ -20,6 +20,10 @@ import java.util.HashMap;
 public class EdgeList {
 	protected HashMap<Integer, EdgeInfo> map = new HashMap<Integer, EdgeInfo>();
 
+	public HashMap<Integer, EdgeInfo> getMap() {
+		return map;
+	}
+
 	public EdgeList() {
 	}
 
