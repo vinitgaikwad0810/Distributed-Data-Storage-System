@@ -6,11 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
 public class PostgreSQL implements DatabaseClient {
-
 	Connection conn = null;
 
 	public PostgreSQL(String url, String username, String password, String dbname, String ssl) throws SQLException {
@@ -40,18 +41,61 @@ public class PostgreSQL implements DatabaseClient {
 		} finally {
 			// TODO connection handling
 		}
-		return image;
-		
+		return image;		
 	}
 
 	@Override
-	public String post(byte[] image){
+	public List<Record> getNewEntries(long staleTimestamp) {
+		Statement stmt = null;
+		List<Record> list = new ArrayList<Record>();
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select key, image, timestamp FROM testtable where timestamp > " + staleTimestamp);
+			
+			while (rs.next()) {
+				list.add(new Record(rs.getString(1), rs.getBytes(2), rs.getLong(3)));
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// TODO connection handling
+		}
+		return list;		
+	}
+
+
+	
+	@Override
+	public long getCurrentTimeStamp() {
+		Statement stmt = null;
+		long timestamp = 0; 
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select max(timestamp) FROM testtable");
+			
+			while (rs.next()) {
+				timestamp = rs.getLong(1);
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// TODO connection handling
+		}
+		return timestamp;		
+	}
+
+	
+	@Override
+	public String post(byte[] image, long timestamp){
 		String key = UUID.randomUUID().toString();
 		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement("INSERT INTO testtable VALUES ( ?, ?)");
+			ps = conn.prepareStatement("INSERT INTO testtable VALUES ( ?, ?, ?)");
 			ps.setString(1, key);
 			ps.setBytes(2, image);
+			ps.setLong(3, timestamp);
 			ResultSet set = ps.executeQuery();
 			
 		} catch (SQLException e) {
@@ -65,44 +109,38 @@ public class PostgreSQL implements DatabaseClient {
 			}
 		}
 		
-//		Statement stmt = null;
-//		String key = UUID.randomUUID().toString();
-//		try {
-//			stmt = conn.createStatement();
-//			StringBuilder sql = new StringBuilder();
-//			sql.append("INSERT INTO testtable VALUES ( '");
-//			sql.append(key + "' , '" + image + "' );");
-//			
-//			stmt.executeUpdate(sql.toString());
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			// TODO close connection, decide if need to keep open all time or
-//			// initiate new everytime
-//			ps.close();
-//		}
 		return key;
 	}
 	
 	@Override
-	public void put(String key, byte[] image){
-		Statement stmt = null;
+	public void put(String key, byte[] image, long timestamp){		
+		PreparedStatement ps = null;
 		try {
-			stmt = conn.createStatement();
-			StringBuilder sql = new StringBuilder();
-			sql.append("UPDATE testtable SET image= '");
-			sql.append(image + "' WHERE key LIKE '"+key+"';");
+			ps = conn.prepareStatement("UPDATE testtable SET image= ? , timestamp = ?  WHERE key LIKE ?");
+			ps.setBytes(1, image);
+			ps.setLong(2, timestamp);
+			ps.setString(3, key);
+			ResultSet set = ps.executeQuery();
 			
-			stmt.executeUpdate(sql.toString());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			//TODO handle exception if no result
 		} finally {
-			// TODO close connection, decide if need to keep open all time or
-			// initiate new everytime
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
+
+	@Override
+	public void putEntries(List<Record> list){		
+			for (Record record : list) {
+				put(record.getKey(), record.getImage(), record.getTimestamp());
+			}
+	}
+
 	
 	@Override
 	public void delete(String key){
@@ -110,8 +148,7 @@ public class PostgreSQL implements DatabaseClient {
 		try {
 			stmt = conn.createStatement();
 			StringBuilder sql = new StringBuilder();
-			sql.append("DELETE FROM testtable WHERE key LIKE '"+key+"';");
-			
+			sql.append("DELETE FROM testtable WHERE key LIKE '"+key+"';");			
 			stmt.executeUpdate(sql.toString());
 			
 		} catch (Exception e) {
