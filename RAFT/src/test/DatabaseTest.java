@@ -1,5 +1,6 @@
 package test;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 import server.db.PostgreSQL;
@@ -7,8 +8,8 @@ import server.db.PostgreSQL;
 public class DatabaseTest {
 	protected PostgreSQL postgre;
 	protected String url="jdbc:postgresql://localhost:5432/db275";
-	protected String username="faisal";
-	protected String password="6992";
+	protected String username="jagruti";
+	protected String password="linux2015";
 	protected String dbname="db275";
 	protected String ssl="false";
 	
@@ -40,8 +41,13 @@ public class DatabaseTest {
 		DatabaseTest db = new DatabaseTest();
 		String key = db.post("abc");
 		System.out.println("key:" + key);
-		System.out.println(db.get(key));
-		
+		byte[] byteArray = db.get(key);
+		try {
+			System.out.println(new String(byteArray, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
 	

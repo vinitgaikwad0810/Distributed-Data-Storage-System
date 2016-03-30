@@ -2,6 +2,7 @@ package server.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,7 +29,7 @@ public class PostgreSQL implements DatabaseClient {
 		System.out.println(key);
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * FROM testtable WHERE \"key\" LIKE '"+key+"'");
+			ResultSet rs = stmt.executeQuery("Select image FROM testtable WHERE \"key\" LIKE '"+key+"'");
 			
 			while (rs.next()) {
 				image=rs.getBytes(1);
@@ -45,22 +46,42 @@ public class PostgreSQL implements DatabaseClient {
 
 	@Override
 	public String post(byte[] image){
-		Statement stmt = null;
 		String key = UUID.randomUUID().toString();
+		PreparedStatement ps = null;
 		try {
-			stmt = conn.createStatement();
-			StringBuilder sql = new StringBuilder();
-			sql.append("INSERT INTO testtable VALUES ( '");
-			sql.append(key + "' , '" + image + "' );");
+			ps = conn.prepareStatement("INSERT INTO testtable VALUES ( ?, ?)");
+			ps.setString(1, key);
+			ps.setBytes(2, image);
+			ResultSet set = ps.executeQuery();
 			
-			stmt.executeUpdate(sql.toString());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			//TODO handle exception if no result
 		} finally {
-			// TODO close connection, decide if need to keep open all time or
-			// initiate new everytime
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
+		
+//		Statement stmt = null;
+//		String key = UUID.randomUUID().toString();
+//		try {
+//			stmt = conn.createStatement();
+//			StringBuilder sql = new StringBuilder();
+//			sql.append("INSERT INTO testtable VALUES ( '");
+//			sql.append(key + "' , '" + image + "' );");
+//			
+//			stmt.executeUpdate(sql.toString());
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			// TODO close connection, decide if need to keep open all time or
+//			// initiate new everytime
+//			ps.close();
+//		}
 		return key;
 	}
 	
