@@ -40,6 +40,10 @@ public  class Service {
 		
 		
 	}
+	
+	public void handleAppendEntries(WorkMessage wm){
+		
+	}
 
 	
 }

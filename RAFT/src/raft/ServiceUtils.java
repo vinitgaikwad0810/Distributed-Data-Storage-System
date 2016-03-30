@@ -29,7 +29,7 @@ public class ServiceUtils {
 
 		LogEntries.Builder logEntries = LogEntries.newBuilder();
 		logEntries.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-		logEntries.setKey(1234);
+		logEntries.setKey("1234");
 
 		requestVoteRPC.addLogEntriesBuilder(0);
 		requestVoteRPC.setLogEntries(0, logEntries);
@@ -72,7 +72,7 @@ public class ServiceUtils {
 		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
 
 		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey(1);
+		logEntry.setKey("1");
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		heartbeatResponse.addLogEntries(logEntry);
@@ -97,7 +97,7 @@ public class ServiceUtils {
 		heartbeat.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
 
 		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey(1);
+		logEntry.setKey("1");
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		heartbeat.addLogEntries(logEntry);
@@ -112,7 +112,7 @@ public class ServiceUtils {
 		return work.build();
 	}
 
-	public static WorkMessage prepareAppendEntries() {
+	public static WorkMessage prepareAppendEntriesPacket(String key, byte[] imageData, long timestamp) {
 
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -121,16 +121,16 @@ public class ServiceUtils {
 		appendEntriesPacket.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey(1);
+		logEntry.setKey(key);
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		AppendEntriesRPC.ImageMsg.Builder imageMsg = AppendEntriesRPC.ImageMsg.newBuilder();
 		// TO-DO
-		imageMsg.setKey(1);
+		imageMsg.setKey(key);
 
 		// TO-DO
 		ByteString byteString;
-		byteString = ByteString.copyFrom("This is a test".getBytes());
+		byteString = ByteString.copyFrom(imageData);
 		imageMsg.setImageData(byteString);
 
 		AppendEntries.Builder appendEntries = AppendEntries.newBuilder();
@@ -140,6 +140,8 @@ public class ServiceUtils {
 		appendEntries.addLogEntries(logEntry);
 
 		appendEntriesPacket.setAppendEntries(appendEntries);
+		
+		work.setAppendEntriesPacket(appendEntriesPacket);
 
 		return work.build();
 

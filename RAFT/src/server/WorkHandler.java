@@ -75,25 +75,25 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 			} else if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartbeat()) {
 				System.out.println(
 						"Heart Beat Packet recieved from " + msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
-				
+
 				WorkMessage.Builder work = WorkMessage.newBuilder();
 				work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 				NodeState.getInstance().getService().handleHeartBeat(msg);
-			
 
-				//channel.write(work.build());
+				// channel.write(work.build());
 
 			} else if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartBeatResponse()) {
-				Logger.DEBUG("Response is Received from " + msg.getHeartBeatPacket().getHeartBeatResponse().getNodeId());
+				Logger.DEBUG(
+						"Response is Received from " + msg.getHeartBeatPacket().getHeartBeatResponse().getNodeId());
 
-				
 			}
-			
+
 			else if (msg.hasVoteRPCPacket() && msg.getVoteRPCPacket().hasRequestVoteRPC()) {
-				WorkMessage voteResponse =NodeState.getInstance().getService().handleRequestVoteRPC(msg);
+				WorkMessage voteResponse = NodeState.getInstance().getService().handleRequestVoteRPC(msg);
 				channel.write(voteResponse);
-			} else if(msg.hasVoteRPCPacket() && msg.getVoteRPCPacket().hasResponseVoteRPC()){
-				
+			} else if (msg.hasVoteRPCPacket() && msg.getVoteRPCPacket().hasResponseVoteRPC()) {
+
+			} else if (msg.hasAppendEntriesPacket() && msg.getAppendEntriesPacket().hasAppendEntries()) {
 				
 			}
 

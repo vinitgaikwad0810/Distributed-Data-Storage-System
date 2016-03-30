@@ -13,13 +13,18 @@ public final class AppendEntriesRPC {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
     boolean hasKey();
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
-    int getKey();
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
 
     /**
      * <code>required int64 unixTimeStamp = 2;</code>
@@ -82,9 +87,10 @@ public final class AppendEntriesRPC {
               }
               break;
             }
-            case 8: {
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              key_ = input.readInt32();
+              key_ = bs;
               break;
             }
             case 16: {
@@ -133,18 +139,45 @@ public final class AppendEntriesRPC {
 
     private int bitField0_;
     public static final int KEY_FIELD_NUMBER = 1;
-    private int key_;
+    private java.lang.Object key_;
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
     public boolean hasKey() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
-    public int getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int UNIXTIMESTAMP_FIELD_NUMBER = 2;
@@ -163,7 +196,7 @@ public final class AppendEntriesRPC {
     }
 
     private void initFields() {
-      key_ = 0;
+      key_ = "";
       unixTimeStamp_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
@@ -188,7 +221,7 @@ public final class AppendEntriesRPC {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, key_);
+        output.writeBytes(1, getKeyBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt64(2, unixTimeStamp_);
@@ -204,7 +237,7 @@ public final class AppendEntriesRPC {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, key_);
+          .computeBytesSize(1, getKeyBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -327,7 +360,7 @@ public final class AppendEntriesRPC {
 
       public Builder clear() {
         super.clear();
-        key_ = 0;
+        key_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         unixTimeStamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -384,7 +417,9 @@ public final class AppendEntriesRPC {
       public Builder mergeFrom(AppendEntriesRPC.LogEntries other) {
         if (other == AppendEntriesRPC.LogEntries.getDefaultInstance()) return this;
         if (other.hasKey()) {
-          setKey(other.getKey());
+          bitField0_ |= 0x00000001;
+          key_ = other.key_;
+          onChanged();
         }
         if (other.hasUnixTimeStamp()) {
           setUnixTimeStamp(other.getUnixTimeStamp());
@@ -424,34 +459,78 @@ public final class AppendEntriesRPC {
       }
       private int bitField0_;
 
-      private int key_ ;
+      private java.lang.Object key_ = "";
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
-      public int getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            key_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
-      public Builder setKey(int value) {
-        bitField0_ |= 0x00000001;
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        key_ = 0;
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        key_ = value;
         onChanged();
         return this;
       }
@@ -504,13 +583,18 @@ public final class AppendEntriesRPC {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
     boolean hasKey();
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
-    int getKey();
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
 
     /**
      * <code>required bytes imageData = 2;</code>
@@ -573,9 +657,10 @@ public final class AppendEntriesRPC {
               }
               break;
             }
-            case 8: {
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              key_ = input.readInt32();
+              key_ = bs;
               break;
             }
             case 18: {
@@ -624,18 +709,45 @@ public final class AppendEntriesRPC {
 
     private int bitField0_;
     public static final int KEY_FIELD_NUMBER = 1;
-    private int key_;
+    private java.lang.Object key_;
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
     public boolean hasKey() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 key = 1;</code>
+     * <code>required string key = 1;</code>
      */
-    public int getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int IMAGEDATA_FIELD_NUMBER = 2;
@@ -654,7 +766,7 @@ public final class AppendEntriesRPC {
     }
 
     private void initFields() {
-      key_ = 0;
+      key_ = "";
       imageData_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
@@ -679,7 +791,7 @@ public final class AppendEntriesRPC {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, key_);
+        output.writeBytes(1, getKeyBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, imageData_);
@@ -695,7 +807,7 @@ public final class AppendEntriesRPC {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, key_);
+          .computeBytesSize(1, getKeyBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -818,7 +930,7 @@ public final class AppendEntriesRPC {
 
       public Builder clear() {
         super.clear();
-        key_ = 0;
+        key_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         imageData_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -875,7 +987,9 @@ public final class AppendEntriesRPC {
       public Builder mergeFrom(AppendEntriesRPC.ImageMsg other) {
         if (other == AppendEntriesRPC.ImageMsg.getDefaultInstance()) return this;
         if (other.hasKey()) {
-          setKey(other.getKey());
+          bitField0_ |= 0x00000001;
+          key_ = other.key_;
+          onChanged();
         }
         if (other.hasImageData()) {
           setImageData(other.getImageData());
@@ -915,34 +1029,78 @@ public final class AppendEntriesRPC {
       }
       private int bitField0_;
 
-      private int key_ ;
+      private java.lang.Object key_ = "";
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
-      public int getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            key_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
-      public Builder setKey(int value) {
-        bitField0_ |= 0x00000001;
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 key = 1;</code>
+       * <code>required string key = 1;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        key_ = 0;
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        key_ = value;
         onChanged();
         return this;
       }
@@ -3485,8 +3643,8 @@ public final class AppendEntriesRPC {
   static {
     java.lang.String[] descriptorData = {
       "\n\026AppendEntriesRPC.proto\"0\n\nLogEntries\022\013" +
-      "\n\003key\030\001 \002(\005\022\025\n\runixTimeStamp\030\002 \002(\003\"*\n\010Im" +
-      "ageMsg\022\013\n\003key\030\001 \002(\005\022\021\n\timageData\030\002 \002(\014\"\200" +
+      "\n\003key\030\001 \002(\t\022\025\n\runixTimeStamp\030\002 \002(\003\"*\n\010Im" +
+      "ageMsg\022\013\n\003key\030\001 \002(\t\022\021\n\timageData\030\002 \002(\014\"\200" +
       "\001\n\rAppendEntries\022\020\n\010leaderId\030\001 \002(\005\022\033\n\010im" +
       "ageMsg\030\002 \002(\0132\t.ImageMsg\022\037\n\nlogEntries\030\003 " +
       "\003(\0132\013.LogEntries\022\037\n\027timeStampOnLatestUpd" +

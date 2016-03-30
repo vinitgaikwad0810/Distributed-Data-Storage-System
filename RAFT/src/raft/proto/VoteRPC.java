@@ -2558,7 +2558,7 @@ public final class VoteRPC {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-           AppendEntriesRPC.getDescriptor(),
+          AppendEntriesRPC.getDescriptor(),
         }, assigner);
     internal_static_RequestVoteRPC_descriptor =
       getDescriptor().getMessageTypes().get(0);

@@ -10,6 +10,7 @@ import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
 import server.ServerUtils;
+import server.db.DatabaseService;
 import server.edges.EdgeInfo;
 
 public class FollowerService extends Service implements Runnable {
@@ -18,7 +19,6 @@ public class FollowerService extends Service implements Runnable {
 	NodeTimer timer;
 
 	private static FollowerService INSTANCE = null;
-	
 
 	private FollowerService() {
 		// TODO Auto-generated constructor stub
@@ -82,13 +82,12 @@ public class FollowerService extends Service implements Runnable {
 		voteRPCPacket.setResponseVoteRPC(responseVoteRPC);
 
 		work.setVoteRPCPacket(voteRPCPacket);
-		
+
 		return work.build();
-		
+
 	}
 
-	public void handleHeartBeat(WorkMessage wm)
-	{
+	public void handleHeartBeat(WorkMessage wm) {
 		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
 		onReceivingHeartBeatPacket();
 		WorkMessage heartBeatResponse = ServiceUtils.prepareHeartBeatResponse();
@@ -105,11 +104,22 @@ public class FollowerService extends Service implements Runnable {
 				}
 			}
 		}
-		
-		
+
 	}
-	
-		
+
+	@Override
+	public void handleAppendEntries(WorkMessage wm) {
+		String key = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getKey();
+		byte[] image = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getImageData().toByteArray();
+		long unixTimeStamp = wm.getAppendEntriesPacket().getAppendEntries().getTimeStampOnLatestUpdate();
+
+		DatabaseService.getInstance().getDb().post(key, image, unixTimeStamp);
+
+		Logger.DEBUG("Inserted entry with key " + key + " received from "
+				+ wm.getAppendEntriesPacket().getAppendEntries().getLeaderId());
+
+	}
+
 	@Override
 	public void startService(Service service) {
 
