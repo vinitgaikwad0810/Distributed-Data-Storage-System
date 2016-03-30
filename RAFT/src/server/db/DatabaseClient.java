@@ -17,5 +17,7 @@ public interface DatabaseClient {
 	List<Record> getNewEntries(long staleTimestamp);
 
 	void putEntries(List<Record> list);
+
+	List<Record> getAllEntries();
 	
 }

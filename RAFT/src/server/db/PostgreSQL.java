@@ -65,6 +65,26 @@ public class PostgreSQL implements DatabaseClient {
 	}
 
 
+	@Override
+	public List<Record> getAllEntries() {
+		Statement stmt = null;
+		List<Record> list = new ArrayList<Record>();
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select key, image, timestamp FROM testtable");
+			
+			while (rs.next()) {
+				list.add(new Record(rs.getString(1), rs.getBytes(2), rs.getLong(3)));
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// TODO connection handling
+		}
+		return list;		
+	}
+
 	
 	@Override
 	public long getCurrentTimeStamp() {
