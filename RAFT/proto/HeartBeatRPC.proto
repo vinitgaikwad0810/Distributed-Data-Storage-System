@@ -3,12 +3,16 @@ import "AppendEntriesRPC.proto";
 message HeartBeat{
 	required int32 leaderId = 1;
 	repeated LogEntries logEntries = 2;
+	required int64 timeStampOnLatestUpdate = 3;
 }
 
 message HeartBeatResponse{
 	required int32 nodeId = 1;
 	
 	repeated LogEntries logEntries = 3;
+
+	required int64 timeStampOnLatestUpdate = 4;
+	
 	
 	enum IsAlive{
 	

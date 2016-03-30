@@ -1,7 +1,12 @@
 package raft;
 
+import com.google.protobuf.ByteString;
+
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
+import raft.proto.AppendEntriesRPC;
+import raft.proto.AppendEntriesRPC.AppendEntries;
+import raft.proto.AppendEntriesRPC.AppendEntriesPacket;
 import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeat;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
@@ -40,6 +45,7 @@ public class LeaderService extends Service implements Runnable {
 
 		}
 	}
+
 	@Override
 	public void sendHeartBeat() {
 		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
@@ -68,6 +74,7 @@ public class LeaderService extends Service implements Runnable {
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		heartbeat.addLogEntries(logEntry);
+		heartbeat.setTimeStampOnLatestUpdate(Service.timeStampOnLatestUpdate);
 
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
 		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -76,6 +83,39 @@ public class LeaderService extends Service implements Runnable {
 		work.setHeartBeatPacket(heartBeatPacket);
 
 		return work.build();
+	}
+
+	public WorkMessage prepareAppendEntries() {
+
+		WorkMessage.Builder work = WorkMessage.newBuilder();
+		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		AppendEntriesPacket.Builder appendEntriesPacket = AppendEntriesPacket.newBuilder();
+		appendEntriesPacket.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		LogEntries.Builder logEntry = LogEntries.newBuilder();
+		logEntry.setKey(1);
+		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		AppendEntriesRPC.ImageMsg.Builder imageMsg = AppendEntriesRPC.ImageMsg.newBuilder();
+		// TO-DO
+		imageMsg.setKey(1);
+
+		// TO-DO
+		ByteString byteString;
+		byteString = ByteString.copyFrom("This is a test".getBytes());
+		imageMsg.setImageData(byteString);
+
+		AppendEntries.Builder appendEntries = AppendEntries.newBuilder();
+		appendEntries.setTimeStampOnLatestUpdate(Service.timeStampOnLatestUpdate);
+		appendEntries.setImageMsg(imageMsg);
+		appendEntries.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
+		appendEntries.addLogEntries(logEntry);
+
+		appendEntriesPacket.setAppendEntries(appendEntries);
+
+		return work.build();
+
 	}
 
 	public void startService(Service service) {

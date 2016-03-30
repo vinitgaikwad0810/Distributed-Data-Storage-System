@@ -13,7 +13,8 @@ message ImageMsg{
 message AppendEntries{
 	required int32 leaderId = 1;
 	required ImageMsg imageMsg = 2;
-	repeated LogEntries logEntries = 3;		
+	repeated LogEntries logEntries = 3;
+	required int64 timeStampOnLatestUpdate = 4;		
 }
 
 message AppendEntriesResponse{

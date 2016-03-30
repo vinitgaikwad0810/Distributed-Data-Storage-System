@@ -3,11 +3,12 @@ package raft;
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import node.timer.NodeTimer;
+import raft.proto.AppendEntriesRPC.AppendEntriesPacket;
+import raft.proto.AppendEntriesRPC.AppendEntriesResponse;
+import raft.proto.AppendEntriesRPC.AppendEntriesResponse.IsUpdated;
 import raft.proto.AppendEntriesRPC.LogEntries;
-import raft.proto.HeartBeatRPC.HeartBeat;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
-import raft.proto.VoteRPC.RequestVoteRPC;
 import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
@@ -48,7 +49,7 @@ public class CandidateService extends Service implements Runnable {
 		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
 
 			if (ei.isActive() && ei.getChannel() != null) {
-				WorkMessage workMessage = prepareRequestVoteRPC();
+				WorkMessage workMessage = ServiceUtils.prepareRequestVoteRPC();
 				Logger.DEBUG("Sent VoteRequestRPC to " + ei.getRef());
 				ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
 				if (cf.isDone() && !cf.isSuccess()) {
@@ -56,7 +57,6 @@ public class CandidateService extends Service implements Runnable {
 				}
 			}
 		}
-
 
 		timer.schedule(new Runnable() {
 			@Override
@@ -81,30 +81,7 @@ public class CandidateService extends Service implements Runnable {
 
 	}
 
-	public WorkMessage prepareRequestVoteRPC() {
-		// TO-DO
-		WorkMessage.Builder work = WorkMessage.newBuilder();
-		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		RequestVoteRPC.Builder requestVoteRPC = RequestVoteRPC.newBuilder();
-		requestVoteRPC.setTerm(1);
-		requestVoteRPC.setCandidateId("" + NodeState.getInstance().getServerState().getConf().getNodeId());
-
-		LogEntries.Builder logEntries = LogEntries.newBuilder();
-		logEntries.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-		logEntries.setKey(1234);
-
-		requestVoteRPC.addLogEntriesBuilder(0);
-		requestVoteRPC.setLogEntries(0, logEntries);
-
-		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
-		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
-		voteRPCPacket.setRequestVoteRPC(requestVoteRPC);
-
-		work.setVoteRPCPacket(voteRPCPacket);
-
-		return work.build();
-	}
+	
 
 	@Override
 	public void handleResponseVoteRPCs(WorkMessage workMessage) {
@@ -140,33 +117,13 @@ public class CandidateService extends Service implements Runnable {
 	@Override
 	public void handleHeartBeat(WorkMessage wm) {
 		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
-		
+
 		NodeState.getInstance().setState(NodeState.FOLLOWER);
 
-
 	}
 
-	public WorkMessage prepareHeartBeatResponse() {
-		WorkMessage.Builder work = WorkMessage.newBuilder();
-		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
-		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
-
-		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey(1);
-		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		heartbeatResponse.addLogEntries(logEntry);
-
-		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
-		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
-		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
-
-		work.setHeartBeatPacket(heartBeatPacket);
-
-		return work.build();
-	}
+	
+	
 
 	public void startService(Service service) {
 		running = Boolean.TRUE;

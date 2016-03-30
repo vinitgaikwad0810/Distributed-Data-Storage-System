@@ -58,6 +58,15 @@ public final class VoteRPC {
      */
     AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
         int index);
+
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    boolean hasTimeStampOnLatestUpdate();
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    long getTimeStampOnLatestUpdate();
   }
   /**
    * Protobuf type {@code RequestVoteRPC}
@@ -128,6 +137,11 @@ public final class VoteRPC {
                 mutable_bitField0_ |= 0x00000004;
               }
               logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000004;
+              timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
           }
@@ -265,10 +279,26 @@ public final class VoteRPC {
       return logEntries_.get(index);
     }
 
+    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 4;
+    private long timeStampOnLatestUpdate_;
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    public boolean hasTimeStampOnLatestUpdate() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    public long getTimeStampOnLatestUpdate() {
+      return timeStampOnLatestUpdate_;
+    }
+
     private void initFields() {
       term_ = 0;
       candidateId_ = "";
       logEntries_ = java.util.Collections.emptyList();
+      timeStampOnLatestUpdate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -281,6 +311,10 @@ public final class VoteRPC {
         return false;
       }
       if (!hasCandidateId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimeStampOnLatestUpdate()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -306,6 +340,9 @@ public final class VoteRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         output.writeMessage(3, logEntries_.get(i));
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt64(4, timeStampOnLatestUpdate_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -326,6 +363,10 @@ public final class VoteRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, logEntries_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, timeStampOnLatestUpdate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -455,6 +496,8 @@ public final class VoteRPC {
         } else {
           logEntriesBuilder_.clear();
         }
+        timeStampOnLatestUpdate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -500,6 +543,10 @@ public final class VoteRPC {
         } else {
           result.logEntries_ = logEntriesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -550,6 +597,9 @@ public final class VoteRPC {
             }
           }
         }
+        if (other.hasTimeStampOnLatestUpdate()) {
+          setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -560,6 +610,10 @@ public final class VoteRPC {
           return false;
         }
         if (!hasCandidateId()) {
+          
+          return false;
+        }
+        if (!hasTimeStampOnLatestUpdate()) {
           
           return false;
         }
@@ -937,6 +991,38 @@ public final class VoteRPC {
           logEntries_ = null;
         }
         return logEntriesBuilder_;
+      }
+
+      private long timeStampOnLatestUpdate_ ;
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public boolean hasTimeStampOnLatestUpdate() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public long getTimeStampOnLatestUpdate() {
+        return timeStampOnLatestUpdate_;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public Builder setTimeStampOnLatestUpdate(long value) {
+        bitField0_ |= 0x00000008;
+        timeStampOnLatestUpdate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public Builder clearTimeStampOnLatestUpdate() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        timeStampOnLatestUpdate_ = 0L;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:RequestVoteRPC)
@@ -2450,15 +2536,16 @@ public final class VoteRPC {
   static {
     java.lang.String[] descriptorData = {
       "\n\rVoteRPC.proto\032\026AppendEntriesRPC.proto\"" +
-      "T\n\016RequestVoteRPC\022\014\n\004term\030\001 \002(\005\022\023\n\013candi" +
+      "u\n\016RequestVoteRPC\022\014\n\004term\030\001 \002(\005\022\023\n\013candi" +
       "dateId\030\002 \002(\t\022\037\n\nlogEntries\030\003 \003(\0132\013.LogEn" +
-      "tries\"x\n\017ResponseVoteRPC\022\014\n\004term\030\001 \002(\005\0225" +
-      "\n\risVoteGranted\030\002 \002(\0162\036.ResponseVoteRPC." +
-      "IsVoteGranted\" \n\rIsVoteGranted\022\007\n\003YES\020\000\022" +
-      "\006\n\002NO\020\001\"\211\001\n\rVoteRPCPacket\022\025\n\runixTimesta" +
-      "mp\030\001 \002(\003\022)\n\016requestVoteRPC\030\002 \001(\0132\017.Reque" +
-      "stVoteRPCH\000\022+\n\017responseVoteRPC\030\003 \001(\0132\020.R" +
-      "esponseVoteRPCH\000B\t\n\007payload"
+      "tries\022\037\n\027timeStampOnLatestUpdate\030\004 \002(\003\"x" +
+      "\n\017ResponseVoteRPC\022\014\n\004term\030\001 \002(\005\0225\n\risVot" +
+      "eGranted\030\002 \002(\0162\036.ResponseVoteRPC.IsVoteG" +
+      "ranted\" \n\rIsVoteGranted\022\007\n\003YES\020\000\022\006\n\002NO\020\001" +
+      "\"\211\001\n\rVoteRPCPacket\022\025\n\runixTimestamp\030\001 \002(" +
+      "\003\022)\n\016requestVoteRPC\030\002 \001(\0132\017.RequestVoteR" +
+      "PCH\000\022+\n\017responseVoteRPC\030\003 \001(\0132\020.Response",
+      "VoteRPCH\000B\t\n\007payload"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2471,14 +2558,14 @@ public final class VoteRPC {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          AppendEntriesRPC.getDescriptor(),
+           AppendEntriesRPC.getDescriptor(),
         }, assigner);
     internal_static_RequestVoteRPC_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_RequestVoteRPC_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_RequestVoteRPC_descriptor,
-        new java.lang.String[] { "Term", "CandidateId", "LogEntries", });
+        new java.lang.String[] { "Term", "CandidateId", "LogEntries", "TimeStampOnLatestUpdate", });
     internal_static_ResponseVoteRPC_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ResponseVoteRPC_fieldAccessorTable = new

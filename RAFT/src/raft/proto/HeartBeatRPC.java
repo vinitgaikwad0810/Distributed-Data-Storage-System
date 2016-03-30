@@ -44,6 +44,15 @@ public final class HeartBeatRPC {
      */
     AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
         int index);
+
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+     */
+    boolean hasTimeStampOnLatestUpdate();
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+     */
+    long getTimeStampOnLatestUpdate();
   }
   /**
    * Protobuf type {@code HeartBeat}
@@ -108,6 +117,11 @@ public final class HeartBeatRPC {
                 mutable_bitField0_ |= 0x00000002;
               }
               logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000002;
+              timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
           }
@@ -203,9 +217,25 @@ public final class HeartBeatRPC {
       return logEntries_.get(index);
     }
 
+    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 3;
+    private long timeStampOnLatestUpdate_;
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+     */
+    public boolean hasTimeStampOnLatestUpdate() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+     */
+    public long getTimeStampOnLatestUpdate() {
+      return timeStampOnLatestUpdate_;
+    }
+
     private void initFields() {
       leaderId_ = 0;
       logEntries_ = java.util.Collections.emptyList();
+      timeStampOnLatestUpdate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -214,6 +244,10 @@ public final class HeartBeatRPC {
       if (isInitialized == 0) return false;
 
       if (!hasLeaderId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimeStampOnLatestUpdate()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -236,6 +270,9 @@ public final class HeartBeatRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         output.writeMessage(2, logEntries_.get(i));
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt64(3, timeStampOnLatestUpdate_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -252,6 +289,10 @@ public final class HeartBeatRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, logEntries_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, timeStampOnLatestUpdate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -379,6 +420,8 @@ public final class HeartBeatRPC {
         } else {
           logEntriesBuilder_.clear();
         }
+        timeStampOnLatestUpdate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -420,6 +463,10 @@ public final class HeartBeatRPC {
         } else {
           result.logEntries_ = logEntriesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -465,12 +512,19 @@ public final class HeartBeatRPC {
             }
           }
         }
+        if (other.hasTimeStampOnLatestUpdate()) {
+          setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasLeaderId()) {
+          
+          return false;
+        }
+        if (!hasTimeStampOnLatestUpdate()) {
           
           return false;
         }
@@ -774,6 +828,38 @@ public final class HeartBeatRPC {
         return logEntriesBuilder_;
       }
 
+      private long timeStampOnLatestUpdate_ ;
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+       */
+      public boolean hasTimeStampOnLatestUpdate() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+       */
+      public long getTimeStampOnLatestUpdate() {
+        return timeStampOnLatestUpdate_;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+       */
+      public Builder setTimeStampOnLatestUpdate(long value) {
+        bitField0_ |= 0x00000004;
+        timeStampOnLatestUpdate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
+       */
+      public Builder clearTimeStampOnLatestUpdate() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        timeStampOnLatestUpdate_ = 0L;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:HeartBeat)
     }
 
@@ -821,6 +907,15 @@ public final class HeartBeatRPC {
      */
     AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
         int index);
+
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    boolean hasTimeStampOnLatestUpdate();
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    long getTimeStampOnLatestUpdate();
   }
   /**
    * Protobuf type {@code HeartBeatResponse}
@@ -885,6 +980,11 @@ public final class HeartBeatRPC {
                 mutable_bitField0_ |= 0x00000002;
               }
               logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000002;
+              timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
           }
@@ -1062,9 +1162,25 @@ public final class HeartBeatRPC {
       return logEntries_.get(index);
     }
 
+    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 4;
+    private long timeStampOnLatestUpdate_;
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    public boolean hasTimeStampOnLatestUpdate() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    public long getTimeStampOnLatestUpdate() {
+      return timeStampOnLatestUpdate_;
+    }
+
     private void initFields() {
       nodeId_ = 0;
       logEntries_ = java.util.Collections.emptyList();
+      timeStampOnLatestUpdate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1073,6 +1189,10 @@ public final class HeartBeatRPC {
       if (isInitialized == 0) return false;
 
       if (!hasNodeId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimeStampOnLatestUpdate()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1095,6 +1215,9 @@ public final class HeartBeatRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         output.writeMessage(3, logEntries_.get(i));
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt64(4, timeStampOnLatestUpdate_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1111,6 +1234,10 @@ public final class HeartBeatRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, logEntries_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, timeStampOnLatestUpdate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1238,6 +1365,8 @@ public final class HeartBeatRPC {
         } else {
           logEntriesBuilder_.clear();
         }
+        timeStampOnLatestUpdate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -1279,6 +1408,10 @@ public final class HeartBeatRPC {
         } else {
           result.logEntries_ = logEntriesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1324,12 +1457,19 @@ public final class HeartBeatRPC {
             }
           }
         }
+        if (other.hasTimeStampOnLatestUpdate()) {
+          setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasNodeId()) {
+          
+          return false;
+        }
+        if (!hasTimeStampOnLatestUpdate()) {
           
           return false;
         }
@@ -1631,6 +1771,38 @@ public final class HeartBeatRPC {
           logEntries_ = null;
         }
         return logEntriesBuilder_;
+      }
+
+      private long timeStampOnLatestUpdate_ ;
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public boolean hasTimeStampOnLatestUpdate() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public long getTimeStampOnLatestUpdate() {
+        return timeStampOnLatestUpdate_;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public Builder setTimeStampOnLatestUpdate(long value) {
+        bitField0_ |= 0x00000004;
+        timeStampOnLatestUpdate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public Builder clearTimeStampOnLatestUpdate() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        timeStampOnLatestUpdate_ = 0L;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:HeartBeatResponse)
@@ -2562,14 +2734,16 @@ public final class HeartBeatRPC {
   static {
     java.lang.String[] descriptorData = {
       "\n\022HeartBeatRPC.proto\032\026AppendEntriesRPC.p" +
-      "roto\">\n\tHeartBeat\022\020\n\010leaderId\030\001 \002(\005\022\037\n\nl" +
-      "ogEntries\030\002 \003(\0132\013.LogEntries\"`\n\021HeartBea" +
-      "tResponse\022\016\n\006nodeId\030\001 \002(\005\022\037\n\nlogEntries\030" +
-      "\003 \003(\0132\013.LogEntries\"\032\n\007IsAlive\022\007\n\003YES\020\001\022\006" +
-      "\n\002NO\020\002\"\205\001\n\017HeartBeatPacket\022\025\n\runixTimest" +
-      "amp\030\001 \002(\003\022\037\n\theartbeat\030\002 \001(\0132\n.HeartBeat" +
-      "H\000\022/\n\021heartBeatResponse\030\003 \001(\0132\022.HeartBea" +
-      "tResponseH\000B\t\n\007payload"
+      "roto\"_\n\tHeartBeat\022\020\n\010leaderId\030\001 \002(\005\022\037\n\nl" +
+      "ogEntries\030\002 \003(\0132\013.LogEntries\022\037\n\027timeStam" +
+      "pOnLatestUpdate\030\003 \002(\003\"\201\001\n\021HeartBeatRespo" +
+      "nse\022\016\n\006nodeId\030\001 \002(\005\022\037\n\nlogEntries\030\003 \003(\0132" +
+      "\013.LogEntries\022\037\n\027timeStampOnLatestUpdate\030" +
+      "\004 \002(\003\"\032\n\007IsAlive\022\007\n\003YES\020\001\022\006\n\002NO\020\002\"\205\001\n\017He" +
+      "artBeatPacket\022\025\n\runixTimestamp\030\001 \002(\003\022\037\n\t" +
+      "heartbeat\030\002 \001(\0132\n.HeartBeatH\000\022/\n\021heartBe" +
+      "atResponse\030\003 \001(\0132\022.HeartBeatResponseH\000B\t",
+      "\n\007payload"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2582,20 +2756,20 @@ public final class HeartBeatRPC {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          AppendEntriesRPC.getDescriptor(),
+           AppendEntriesRPC.getDescriptor(),
         }, assigner);
     internal_static_HeartBeat_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_HeartBeat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_HeartBeat_descriptor,
-        new java.lang.String[] { "LeaderId", "LogEntries", });
+        new java.lang.String[] { "LeaderId", "LogEntries", "TimeStampOnLatestUpdate", });
     internal_static_HeartBeatResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_HeartBeatResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_HeartBeatResponse_descriptor,
-        new java.lang.String[] { "NodeId", "LogEntries", });
+        new java.lang.String[] { "NodeId", "LogEntries", "TimeStampOnLatestUpdate", });
     internal_static_HeartBeatPacket_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_HeartBeatPacket_fieldAccessorTable = new

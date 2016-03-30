@@ -1042,6 +1042,15 @@ public final class AppendEntriesRPC {
      */
     AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
         int index);
+
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    boolean hasTimeStampOnLatestUpdate();
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    long getTimeStampOnLatestUpdate();
   }
   /**
    * Protobuf type {@code AppendEntries}
@@ -1119,6 +1128,11 @@ public final class AppendEntriesRPC {
                 mutable_bitField0_ |= 0x00000004;
               }
               logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000004;
+              timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
           }
@@ -1235,10 +1249,26 @@ public final class AppendEntriesRPC {
       return logEntries_.get(index);
     }
 
+    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 4;
+    private long timeStampOnLatestUpdate_;
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    public boolean hasTimeStampOnLatestUpdate() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     */
+    public long getTimeStampOnLatestUpdate() {
+      return timeStampOnLatestUpdate_;
+    }
+
     private void initFields() {
       leaderId_ = 0;
       imageMsg_ = AppendEntriesRPC.ImageMsg.getDefaultInstance();
       logEntries_ = java.util.Collections.emptyList();
+      timeStampOnLatestUpdate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1251,6 +1281,10 @@ public final class AppendEntriesRPC {
         return false;
       }
       if (!hasImageMsg()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimeStampOnLatestUpdate()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1280,6 +1314,9 @@ public final class AppendEntriesRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         output.writeMessage(3, logEntries_.get(i));
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt64(4, timeStampOnLatestUpdate_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1300,6 +1337,10 @@ public final class AppendEntriesRPC {
       for (int i = 0; i < logEntries_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, logEntries_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, timeStampOnLatestUpdate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1434,6 +1475,8 @@ public final class AppendEntriesRPC {
         } else {
           logEntriesBuilder_.clear();
         }
+        timeStampOnLatestUpdate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -1483,6 +1526,10 @@ public final class AppendEntriesRPC {
         } else {
           result.logEntries_ = logEntriesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1531,6 +1578,9 @@ public final class AppendEntriesRPC {
             }
           }
         }
+        if (other.hasTimeStampOnLatestUpdate()) {
+          setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1541,6 +1591,10 @@ public final class AppendEntriesRPC {
           return false;
         }
         if (!hasImageMsg()) {
+          
+          return false;
+        }
+        if (!hasTimeStampOnLatestUpdate()) {
           
           return false;
         }
@@ -1962,6 +2016,38 @@ public final class AppendEntriesRPC {
           logEntries_ = null;
         }
         return logEntriesBuilder_;
+      }
+
+      private long timeStampOnLatestUpdate_ ;
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public boolean hasTimeStampOnLatestUpdate() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public long getTimeStampOnLatestUpdate() {
+        return timeStampOnLatestUpdate_;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public Builder setTimeStampOnLatestUpdate(long value) {
+        bitField0_ |= 0x00000008;
+        timeStampOnLatestUpdate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       */
+      public Builder clearTimeStampOnLatestUpdate() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        timeStampOnLatestUpdate_ = 0L;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:AppendEntries)
@@ -3400,17 +3486,17 @@ public final class AppendEntriesRPC {
     java.lang.String[] descriptorData = {
       "\n\026AppendEntriesRPC.proto\"0\n\nLogEntries\022\013" +
       "\n\003key\030\001 \002(\005\022\025\n\runixTimeStamp\030\002 \002(\003\"*\n\010Im" +
-      "ageMsg\022\013\n\003key\030\001 \002(\005\022\021\n\timageData\030\002 \002(\014\"_" +
-      "\n\rAppendEntries\022\020\n\010leaderId\030\001 \002(\005\022\033\n\010ima" +
-      "geMsg\030\002 \002(\0132\t.ImageMsg\022\037\n\nlogEntries\030\003 \003" +
-      "(\0132\013.LogEntries\"j\n\025AppendEntriesResponse" +
-      "\0223\n\tisUpdated\030\001 \002(\0162 .AppendEntriesRespo" +
-      "nse.IsUpdated\"\034\n\tIsUpdated\022\007\n\003YES\020\000\022\006\n\002N" +
-      "O\020\001\"\231\001\n\023AppendEntriesPacket\022\025\n\runixTimeS" +
-      "tamp\030\001 \002(\003\022\'\n\rappendEntries\030\002 \001(\0132\016.Appe",
-      "ndEntriesH\000\0227\n\025appendEntriesResponse\030\003 \001" +
-      "(\0132\026.AppendEntriesResponseH\000B\t\n\007payloadB" +
-      "\002H\001"
+      "ageMsg\022\013\n\003key\030\001 \002(\005\022\021\n\timageData\030\002 \002(\014\"\200" +
+      "\001\n\rAppendEntries\022\020\n\010leaderId\030\001 \002(\005\022\033\n\010im" +
+      "ageMsg\030\002 \002(\0132\t.ImageMsg\022\037\n\nlogEntries\030\003 " +
+      "\003(\0132\013.LogEntries\022\037\n\027timeStampOnLatestUpd" +
+      "ate\030\004 \002(\003\"j\n\025AppendEntriesResponse\0223\n\tis" +
+      "Updated\030\001 \002(\0162 .AppendEntriesResponse.Is" +
+      "Updated\"\034\n\tIsUpdated\022\007\n\003YES\020\000\022\006\n\002NO\020\001\"\231\001" +
+      "\n\023AppendEntriesPacket\022\025\n\runixTimeStamp\030\001",
+      " \002(\003\022\'\n\rappendEntries\030\002 \001(\0132\016.AppendEntr" +
+      "iesH\000\0227\n\025appendEntriesResponse\030\003 \001(\0132\026.A" +
+      "ppendEntriesResponseH\000B\t\n\007payloadB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3441,7 +3527,7 @@ public final class AppendEntriesRPC {
     internal_static_AppendEntries_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_AppendEntries_descriptor,
-        new java.lang.String[] { "LeaderId", "ImageMsg", "LogEntries", });
+        new java.lang.String[] { "LeaderId", "ImageMsg", "LogEntries", "TimeStampOnLatestUpdate", });
     internal_static_AppendEntriesResponse_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_AppendEntriesResponse_fieldAccessorTable = new

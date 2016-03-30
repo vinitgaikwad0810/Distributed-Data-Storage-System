@@ -91,7 +91,7 @@ public class FollowerService extends Service implements Runnable {
 	{
 		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
 		onReceivingHeartBeatPacket();
-		WorkMessage heartBeatResponse = prepareHeartBeatResponse();
+		WorkMessage heartBeatResponse = ServiceUtils.prepareHeartBeatResponse();
 
 		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
 
@@ -109,29 +109,7 @@ public class FollowerService extends Service implements Runnable {
 		
 	}
 	
-	public WorkMessage prepareHeartBeatResponse() {
-		WorkMessage.Builder work = WorkMessage.newBuilder();
-		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
-		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
-
-		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey(1);
-		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		heartbeatResponse.addLogEntries(logEntry);
-
-		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
-		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
-		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
-
-		work.setHeartBeatPacket(heartBeatPacket);
-
-		return work.build();
-	}
-
-	
+		
 	@Override
 	public void startService(Service service) {
 

@@ -4,7 +4,8 @@ message RequestVoteRPC{
 
 required int32 term = 1;
 required string candidateId = 2;
-repeated LogEntries logEntries = 3;		
+repeated LogEntries logEntries = 3;	
+required int64 timeStampOnLatestUpdate = 4;
 
 }
 
