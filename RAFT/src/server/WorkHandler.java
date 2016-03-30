@@ -95,6 +95,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 
 			} else if (msg.hasAppendEntriesPacket() && msg.getAppendEntriesPacket().hasAppendEntries()) {
 				
+				NodeState.getInstance().getService().handleAppendEntries(msg);
 			}
 
 		} catch (Exception e) {
