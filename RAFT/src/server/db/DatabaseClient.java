@@ -19,5 +19,7 @@ public interface DatabaseClient {
 	void putEntries(List<Record> list);
 
 	List<Record> getAllEntries();
+
+	void post(String key, byte[] image, long timestamp);
 	
 }

@@ -131,7 +131,30 @@ public class PostgreSQL implements DatabaseClient {
 		
 		return key;
 	}
+
 	
+	@Override
+	public void post(String key, byte[] image, long timestamp){
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("INSERT INTO testtable VALUES ( ?, ?, ?)");
+			ps.setString(1, key);
+			ps.setBytes(2, image);
+			ps.setLong(3, timestamp);
+			ResultSet set = ps.executeQuery();
+			
+		} catch (SQLException e) {
+			//TODO handle exception if no result
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public void put(String key, byte[] image, long timestamp){		
 		PreparedStatement ps = null;
@@ -154,6 +177,8 @@ public class PostgreSQL implements DatabaseClient {
 		}
 	}
 
+	
+	
 	@Override
 	public void putEntries(List<Record> list){		
 			for (Record record : list) {
