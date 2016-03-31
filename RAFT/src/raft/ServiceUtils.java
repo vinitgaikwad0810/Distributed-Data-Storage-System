@@ -12,6 +12,8 @@ import raft.proto.HeartBeatRPC.HeartBeat;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
 import raft.proto.VoteRPC.RequestVoteRPC;
+import raft.proto.VoteRPC.ResponseVoteRPC;
+import raft.proto.VoteRPC.ResponseVoteRPC.IsVoteGranted;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
 import server.ServerUtils;
@@ -34,8 +36,9 @@ public class ServiceUtils {
 
 		requestVoteRPC.addLogEntriesBuilder(0);
 		requestVoteRPC.setLogEntries(0, logEntries);
-		requestVoteRPC.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
-
+		// TODO requestVoteRPC.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
+		requestVoteRPC.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
+		
 		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
 		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		voteRPCPacket.setRequestVoteRPC(requestVoteRPC);
@@ -151,5 +154,23 @@ public class ServiceUtils {
 		return work.build();
 
 	}
+	
+	public static WorkMessage prepareResponseVoteRPC(IsVoteGranted decision)
+	{
+		WorkMessage.Builder work = WorkMessage.newBuilder();
+		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
+		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
+		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
+
+		ResponseVoteRPC.Builder responseVoteRPC = ResponseVoteRPC.newBuilder();
+		responseVoteRPC.setTerm(1);
+		responseVoteRPC.setIsVoteGranted(decision);
+
+		voteRPCPacket.setResponseVoteRPC(responseVoteRPC);
+
+		work.setVoteRPCPacket(voteRPCPacket);
+
+		return work.build();
+	}
 }

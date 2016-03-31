@@ -3,6 +3,7 @@ package raft;
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import node.timer.NodeTimer;
+import raft.proto.Work;
 import raft.proto.AppendEntriesRPC.AppendEntriesPacket;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse.IsUpdated;
@@ -13,6 +14,7 @@ import raft.proto.VoteRPC.ResponseVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
 import server.ServerUtils;
+import server.db.DatabaseService;
 import server.edges.EdgeInfo;
 
 public class CandidateService extends Service implements Runnable {
@@ -81,8 +83,6 @@ public class CandidateService extends Service implements Runnable {
 
 	}
 
-	
-
 	@Override
 	public void handleResponseVoteRPCs(WorkMessage workMessage) {
 		TotalResponses++;
@@ -95,22 +95,13 @@ public class CandidateService extends Service implements Runnable {
 
 	@Override
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
+	//TODO
+		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < DatabaseService
+				.getInstance().getDb().getCurrentTimeStamp()) {
+			return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.NO);
 
-		WorkMessage.Builder work = WorkMessage.newBuilder();
-		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
-		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		ResponseVoteRPC.Builder responseVoteRPC = ResponseVoteRPC.newBuilder();
-		responseVoteRPC.setTerm(1);
-		responseVoteRPC.setIsVoteGranted(ResponseVoteRPC.IsVoteGranted.YES);
-
-		voteRPCPacket.setResponseVoteRPC(responseVoteRPC);
-
-		work.setVoteRPCPacket(voteRPCPacket);
-
-		return work.build();
+		}
+		return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.YES);
 
 	}
 
@@ -121,9 +112,6 @@ public class CandidateService extends Service implements Runnable {
 		NodeState.getInstance().setState(NodeState.FOLLOWER);
 
 	}
-
-	
-	
 
 	public void startService(Service service) {
 		running = Boolean.TRUE;

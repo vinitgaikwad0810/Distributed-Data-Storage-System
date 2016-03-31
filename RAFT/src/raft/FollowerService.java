@@ -69,21 +69,14 @@ public class FollowerService extends Service implements Runnable {
 	@Override
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
 
-		WorkMessage.Builder work = WorkMessage.newBuilder();
-		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+		//TODO
+		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < DatabaseService
+				.getInstance().getDb().getCurrentTimeStamp()) {
+			return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.NO);
 
-		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
-		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
+		}
+		return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.YES);
 
-		ResponseVoteRPC.Builder responseVoteRPC = ResponseVoteRPC.newBuilder();
-		responseVoteRPC.setTerm(1);
-		responseVoteRPC.setIsVoteGranted(ResponseVoteRPC.IsVoteGranted.YES);
-
-		voteRPCPacket.setResponseVoteRPC(responseVoteRPC);
-
-		work.setVoteRPCPacket(voteRPCPacket);
-
-		return work.build();
 
 	}
 
