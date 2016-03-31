@@ -54,9 +54,6 @@ public class FollowerService extends Service implements Runnable {
 			@Override
 			public void run() {
 				NodeState.getInstance().setState(NodeState.CANDIDATE);
-				;
-				Thread candidateThread = new Thread(CandidateService.getInstance());
-				candidateThread.start();
 			}
 		}, ServerUtils.getElectionTimeout());
 
