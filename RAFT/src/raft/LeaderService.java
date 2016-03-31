@@ -12,7 +12,7 @@ import server.edges.EdgeInfo;
 public class LeaderService extends Service implements Runnable {
 
 	private static LeaderService INSTANCE = null;
-	private Boolean dummy = Boolean.TRUE;
+	
 
 	private LeaderService() {
 		// TODO Auto-generated constructor stub
@@ -41,10 +41,7 @@ public class LeaderService extends Service implements Runnable {
 			sendHeartBeat();
 			// TODO Append Messages are to be sent only when master recieves
 			// update message from queue
-			if (dummy) {
-				sendAppendEntriesPacket();
-				dummy = Boolean.FALSE;
-			}
+
 		}
 	}
 
@@ -95,7 +92,8 @@ public class LeaderService extends Service implements Runnable {
 					for (Record record : laterEntries) {
 						WorkMessage workMessage = ServiceUtils.prepareAppendEntriesPacket(record.getKey(),
 								record.getImage(), record.getTimestamp());
-						Logger.DEBUG("Sent AppendEntriesPacket to " + ei.getRef() + "for the key (later Entries) " + record.getKey());
+						Logger.DEBUG("Sent AppendEntriesPacket to " + ei.getRef() + "for the key (later Entries) "
+								+ record.getKey());
 						ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
 						if (cf.isDone() && !cf.isSuccess()) {
 							Logger.DEBUG("failed to send message (AppendEntriesPacket) to server");
