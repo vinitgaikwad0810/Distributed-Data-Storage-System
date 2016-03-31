@@ -27,7 +27,7 @@ public class ServiceUtils {
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		RequestVoteRPC.Builder requestVoteRPC = RequestVoteRPC.newBuilder();
-		requestVoteRPC.setTerm(1);
+		requestVoteRPC.setTerm(NodeState.getInstance().getServerState().getConf().getNodeId());
 		requestVoteRPC.setCandidateId("" + NodeState.getInstance().getServerState().getConf().getNodeId());
 
 		LogEntries.Builder logEntries = LogEntries.newBuilder();
@@ -164,7 +164,7 @@ public class ServiceUtils {
 		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		ResponseVoteRPC.Builder responseVoteRPC = ResponseVoteRPC.newBuilder();
-		responseVoteRPC.setTerm(1);
+		responseVoteRPC.setTerm(NodeState.getInstance().getServerState().getConf().getNodeId());
 		responseVoteRPC.setIsVoteGranted(decision);
 
 		voteRPCPacket.setResponseVoteRPC(responseVoteRPC);

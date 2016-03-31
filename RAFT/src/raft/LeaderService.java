@@ -12,7 +12,6 @@ import server.edges.EdgeInfo;
 public class LeaderService extends Service implements Runnable {
 
 	private static LeaderService INSTANCE = null;
-	
 
 	private LeaderService() {
 		// TODO Auto-generated constructor stub
@@ -28,7 +27,7 @@ public class LeaderService extends Service implements Runnable {
 
 	@Override
 	public void run() {
-		Logger.DEBUG("Leader Service Started");
+		Logger.DEBUG("-----------------------LEADER SERVICE STARTED ----------------------------");
 		initLatestTimeStampOnUpdate();
 		while (running) {
 

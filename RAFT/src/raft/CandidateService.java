@@ -37,7 +37,7 @@ public class CandidateService extends Service implements Runnable {
 
 	@Override
 	public void run() {
-		Logger.DEBUG("Candidate Service Started");
+		Logger.DEBUG("-----------------------CANDIDATE SERVICE STARTED ----------------------------");
 		startElection();
 		while (running) {
 
@@ -65,14 +65,19 @@ public class CandidateService extends Service implements Runnable {
 			public void run() {
 
 				if (isWinner()) {
+					Logger.DEBUG(NodeState.getInstance().getServerState().getConf().getNodeId() + " has won the election.");
 					NodeState.getInstance().setState(NodeState.LEADER);
 				} else {
+					Logger.DEBUG(NodeState.getInstance().getServerState().getConf().getNodeId() + " has lost the election.");
 					NodeState.getInstance().setState(NodeState.FOLLOWER);
 				}
 			}
 
 			private Boolean isWinner() {
 
+				Logger.DEBUG("Total number of responses = "+TotalResponses);
+				Logger.DEBUG("Total number of YES responses = "+ numberOfYESResponses);
+				
 				if ((numberOfYESResponses + 1) > (TotalResponses + 1) / 2) {
 					return Boolean.TRUE;
 				}
@@ -86,10 +91,17 @@ public class CandidateService extends Service implements Runnable {
 	@Override
 	public void handleResponseVoteRPCs(WorkMessage workMessage) {
 		TotalResponses++;
+		
 		if (workMessage.getVoteRPCPacket().getResponseVoteRPC()
 				.getIsVoteGranted() == ResponseVoteRPC.IsVoteGranted.YES) {
+			
+			Logger.DEBUG("Vote 'YES' is granted from Node Id " + workMessage.getVoteRPCPacket().getResponseVoteRPC().getTerm());
 			numberOfYESResponses++;
+			
+		}else{
+			Logger.DEBUG("Vote 'NO' is granted from Node Id " + workMessage.getVoteRPCPacket().getResponseVoteRPC().getTerm());
 		}
+		
 
 	}
 

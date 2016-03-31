@@ -34,7 +34,7 @@ public class FollowerService extends Service implements Runnable {
 
 	@Override
 	public void run() {
-		Logger.DEBUG("Follower service started");
+		Logger.DEBUG("-----------------------FOLLOWER SERVICE STARTED ----------------------------");
 		initFollower();
 		while (running) {
 
@@ -69,14 +69,15 @@ public class FollowerService extends Service implements Runnable {
 	@Override
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
 
-		//TODO
+		// TODO
 		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < DatabaseService
 				.getInstance().getDb().getCurrentTimeStamp()) {
+			Logger.DEBUG(NodeState.getInstance().getServerState().getConf().getNodeId() + " has replied NO");
 			return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.NO);
 
 		}
+		Logger.DEBUG(NodeState.getInstance().getServerState().getConf().getNodeId() + " has replied YES");
 		return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.YES);
-
 
 	}
 
@@ -105,7 +106,7 @@ public class FollowerService extends Service implements Runnable {
 		String key = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getKey();
 		byte[] image = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getImageData().toByteArray();
 		long unixTimeStamp = wm.getAppendEntriesPacket().getAppendEntries().getTimeStampOnLatestUpdate();
-		
+
 		DatabaseService.getInstance().getDb().post(key, image, unixTimeStamp);
 
 		Logger.DEBUG("Inserted entry with key " + key + " received from "
