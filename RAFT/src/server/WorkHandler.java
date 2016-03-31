@@ -85,7 +85,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 			} else if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartBeatResponse()) {
 				Logger.DEBUG(
 						"Response is Received from " + msg.getHeartBeatPacket().getHeartBeatResponse().getNodeId());
-
+				NodeState.getService().handleHeartBeatResponse(msg);
 			}
 
 			else if (msg.hasVoteRPCPacket() && msg.getVoteRPCPacket().hasRequestVoteRPC()) {

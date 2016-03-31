@@ -15,6 +15,7 @@ import raft.proto.VoteRPC.RequestVoteRPC;
 import raft.proto.VoteRPC.VoteRPCPacket;
 import raft.proto.Work.WorkMessage;
 import server.ServerUtils;
+import server.db.DatabaseService;
 
 public class ServiceUtils {
 
@@ -33,7 +34,7 @@ public class ServiceUtils {
 
 		requestVoteRPC.addLogEntriesBuilder(0);
 		requestVoteRPC.setLogEntries(0, logEntries);
-		requestVoteRPC.setTimeStampOnLatestUpdate(Service.timeStampOnLatestUpdate);
+		requestVoteRPC.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
 
 		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
 		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -44,7 +45,6 @@ public class ServiceUtils {
 		return work.build();
 	}
 
-	
 	public static WorkMessage prepareAppendEntriesResponse() {
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -64,6 +64,7 @@ public class ServiceUtils {
 		return work.build();
 
 	}
+
 	public static WorkMessage prepareHeartBeatResponse() {
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -76,8 +77,10 @@ public class ServiceUtils {
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		heartbeatResponse.addLogEntries(logEntry);
-		heartbeatResponse.setTimeStampOnLatestUpdate(Service.timeStampOnLatestUpdate);
 
+		// TODO
+		// heartbeatResponse.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
+		heartbeatResponse.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
 		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
@@ -85,8 +88,7 @@ public class ServiceUtils {
 		work.setHeartBeatPacket(heartBeatPacket);
 
 		return work.build();
-		
-		
+
 	}
 
 	public static WorkMessage prepareHeartBeat() {
@@ -96,13 +98,16 @@ public class ServiceUtils {
 		HeartBeat.Builder heartbeat = HeartBeat.newBuilder();
 		heartbeat.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
 
+		//Optional
 		LogEntries.Builder logEntry = LogEntries.newBuilder();
 		logEntry.setKey("1");
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		heartbeat.addLogEntries(logEntry);
-		heartbeat.setTimeStampOnLatestUpdate(Service.timeStampOnLatestUpdate);
+		// TODO
+		// heartbeat.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
 
+		heartbeat.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
 		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		heartBeatPacket.setHeartbeat(heartbeat);
@@ -134,13 +139,13 @@ public class ServiceUtils {
 		imageMsg.setImageData(byteString);
 
 		AppendEntries.Builder appendEntries = AppendEntries.newBuilder();
-		appendEntries.setTimeStampOnLatestUpdate(Service.timeStampOnLatestUpdate);
+		appendEntries.setTimeStampOnLatestUpdate(timestamp);
 		appendEntries.setImageMsg(imageMsg);
 		appendEntries.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
 		appendEntries.addLogEntries(logEntry);
 
 		appendEntriesPacket.setAppendEntries(appendEntries);
-		
+
 		work.setAppendEntriesPacket(appendEntriesPacket);
 
 		return work.build();

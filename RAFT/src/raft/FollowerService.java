@@ -112,7 +112,7 @@ public class FollowerService extends Service implements Runnable {
 		String key = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getKey();
 		byte[] image = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getImageData().toByteArray();
 		long unixTimeStamp = wm.getAppendEntriesPacket().getAppendEntries().getTimeStampOnLatestUpdate();
-
+		
 		DatabaseService.getInstance().getDb().post(key, image, unixTimeStamp);
 
 		Logger.DEBUG("Inserted entry with key " + key + " received from "

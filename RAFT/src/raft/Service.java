@@ -2,27 +2,23 @@ package raft;
 
 import raft.proto.Work.WorkMessage;
 
-public  class Service {
+public class Service {
 
 	protected volatile Boolean running = Boolean.TRUE;
 	static Thread cthread;
-	
-	protected static long timeStampOnLatestUpdate;
-	
-	public void startService(Service service){
-		
+
+	public void startService(Service service) {
+
 	}
 
 	public void stopService() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 	public void handleResponseVoteRPCs(WorkMessage workMessage) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
@@ -30,20 +26,20 @@ public  class Service {
 		return null;
 	}
 
-	public  void sendHeartBeat(){
-		
-	}
-	
-	
-	public void handleHeartBeat(WorkMessage wm)
-	{
-		
-		
-	}
-	
-	public void handleAppendEntries(WorkMessage wm){
-		
+	public void sendHeartBeat() {
+
 	}
 
+	public void handleHeartBeat(WorkMessage wm) {
+
+	}
 	
+	public void handleHeartBeatResponse(WorkMessage wm) {
+
+	}
+
+	public void handleAppendEntries(WorkMessage wm) {
+
+	}
+
 }

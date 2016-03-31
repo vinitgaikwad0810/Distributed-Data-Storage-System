@@ -29,6 +29,7 @@ public class LeaderService extends Service implements Runnable {
 	@Override
 	public void run() {
 		Logger.DEBUG("Leader Service Started");
+		initLatestTimeStampOnUpdate();
 		while (running) {
 
 			try {
@@ -45,6 +46,12 @@ public class LeaderService extends Service implements Runnable {
 				dummy = Boolean.FALSE;
 			}
 		}
+	}
+
+	private void initLatestTimeStampOnUpdate() {
+
+		NodeState.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
+
 	}
 
 	private void sendAppendEntriesPacket() {
@@ -70,6 +77,35 @@ public class LeaderService extends Service implements Runnable {
 			}
 
 		}
+	}
+
+	public void handleHeartBeatResponse(WorkMessage wm) {
+
+		long timeStampOnLatestUpdate = wm.getHeartBeatPacket().getHeartBeatResponse().getTimeStampOnLatestUpdate();
+
+		if (DatabaseService.getInstance().getDb().getCurrentTimeStamp() > timeStampOnLatestUpdate) {
+			List<Record> laterEntries = DatabaseService.getInstance().getDb().getNewEntries(timeStampOnLatestUpdate);
+
+			for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap()
+					.values()) {
+
+				if (ei.isActive() && ei.getChannel() != null
+						&& ei.getRef() == wm.getHeartBeatPacket().getHeartBeatResponse().getNodeId()) {
+
+					for (Record record : laterEntries) {
+						WorkMessage workMessage = ServiceUtils.prepareAppendEntriesPacket(record.getKey(),
+								record.getImage(), record.getTimestamp());
+						Logger.DEBUG("Sent AppendEntriesPacket to " + ei.getRef() + "for the key (later Entries) " + record.getKey());
+						ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
+						if (cf.isDone() && !cf.isSuccess()) {
+							Logger.DEBUG("failed to send message (AppendEntriesPacket) to server");
+						}
+					}
+				}
+			}
+
+		}
+
 	}
 
 	@Override

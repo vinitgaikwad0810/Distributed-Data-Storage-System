@@ -12,6 +12,16 @@ public class NodeState {
 
 	private static int state = 2;
 
+	private static long timeStampOnLatestUpdate;
+	
+	public static long getTimeStampOnLatestUpdate() {
+		return timeStampOnLatestUpdate;
+	}
+
+	public static void setTimeStampOnLatestUpdate(long timeStampOnLatestUpdate) {
+		NodeState.timeStampOnLatestUpdate = timeStampOnLatestUpdate;
+	}
+
 	public static Service getService() {
 		return service;
 	}
