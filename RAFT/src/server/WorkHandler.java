@@ -72,6 +72,9 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 			if (msg.hasTrivialPing()) {
 				Logger.DEBUG(" The node: " + msg.getTrivialPing().getNodeId() + " Is Active to this IP: "
 						+ msg.getTrivialPing().getIP());
+				NodeState.getInstance().getServerState().getEmon().getOutboundEdges()
+						.getNode(msg.getTrivialPing().getNodeId()).setChannel(channel);
+
 			} else if (msg.hasHeartBeatPacket() && msg.getHeartBeatPacket().hasHeartbeat()) {
 				System.out.println(
 						"Heart Beat Packet recieved from " + msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
