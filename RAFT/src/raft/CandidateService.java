@@ -59,7 +59,7 @@ public class CandidateService extends Service implements Runnable {
 				}
 			}
 		}
-
+		timer = new NodeTimer();
 		timer.schedule(new Runnable() {
 			@Override
 			public void run() {
