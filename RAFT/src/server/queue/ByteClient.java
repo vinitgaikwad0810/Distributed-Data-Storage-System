@@ -17,8 +17,11 @@ public class ByteClient implements ByteClientAPI {
 		if (fileName == null) {
 			throw new Exception("Queue Configurataion file not found");
 		}
-		
-		QueueConfiguration.getInstance().loadProperties(new File(fileName));
+
+		if (fileName != null) {
+
+			QueueConfiguration.getInstance().loadProperties(new File(fileName));
+		}
 		queue = ClientQueueService.getInstance();
 	}
 
