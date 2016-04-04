@@ -3,6 +3,7 @@ package raft;
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import node.timer.NodeTimer;
+import raft.proto.AppendEntriesRPC.AppendEntries.RequestType;
 import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
@@ -103,13 +104,24 @@ public class FollowerService extends Service implements Runnable {
 		String key = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getKey();
 		byte[] image = wm.getAppendEntriesPacket().getAppendEntries().getImageMsg().getImageData().toByteArray();
 		long unixTimeStamp = wm.getAppendEntriesPacket().getAppendEntries().getTimeStampOnLatestUpdate();
-
-		DatabaseService.getInstance().getDb().post(key, image, unixTimeStamp);
-
+		RequestType type = wm.getAppendEntriesPacket().getAppendEntries().getRequestType();
+		
+		if (type == RequestType.GET) {
+			//TODO
+			DatabaseService.getInstance().getDb().get(key);
+		} else if (type == RequestType.POST) {
+			DatabaseService.getInstance().getDb().post(key, image, unixTimeStamp);
+		} else if (type == RequestType.PUT) {
+			DatabaseService.getInstance().getDb().put(key, image, unixTimeStamp);
+		} else if (type == RequestType.DELETE) {
+			DatabaseService.getInstance().getDb().delete(key);
+		}
+		
 		Logger.DEBUG("Inserted entry with key " + key + " received from "
 				+ wm.getAppendEntriesPacket().getAppendEntries().getLeaderId());
 
 	}
+	
 
 	@Override
 	public void startService(Service service) {

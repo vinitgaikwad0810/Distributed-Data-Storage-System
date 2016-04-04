@@ -4,10 +4,12 @@ import java.util.List;
 
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
+import raft.proto.AppendEntriesRPC.AppendEntries.RequestType;
 import raft.proto.Work.WorkMessage;
 import server.db.DatabaseService;
 import server.db.Record;
 import server.edges.EdgeInfo;
+import server.queue.ServerQueueService;
 
 public class LeaderService extends Service implements Runnable {
 
@@ -29,6 +31,7 @@ public class LeaderService extends Service implements Runnable {
 	public void run() {
 		Logger.DEBUG("-----------------------LEADER SERVICE STARTED ----------------------------");
 		initLatestTimeStampOnUpdate();
+		ServerQueueService.getInstance().createQueue();
 		while (running) {
 
 			try {
@@ -50,20 +53,14 @@ public class LeaderService extends Service implements Runnable {
 
 	}
 
-	private void sendAppendEntriesPacket() {
-		List<Record> list = DatabaseService.getInstance().getDb().getAllEntries();
-
-		for (Record record : list) {
-
-			WorkMessage workMessage = ServiceUtils.prepareAppendEntriesPacket(record.getKey(), record.getImage(),
-					record.getTimestamp());
+	private void sendAppendEntriesPacket(WorkMessage workMessage) {
 
 			for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap()
 					.values()) {
 
 				if (ei.isActive() && ei.getChannel() != null) {
 
-					Logger.DEBUG("Sent AppendEntriesPacket to " + ei.getRef() + "for the key " + record.getKey());
+					Logger.DEBUG("Sent AppendEntriesPacket to " + ei.getRef() + "for the key " + workMessage.getAppendEntriesPacket().getAppendEntries().getImageMsg().getKey());
 
 					ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
 					if (cf.isDone() && !cf.isSuccess()) {
@@ -71,8 +68,6 @@ public class LeaderService extends Service implements Runnable {
 					}
 				}
 			}
-
-		}
 	}
 
 	public void handleHeartBeatResponse(WorkMessage wm) {
@@ -88,9 +83,10 @@ public class LeaderService extends Service implements Runnable {
 				if (ei.isActive() && ei.getChannel() != null
 						&& ei.getRef() == wm.getHeartBeatPacket().getHeartBeatResponse().getNodeId()) {
 
+					//TODO decide it will be post or put
 					for (Record record : laterEntries) {
 						WorkMessage workMessage = ServiceUtils.prepareAppendEntriesPacket(record.getKey(),
-								record.getImage(), record.getTimestamp());
+								record.getImage(), record.getTimestamp(), RequestType.POST);
 						Logger.DEBUG("Sent AppendEntriesPacket to " + ei.getRef() + "for the key (later Entries) "
 								+ record.getKey());
 						ChannelFuture cf = ei.getChannel().writeAndFlush(workMessage);
@@ -108,7 +104,6 @@ public class LeaderService extends Service implements Runnable {
 	@Override
 	public void sendHeartBeat() {
 		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
-
 			if (ei.isActive() && ei.getChannel() != null) {
 				WorkMessage workMessage = ServiceUtils.prepareHeartBeat();
 				Logger.DEBUG("Sent HeartBeatPacket to " + ei.getRef());
@@ -118,8 +113,34 @@ public class LeaderService extends Service implements Runnable {
 				}
 			}
 		}
-
 	}
+
+	public byte[] handleGetMessage(String key) {
+		return DatabaseService.getInstance().getDb().get(key);
+	}
+	
+	public String handlePostMessage(byte[] image, long timestamp) {
+		String key = DatabaseService.getInstance().getDb().post(image, timestamp);
+		Record record = new Record(key, image, timestamp);
+		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(record.getKey(), record.getImage(),
+				record.getTimestamp(), RequestType.POST);
+		sendAppendEntriesPacket(wm);
+		return key;
+	}
+
+	public void handlePutMessage(String key, byte[] image, long timestamp) {
+		DatabaseService.getInstance().getDb().put(key, image, timestamp);
+		Record record = new Record(key, image, timestamp);
+		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(record.getKey(), record.getImage(),
+				record.getTimestamp(), RequestType.PUT);
+		sendAppendEntriesPacket(wm);
+	}
+	
+	public void delete(String key) {
+		DatabaseService.getInstance().getDb().delete(key);
+		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, null, 0 ,RequestType.DELETE);
+		sendAppendEntriesPacket(wm);
+	}	
 
 	public void startService(Service service) {
 		running = Boolean.TRUE;

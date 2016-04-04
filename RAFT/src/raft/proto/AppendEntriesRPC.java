@@ -1209,6 +1209,15 @@ public final class AppendEntriesRPC {
      * <code>required int64 timeStampOnLatestUpdate = 4;</code>
      */
     long getTimeStampOnLatestUpdate();
+
+    /**
+     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     */
+    boolean hasRequestType();
+    /**
+     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     */
+    AppendEntriesRPC.AppendEntries.RequestType getRequestType();
   }
   /**
    * Protobuf type {@code AppendEntries}
@@ -1293,6 +1302,17 @@ public final class AppendEntriesRPC {
               timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
+            case 40: {
+              int rawValue = input.readEnum();
+              AppendEntriesRPC.AppendEntries.RequestType value = AppendEntriesRPC.AppendEntries.RequestType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(5, rawValue);
+              } else {
+                bitField0_ |= 0x00000008;
+                requestType_ = value;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1333,6 +1353,106 @@ public final class AppendEntriesRPC {
     @java.lang.Override
     public com.google.protobuf.Parser<AppendEntries> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code AppendEntries.RequestType}
+     */
+    public enum RequestType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>GET = 0;</code>
+       */
+      GET(0, 0),
+      /**
+       * <code>POST = 1;</code>
+       */
+      POST(1, 1),
+      /**
+       * <code>PUT = 2;</code>
+       */
+      PUT(2, 2),
+      /**
+       * <code>DELETE = 3;</code>
+       */
+      DELETE(3, 3),
+      ;
+
+      /**
+       * <code>GET = 0;</code>
+       */
+      public static final int GET_VALUE = 0;
+      /**
+       * <code>POST = 1;</code>
+       */
+      public static final int POST_VALUE = 1;
+      /**
+       * <code>PUT = 2;</code>
+       */
+      public static final int PUT_VALUE = 2;
+      /**
+       * <code>DELETE = 3;</code>
+       */
+      public static final int DELETE_VALUE = 3;
+
+
+      public final int getNumber() { return value; }
+
+      public static RequestType valueOf(int value) {
+        switch (value) {
+          case 0: return GET;
+          case 1: return POST;
+          case 2: return PUT;
+          case 3: return DELETE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<RequestType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<RequestType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<RequestType>() {
+              public RequestType findValueByNumber(int number) {
+                return RequestType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return AppendEntriesRPC.AppendEntries.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final RequestType[] VALUES = values();
+
+      public static RequestType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private RequestType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:AppendEntries.RequestType)
     }
 
     private int bitField0_;
@@ -1422,11 +1542,27 @@ public final class AppendEntriesRPC {
       return timeStampOnLatestUpdate_;
     }
 
+    public static final int REQUESTTYPE_FIELD_NUMBER = 5;
+    private AppendEntriesRPC.AppendEntries.RequestType requestType_;
+    /**
+     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     */
+    public boolean hasRequestType() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     */
+    public AppendEntriesRPC.AppendEntries.RequestType getRequestType() {
+      return requestType_;
+    }
+
     private void initFields() {
       leaderId_ = 0;
       imageMsg_ = AppendEntriesRPC.ImageMsg.getDefaultInstance();
       logEntries_ = java.util.Collections.emptyList();
       timeStampOnLatestUpdate_ = 0L;
+      requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1443,6 +1579,10 @@ public final class AppendEntriesRPC {
         return false;
       }
       if (!hasTimeStampOnLatestUpdate()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasRequestType()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1475,6 +1615,9 @@ public final class AppendEntriesRPC {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt64(4, timeStampOnLatestUpdate_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeEnum(5, requestType_.getNumber());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1499,6 +1642,10 @@ public final class AppendEntriesRPC {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(4, timeStampOnLatestUpdate_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(5, requestType_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1635,6 +1782,8 @@ public final class AppendEntriesRPC {
         }
         timeStampOnLatestUpdate_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
+        requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -1688,6 +1837,10 @@ public final class AppendEntriesRPC {
           to_bitField0_ |= 0x00000004;
         }
         result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.requestType_ = requestType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1739,6 +1892,9 @@ public final class AppendEntriesRPC {
         if (other.hasTimeStampOnLatestUpdate()) {
           setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
         }
+        if (other.hasRequestType()) {
+          setRequestType(other.getRequestType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1753,6 +1909,10 @@ public final class AppendEntriesRPC {
           return false;
         }
         if (!hasTimeStampOnLatestUpdate()) {
+          
+          return false;
+        }
+        if (!hasRequestType()) {
           
           return false;
         }
@@ -2204,6 +2364,41 @@ public final class AppendEntriesRPC {
       public Builder clearTimeStampOnLatestUpdate() {
         bitField0_ = (bitField0_ & ~0x00000008);
         timeStampOnLatestUpdate_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private AppendEntriesRPC.AppendEntries.RequestType requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
+      /**
+       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       */
+      public boolean hasRequestType() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       */
+      public AppendEntriesRPC.AppendEntries.RequestType getRequestType() {
+        return requestType_;
+      }
+      /**
+       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       */
+      public Builder setRequestType(AppendEntriesRPC.AppendEntries.RequestType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000010;
+        requestType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       */
+      public Builder clearRequestType() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
         onChanged();
         return this;
       }
@@ -3644,17 +3839,20 @@ public final class AppendEntriesRPC {
     java.lang.String[] descriptorData = {
       "\n\026AppendEntriesRPC.proto\"0\n\nLogEntries\022\013" +
       "\n\003key\030\001 \002(\t\022\025\n\runixTimeStamp\030\002 \002(\003\"*\n\010Im" +
-      "ageMsg\022\013\n\003key\030\001 \002(\t\022\021\n\timageData\030\002 \002(\014\"\200" +
+      "ageMsg\022\013\n\003key\030\001 \002(\t\022\021\n\timageData\030\002 \002(\014\"\350" +
       "\001\n\rAppendEntries\022\020\n\010leaderId\030\001 \002(\005\022\033\n\010im" +
       "ageMsg\030\002 \002(\0132\t.ImageMsg\022\037\n\nlogEntries\030\003 " +
       "\003(\0132\013.LogEntries\022\037\n\027timeStampOnLatestUpd" +
-      "ate\030\004 \002(\003\"j\n\025AppendEntriesResponse\0223\n\tis" +
-      "Updated\030\001 \002(\0162 .AppendEntriesResponse.Is" +
-      "Updated\"\034\n\tIsUpdated\022\007\n\003YES\020\000\022\006\n\002NO\020\001\"\231\001" +
-      "\n\023AppendEntriesPacket\022\025\n\runixTimeStamp\030\001",
-      " \002(\003\022\'\n\rappendEntries\030\002 \001(\0132\016.AppendEntr" +
-      "iesH\000\0227\n\025appendEntriesResponse\030\003 \001(\0132\026.A" +
-      "ppendEntriesResponseH\000B\t\n\007payloadB\002H\001"
+      "ate\030\004 \002(\003\022/\n\013requestType\030\005 \002(\0162\032.AppendE" +
+      "ntries.RequestType\"5\n\013RequestType\022\007\n\003GET" +
+      "\020\000\022\010\n\004POST\020\001\022\007\n\003PUT\020\002\022\n\n\006DELETE\020\003\"j\n\025App" +
+      "endEntriesResponse\0223\n\tisUpdated\030\001 \002(\0162 .",
+      "AppendEntriesResponse.IsUpdated\"\034\n\tIsUpd" +
+      "ated\022\007\n\003YES\020\000\022\006\n\002NO\020\001\"\231\001\n\023AppendEntriesP" +
+      "acket\022\025\n\runixTimeStamp\030\001 \002(\003\022\'\n\rappendEn" +
+      "tries\030\002 \001(\0132\016.AppendEntriesH\000\0227\n\025appendE" +
+      "ntriesResponse\030\003 \001(\0132\026.AppendEntriesResp" +
+      "onseH\000B\t\n\007payloadB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3685,7 +3883,7 @@ public final class AppendEntriesRPC {
     internal_static_AppendEntries_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_AppendEntries_descriptor,
-        new java.lang.String[] { "LeaderId", "ImageMsg", "LogEntries", "TimeStampOnLatestUpdate", });
+        new java.lang.String[] { "LeaderId", "ImageMsg", "LogEntries", "TimeStampOnLatestUpdate", "RequestType", });
     internal_static_AppendEntriesResponse_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_AppendEntriesResponse_fieldAccessorTable = new

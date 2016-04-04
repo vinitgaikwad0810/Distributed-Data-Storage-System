@@ -31,15 +31,26 @@ public class MessageApp {
 			System.out.println("usage: server <config file>");
 			System.exit(1);
 		}
-
+		
+		if (args.length < 2) {
+			usage();
+			return;
+		}
 		File cf = new File(args[0]);
+		File queueConf = new File(args[1]);
 		try {
-			MessageServer svr = new MessageServer(cf);
+			MessageServer svr = new MessageServer(cf ,queueConf);
 			svr.startServer();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			System.out.println("server closing");
 		}
+	}
+
+	private static void usage() {
+		System.out.println("java -jar <jar-path> routing.conf queue.conf");
+		
 	}
 }
