@@ -12,6 +12,7 @@ import raft.proto.Work.WorkMessage;
 import server.db.DatabaseService;
 import server.db.Record;
 import server.edges.EdgeInfo;
+import server.queue.ConfigurationReader;
 import server.queue.ServerQueueService;
 
 public class LeaderService extends Service implements Runnable {
@@ -119,7 +120,11 @@ public class LeaderService extends Service implements Runnable {
 				}
 			}
 		}
+		if (ConfigurationReader.getInstance().getMonitorHost() != null && ConfigurationReader.getInstance().getMonitorPort() != null) {
+			sendClusterMonitor(ConfigurationReader.getInstance().getMonitorHost(), ConfigurationReader.getInstance().getMonitorPort());
+		}		
 	}
+	
 	public void sendClusterMonitor(String host, int port) {
 		try {
 			MonitorClient mc = new MonitorClient(host, port);

@@ -14,6 +14,8 @@ public class ConfigurationReader {
 	private String username = null;
 	private String password = null;
 	private String dbType = null;
+	private String monitor_host = null;
+	private Integer monitor_port = null;
 	
 	private int queuePort = 0;
 	private Properties props = new Properties();
@@ -49,9 +51,26 @@ public class ConfigurationReader {
 				DatabaseService.getInstance().dbConfiguration(dbType, databaseURL, username, password);
 			}
 			
+			if (props.get(SystemConstants.MONITOR_HOST) != null)  {
+				monitor_host = (String) props.get(SystemConstants.MONITOR_HOST);
+				if (props.get(SystemConstants.MONITOR_PORT) != null) {
+					monitor_port = Integer.parseInt((String)props.get(SystemConstants.MONITOR_PORT));
+				}
+			};
+			
+
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	    
+	}
+
+	public String getMonitorHost() {
+		return monitor_host;
+	}
+
+	public Integer getMonitorPort() {
+		return monitor_port;
 	}
 
 	public String getQueueURL() {

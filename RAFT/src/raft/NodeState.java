@@ -31,9 +31,11 @@ public class NodeState {
 	public static void updateTaskCount() {
 		noTaskProcessed++;
 	}
+		
 	public static Service getService() {
 		return service;
 	}	
+	
 	public static int getupdatedTaskCount() {
 		return (int)noTaskProcessed;
 	}

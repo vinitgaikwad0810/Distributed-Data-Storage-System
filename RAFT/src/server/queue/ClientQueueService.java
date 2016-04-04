@@ -24,7 +24,9 @@ public class ClientQueueService {
 	Connection connection = null;
 	Channel channel = null;	
 	String callbackQueueName = null;
+	String get_callbackQueueName = null;
 	QueueingConsumer consumer = null;
+	QueueingConsumer get_consumer = null;
 	
 	public static ClientQueueService getInstance() {
 		if (instance == null) {
@@ -40,9 +42,13 @@ public class ClientQueueService {
 		    	connection = factory.newConnection();
 			    channel = connection.createChannel();		    		    
 			    callbackQueueName = channel.queueDeclare().getQueue();
-			    consumer = new QueueingConsumer(channel); 
+			    get_callbackQueueName = channel.queueDeclare().getQueue();
+			    consumer = new QueueingConsumer(channel);
+			    get_consumer = new QueueingConsumer(channel);
+			    
 			    channel.basicConsume(callbackQueueName, true, consumer);
-
+			    channel.basicConsume(get_callbackQueueName, true, get_consumer);
+			    
 			} catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -99,24 +105,42 @@ public class ClientQueueService {
 	}
 	
 	public byte[] getMessage(String key) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {		
+//		String corrId = java.util.UUID.randomUUID().toString();
+//
+//	    BasicProperties props = new BasicProperties
+//	                                .Builder()
+//	                                .type(SystemConstants.GET)
+//	                                .correlationId(corrId)
+//	                                .replyTo(callbackQueueName)
+//	                                .build();
+//
+//		
+//		while (true) {
+//			channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, key.getBytes());
+//	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+//	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
+//	            byte[] data = delivery.getBody();
+//	            return data;
+//	        }
+//	    }
+
 		String corrId = java.util.UUID.randomUUID().toString();
 
 	    BasicProperties props = new BasicProperties
 	                                .Builder()
 	                                .type(SystemConstants.GET)
 	                                .correlationId(corrId)
-	                                .replyTo(callbackQueueName)
+	                                .replyTo(get_callbackQueueName)
 	                                .build();
 
 		
 		while (true) {
-			channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, key.getBytes());
-	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+			channel.basicPublish("", SystemConstants.GET_QUEUE, props, key.getBytes());
+	        QueueingConsumer.Delivery delivery = get_consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
 	            byte[] data = delivery.getBody();
 	            return data;
 	        }
-	    }
-		
+	    }		
 	}	
 }

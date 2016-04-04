@@ -13,6 +13,7 @@ import raft.proto.Work.WorkMessage;
 import server.ServerUtils;
 import server.db.DatabaseService;
 import server.edges.EdgeInfo;
+import server.queue.ServerQueueService;
 
 public class FollowerService extends Service implements Runnable {
 
@@ -20,7 +21,7 @@ public class FollowerService extends Service implements Runnable {
 	NodeTimer timer;
 
 	private static FollowerService INSTANCE = null;
-
+	Thread fThread = null;
 	private FollowerService() {
 		// TODO Auto-generated constructor stub
 	}
@@ -37,13 +38,19 @@ public class FollowerService extends Service implements Runnable {
 	public void run() {
 		Logger.DEBUG("-----------------------FOLLOWER SERVICE STARTED ----------------------------");
 		initFollower();
-		while (running) {
 
-			while (NodeState.getInstance().getState() == NodeState.FOLLOWER) {
+		fThread = new Thread(){
+		    public void run(){
+				while (running) {
+					while (NodeState.getInstance().getState() == NodeState.FOLLOWER) {
+					}
+				}
 
-			}
-		}
+		    }
+		 };
 
+		fThread.start();
+		ServerQueueService.getInstance().createGetQueue();
 	}
 
 	private void initFollower() {
@@ -123,6 +130,13 @@ public class FollowerService extends Service implements Runnable {
 				+ wm.getAppendEntriesPacket().getAppendEntries().getLeaderId());
 	}
 	
+	@Override
+	public byte[] handleGetMessage(String key) {
+		System.out.println("GET Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
+		NodeState.updateTaskCount();
+		return DatabaseService.getInstance().getDb().get(key);
+	}
+
 
 	@Override
 	public void startService(Service service) {
