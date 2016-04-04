@@ -2,9 +2,12 @@ package raft;
 
 import java.util.List;
 
+import deven.monitor.client.MonitorClient;
+import deven.monitor.client.MonitorClientApp;
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import raft.proto.AppendEntriesRPC.AppendEntries.RequestType;
+import raft.proto.Monitor.ClusterMonitor;
 import raft.proto.Work.WorkMessage;
 import server.db.DatabaseService;
 import server.db.Record;
@@ -116,6 +119,33 @@ public class LeaderService extends Service implements Runnable {
 				}
 			}
 		}
+	}
+	public void sendClusterMonitor(String host, int port) {
+		try {
+			MonitorClient mc = new MonitorClient(host, port);
+			MonitorClientApp ma = new MonitorClientApp(mc);
+			// do stuff w/ the connection
+			System.out.println("Creating message");
+			ClusterMonitor msg = ma.sendDummyMessage(countActiveNodes(),NodeState.getupdatedTaskCount());
+			System.out.println("Sending generated message");
+			mc.write(msg);	
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	public int countActiveNodes() {
+		int count = 0;
+		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap()
+				.values()) {
+
+			if (ei.isActive() && ei.getChannel() != null) {				
+				count++;
+				
+			}
+		}
+		return count;
 	}
 
 	public byte[] handleGetMessage(String key) {

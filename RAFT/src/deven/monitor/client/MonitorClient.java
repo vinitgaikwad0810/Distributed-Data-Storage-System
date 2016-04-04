@@ -41,7 +41,7 @@ public class MonitorClient {
 	/*
 	 * Point the host and port to Monitor Server
 	 */
-	protected MonitorClient(String host, int port) {
+	public MonitorClient(String host, int port) {
 		this.host = host;
 		this.port = port;
 

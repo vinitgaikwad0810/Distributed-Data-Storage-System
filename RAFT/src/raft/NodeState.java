@@ -34,7 +34,9 @@ public class NodeState {
 	public static Service getService() {
 		return service;
 	}	
-
+	public static int getupdatedTaskCount() {
+		return (int)noTaskProcessed;
+	}
 	private static Service service;
 
 	private static NodeState instance = null;

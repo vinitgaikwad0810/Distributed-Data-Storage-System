@@ -15,6 +15,7 @@
  */
 package deven.monitor.client;
 
+import raft.NodeState;
 import raft.proto.Monitor.ClusterMonitor;
 import raft.proto.Work.WorkMessage;
 
@@ -30,26 +31,28 @@ public class MonitorClientApp implements MonitorListener{
 		this.mc.addListener(this);
 	}
 	
-	private ClusterMonitor sendDummyMessage() {
+	public ClusterMonitor sendDummyMessage(int noOfNodes,int addProcessedId) {
 		/*
 		 * This message should be created and sent by only one node inside the cluster.
-		 */
+		  	
+		  */
+		try {
 		
 		//Build the message to be sent to monitor server
 		ClusterMonitor.Builder cm = ClusterMonitor.newBuilder();
 		//your cluster ID
-		cm.setClusterId(0);
+		cm.setClusterId(NodeState.getInstance().getServerState().getConf().getNodeId());
 		//No of nodes in your cluster
-		cm.setNumNodes(2);
+		cm.setNumNodes(noOfNodes);
 		//Node Id = Process Id
 		cm.addProcessId(0);
 		cm.addProcessId(1);
 		//Set processId,No of EnquedTask for that processId
 		cm.addEnqueued(5);
-		cm.addEnqueued(5);
+		//cm.addEnqueued(5);
 		//Set processId,No of ProcessedTask for that processId
-		cm.addProcessed(3);
-		cm.addProcessed(3);
+		cm.addProcessed(addProcessedId);
+//		cm.addProcessed(3);
 		//Set processId,No of StolenTask for that processId
 		cm.addStolen(2);
 		cm.addStolen(2);
@@ -58,6 +61,10 @@ public class MonitorClientApp implements MonitorListener{
 		cm.setTick(0);
 		
 		return cm.build();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	@Override
@@ -70,11 +77,9 @@ public class MonitorClientApp implements MonitorListener{
 	public void onMessage(ClusterMonitor msg) {
 		// TODO Auto-generated method stub
 	}
-	
+	/*
 	public static void main(String[] args) {
-		/*
-		 * Set host and port of Monitor Server
-		 */
+		
 		String host = "127.0.0.1";
 		int port = 5000;
 
@@ -101,5 +106,5 @@ public class MonitorClientApp implements MonitorListener{
 	}
 
 	
-
+*/
 }
