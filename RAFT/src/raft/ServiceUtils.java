@@ -4,10 +4,11 @@ import com.google.protobuf.ByteString;
 
 import raft.proto.AppendEntriesRPC;
 import raft.proto.AppendEntriesRPC.AppendEntries;
+import raft.proto.AppendEntriesRPC.AppendEntries.RequestType;
 import raft.proto.AppendEntriesRPC.AppendEntriesPacket;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse;
-import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse.IsUpdated;
+import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeat;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
@@ -120,14 +121,14 @@ public class ServiceUtils {
 		return work.build();
 	}
 
-	public static WorkMessage prepareAppendEntriesPacket(String key, byte[] imageData, long timestamp) {
+	public static WorkMessage prepareAppendEntriesPacket(String key, byte[] imageData, long timestamp, RequestType type) {
 
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		AppendEntriesPacket.Builder appendEntriesPacket = AppendEntriesPacket.newBuilder();
 		appendEntriesPacket.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
+		
 		LogEntries.Builder logEntry = LogEntries.newBuilder();
 		logEntry.setKey(key);
 		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
@@ -146,7 +147,7 @@ public class ServiceUtils {
 		appendEntries.setImageMsg(imageMsg);
 		appendEntries.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
 		appendEntries.addLogEntries(logEntry);
-
+		appendEntries.setRequestType(type);
 		appendEntriesPacket.setAppendEntries(appendEntries);
 
 		work.setAppendEntriesPacket(appendEntriesPacket);
