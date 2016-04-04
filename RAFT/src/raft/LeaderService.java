@@ -119,10 +119,12 @@ public class LeaderService extends Service implements Runnable {
 	}
 
 	public byte[] handleGetMessage(String key) {
+		NodeState.updateTaskCount();
 		return DatabaseService.getInstance().getDb().get(key);
 	}
 	
 	public String handlePostMessage(byte[] image, long timestamp) {
+		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(timestamp);
 		String key = DatabaseService.getInstance().getDb().post(image, timestamp);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, image, timestamp, RequestType.POST);
@@ -131,6 +133,7 @@ public class LeaderService extends Service implements Runnable {
 	}
 
 	public void handlePutMessage(String key, byte[] image, long timestamp) {
+		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(timestamp);
 		DatabaseService.getInstance().getDb().put(key, image, timestamp);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, image, timestamp, RequestType.PUT);
@@ -139,6 +142,7 @@ public class LeaderService extends Service implements Runnable {
 	
 	@Override
 	public void handleDelete(String key) {
+		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(System.currentTimeMillis());
 		DatabaseService.getInstance().getDb().delete(key);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, null, 0 ,RequestType.DELETE);
