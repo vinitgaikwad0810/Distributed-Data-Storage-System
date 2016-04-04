@@ -30,10 +30,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import logger.Logger;
-import raft.CandidateService;
 import raft.NodeState;
 import router.container.RoutingConf;
 import server.edges.EdgeMonitor;
+import server.queue.QueueConfiguration;
 
 public class MessageServer {
 	//protected static Logger logger = LoggerFactory.getLogger("server");
@@ -51,8 +51,11 @@ public class MessageServer {
 	 * 
 	 * @param cfg
 	 */
-	public MessageServer(File cfg) {
+	public MessageServer(File cfg, File qConf) {
 		init(cfg);
+		QueueConfiguration.getInstance().loadProperties(qConf);
+		//TODO REMOVE THIS (just for testing queue service)
+//		NodeState.getInstance().setState(NodeState.LEADER);
 	}
 
 	public MessageServer(RoutingConf conf) {

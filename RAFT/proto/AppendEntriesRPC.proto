@@ -15,6 +15,15 @@ message AppendEntries{
 	required ImageMsg imageMsg = 2;
 	repeated LogEntries logEntries = 3;
 	required int64 timeStampOnLatestUpdate = 4;		
+	required RequestType requestType = 5;	
+
+	enum RequestType{
+	
+	GET = 0;
+	POST = 1;
+	PUT = 2;	
+	DELETE = 3;	
+	}
 }
 
 message AppendEntriesResponse{
