@@ -121,22 +121,19 @@ public class LeaderService extends Service implements Runnable {
 	
 	public String handlePostMessage(byte[] image, long timestamp) {
 		String key = DatabaseService.getInstance().getDb().post(image, timestamp);
-		Record record = new Record(key, image, timestamp);
-		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(record.getKey(), record.getImage(),
-				record.getTimestamp(), RequestType.POST);
+		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, image, timestamp, RequestType.POST);
 		sendAppendEntriesPacket(wm);
 		return key;
 	}
 
 	public void handlePutMessage(String key, byte[] image, long timestamp) {
 		DatabaseService.getInstance().getDb().put(key, image, timestamp);
-		Record record = new Record(key, image, timestamp);
-		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(record.getKey(), record.getImage(),
-				record.getTimestamp(), RequestType.PUT);
+		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, image, timestamp, RequestType.PUT);
 		sendAppendEntriesPacket(wm);
 	}
 	
-	public void delete(String key) {
+	@Override
+	public void handleDelete(String key) {
 		DatabaseService.getInstance().getDb().delete(key);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, null, 0 ,RequestType.DELETE);
 		sendAppendEntriesPacket(wm);

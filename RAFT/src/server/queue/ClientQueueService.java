@@ -19,7 +19,7 @@ public class ClientQueueService {
 	
 	static ClientQueueService instance = null;
 
-	private static final String QUEUE_URL = QueueConfiguration.getInstance().getQueueURL();
+	private static final String QUEUE_URL = ConfigurationReader.getInstance().getQueueURL();
 
 	Connection connection = null;
 	Channel channel = null;	
@@ -57,17 +57,15 @@ public class ClientQueueService {
 	    connection.close();
 	}
 		
-	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException {
-		String corrId = java.util.UUID.randomUUID().toString();
-	    BasicProperties props = new BasicProperties
-	                                .Builder()
-	                                .type(QueueOperationConstants.PUT)
-	                                .correlationId(corrId)
-	                                .userId(key)
-	                                .replyTo(callbackQueueName)
-	                                .build();
-	    System.out.println("Client Queue Server put");
-		channel.basicPublish("", QueueOperationConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
+	//TODO POST Not working
+	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {		
+		 BasicProperties props = new BasicProperties
+                 .Builder()
+                 .type(SystemConstants.PUT)
+                 .userId(key)
+                 .build();
+
+		 channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
 	}
 	
 	public String postMessage(ImageTransfer.ImageMsg message) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
@@ -75,18 +73,17 @@ public class ClientQueueService {
 
 	    BasicProperties props = new BasicProperties
 	                                .Builder()
-	                                .type(QueueOperationConstants.POST)
+	                                .type(SystemConstants.POST)
 	                                .correlationId(corrId)
 	                                .replyTo(callbackQueueName)
 	                                .build();
 	    System.out.println("Client Queue Server post");
-		channel.basicPublish("", QueueOperationConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
+		channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
 		System.out.println(channel.getConnection().getAddress());
 		while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
 	            String key = new String(delivery.getBody());
-//	            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 	            return key;
 	        }
 	    }
@@ -95,11 +92,10 @@ public class ClientQueueService {
 	public void deleteMessage(String key) throws IOException {
 		 BasicProperties props = new BasicProperties
                  .Builder()
-                 .type(QueueOperationConstants.DELETE)
-                 .replyTo(callbackQueueName)
+                 .type(SystemConstants.DELETE)
                  .build();
 
-		 channel.basicPublish("", QueueOperationConstants.INBOUND_QUEUE, props, key.getBytes());
+		 channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, key.getBytes());
 	}
 	
 	public byte[] getMessage(String key) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {		
@@ -107,17 +103,16 @@ public class ClientQueueService {
 
 	    BasicProperties props = new BasicProperties
 	                                .Builder()
-	                                .type(QueueOperationConstants.GET)
+	                                .type(SystemConstants.GET)
 	                                .correlationId(corrId)
 	                                .replyTo(callbackQueueName)
 	                                .build();
 
-		channel.basicPublish("", QueueOperationConstants.INBOUND_QUEUE, props, key.getBytes());
+		channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, key.getBytes());
 		while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
 	            byte[] data = delivery.getBody();
-//	            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 	            return data;
 	        }
 	    }

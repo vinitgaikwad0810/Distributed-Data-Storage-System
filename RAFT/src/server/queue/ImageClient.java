@@ -21,7 +21,7 @@ public class ImageClient implements ImageClientAPI{
 			throw new Exception("Queue Configurataion file not found");
 		}
 		
-		QueueConfiguration.getInstance().loadProperties(new File(fileName));
+		ConfigurationReader.getInstance().loadProperties(new File(fileName));
 		queue = ClientQueueService.getInstance();
 	}
 	
@@ -52,6 +52,9 @@ public class ImageClient implements ImageClientAPI{
 		}catch (ConsumerCancelledException e) {
 			e.printStackTrace();
 		} catch (ShutdownSignalException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 	}

@@ -19,9 +19,10 @@ public class ByteClient implements ByteClientAPI {
 		}
 
 		if (fileName != null) {
-
-			QueueConfiguration.getInstance().loadProperties(new File(fileName));
+			ConfigurationReader.getInstance().loadProperties(new File(fileName));
 		}
+		
+		ConfigurationReader.getInstance().loadProperties(new File(fileName));
 		queue = ClientQueueService.getInstance();
 	}
 
@@ -49,6 +50,15 @@ public class ByteClient implements ByteClientAPI {
 			imageMsg.setImageData(ByteString.copyFrom(image));
 			queue.putMessage(key, imageMsg.build());
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ShutdownSignalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ConsumerCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

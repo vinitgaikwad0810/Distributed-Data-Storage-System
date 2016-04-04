@@ -138,9 +138,14 @@ public class ServiceUtils {
 		imageMsg.setKey(key);
 
 		// TO-DO
-		ByteString byteString;
-		byteString = ByteString.copyFrom(imageData);
+		ByteString byteString = null;
+		if (imageData == null) {
+			byteString = ByteString.copyFrom(new byte[1]);
+		} else {
+			byteString = ByteString.copyFrom(imageData);
+		}
 		imageMsg.setImageData(byteString);
+		
 
 		AppendEntries.Builder appendEntries = AppendEntries.newBuilder();
 		appendEntries.setTimeStampOnLatestUpdate(timestamp);
