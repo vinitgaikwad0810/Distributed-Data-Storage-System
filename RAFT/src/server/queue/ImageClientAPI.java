@@ -2,7 +2,7 @@ package server.queue;
 
 public interface ImageClientAPI {
 	
-	void get(String key, String outputPath);
+	void get(String key, String outputPath, String inamgeName);
 
 	void put(String key, String imagePath);
 
