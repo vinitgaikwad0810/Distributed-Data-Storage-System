@@ -80,7 +80,6 @@ public class ClientQueueService {
 	                                .build();
 	    System.out.println("Client Queue Server post");
 		channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
-		System.out.println(channel.getConnection().getAddress());
 		while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {

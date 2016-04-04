@@ -75,7 +75,7 @@ public class ServerQueueService {
 			}
 	}
 	
-	public void processQueue() throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException, SQLException {
+	public synchronized void processQueue() throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException, SQLException {
 	    while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();	 
 	        BasicProperties props = delivery.getProperties();
@@ -91,6 +91,7 @@ public class ServerQueueService {
 		        	                                     .build();
 		        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
+		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		        } 
 		        
 		        if (request.equals(SystemConstants.PUT))  {
@@ -105,13 +106,13 @@ public class ServerQueueService {
 		        	                                     .build();
 		        	
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
+		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		        }
 		        
 		        if (request.equals(SystemConstants.DELETE))  {
 	        		String key = new String(delivery.getBody());
 	        		NodeState.getService().handleDelete(key);
 		        }
-	        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 	        }	        	
 	    }	        
 	 }
