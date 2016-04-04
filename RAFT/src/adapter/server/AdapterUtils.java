@@ -42,9 +42,11 @@ public class AdapterUtils {
 	
 
 		header.setDestination(destination);
+		header.setNodeId(1);
+		header.setTime(ServerUtils.getCurrentUnixTimeStamp());
 
 		globalCommandMessage.setHeader(header);
-
+		
 		Storage.Query.Builder query = Storage.Query.newBuilder();
 		query.setAction(Storage.Action.STORE);
 		query.setKey("123");
