@@ -62,10 +62,11 @@ public class ClientQueueService {
 		 BasicProperties props = new BasicProperties
                  .Builder()
                  .type(SystemConstants.PUT)
-                 .userId(key)
+                 .correlationId(key)
                  .build();
 
 		 channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
+
 	}
 	
 	public String postMessage(ImageTransfer.ImageMsg message) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
@@ -108,13 +109,15 @@ public class ClientQueueService {
 	                                .replyTo(callbackQueueName)
 	                                .build();
 
-		channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, key.getBytes());
+		
 		while (true) {
+			channel.basicPublish("", SystemConstants.INBOUND_QUEUE, props, key.getBytes());
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
 	            byte[] data = delivery.getBody();
 	            return data;
 	        }
 	    }
+		
 	}	
 }

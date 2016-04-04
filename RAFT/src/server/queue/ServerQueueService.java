@@ -95,7 +95,7 @@ public class ServerQueueService {
 		        } 
 		        
 		        if (request.equals(SystemConstants.PUT))  {
-		        	NodeState.getService().handlePutMessage(props.getUserId(), delivery.getBody(), System.currentTimeMillis());
+		        	NodeState.getService().handlePutMessage(props.getCorrelationId(), delivery.getBody(), System.currentTimeMillis());
 		        }
 		        
 		        if (request.equals(SystemConstants.POST))  {

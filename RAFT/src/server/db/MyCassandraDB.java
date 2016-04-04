@@ -21,9 +21,9 @@ public class MyCassandraDB implements DatabaseClient{
 	Cluster cluster;
 	Session session;
 	
-	public MyCassandraDB(String url, String username,String password, String db, String ssl) {
+	public MyCassandraDB(String url, String db) {
 		cluster = Cluster.builder().addContactPoint(url).build();
-		session = cluster.connect(db);
+		session = cluster.connect("db275");
 	}
 	
 	
@@ -53,7 +53,7 @@ public class MyCassandraDB implements DatabaseClient{
 	}
 
 	@Override
-	public String post(byte[] image, long timestamp) throws SQLException {
+	public String post(byte[] image, long timestamp) {
 		String key = UUID.randomUUID().toString();
 		try {
 			System.out.write(image);
@@ -74,10 +74,10 @@ public class MyCassandraDB implements DatabaseClient{
 	public void put(String key, byte[] image, long timestamp) {
 		PreparedStatement ps = null;
 		try {
-			ps = session.prepare("UPDATE testtable SET image= ? , timestamp = ?  WHERE key LIKE ?");
+			ps = session.prepare("UPDATE tablename SET image= ? , timestamp = ?  WHERE key = ?");
 			BoundStatement bs=new BoundStatement(ps);
 			ByteBuffer img= ByteBuffer.wrap(image);
-			session.execute(bs.bind(key,img,timestamp));
+			session.execute(bs.bind(img,timestamp,key));
 			
 		} finally {
 		}
@@ -88,7 +88,7 @@ public class MyCassandraDB implements DatabaseClient{
 	public void delete(String key) {
 		Statement stmt = null;
 		try {
-			PreparedStatement ps= session.prepare("DELETE FROM testtable WHERE key = ? ;");			
+			PreparedStatement ps= session.prepare("DELETE FROM tablename WHERE key = ? ;");			
 			BoundStatement bs=new BoundStatement(ps);
 			
 			session.execute(bs.bind(key));
@@ -108,11 +108,11 @@ public class MyCassandraDB implements DatabaseClient{
 		Statement stmt = null;
 		long timestamp = 0; 
 		try {
-			PreparedStatement ps= session.prepare("Select max(timestamp) FROM testtable");			
+			PreparedStatement ps= session.prepare("Select max(timestamp) FROM tablename");			
 			BoundStatement bs=new BoundStatement(ps);
 			com.datastax.driver.core.ResultSet rs = session.execute(bs);
 	        for (Row row : rs) {
-	            timestamp = row.getLong(1);
+	            timestamp = row.getLong(0);
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,7 +127,7 @@ public class MyCassandraDB implements DatabaseClient{
 		Statement stmt = null;
 		List<Record> list = new ArrayList<Record>();
 		try {
-			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM testtable where timestamp > ?");			
+			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM tablename where timestamp > ?");			
 			BoundStatement bs=new BoundStatement(ps);
 			com.datastax.driver.core.ResultSet rs = session.execute(bs);
 			for (Row row : rs) {
@@ -153,7 +153,7 @@ public class MyCassandraDB implements DatabaseClient{
 		Statement stmt = null;
 		List<Record> list = new ArrayList<Record>();
 		try {
-			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM testtable");			
+			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM tablename");			
 			BoundStatement bs=new BoundStatement(ps);
 			com.datastax.driver.core.ResultSet rs = session.execute(bs);
 			for (Row row : rs) {
@@ -171,7 +171,7 @@ public class MyCassandraDB implements DatabaseClient{
 	public void post(String key, byte[] image, long timestamp) {
 		PreparedStatement ps = null;
 		try {
-			ps = session.prepare("UPDATE testtable SET image= ? , timestamp = ?  WHERE key LIKE ?");
+			ps = session.prepare("UPDATE tablename SET image= ? , timestamp = ?  WHERE key = ?");
 			BoundStatement bs=new BoundStatement(ps);
 			ByteBuffer img= ByteBuffer.wrap(image);
 			com.datastax.driver.core.ResultSet rs = session.execute(bs);

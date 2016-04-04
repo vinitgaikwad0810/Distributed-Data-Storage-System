@@ -27,7 +27,7 @@ public class DatabaseService {
 		try {
 		if (db == null) {
 			if (dbType.equalsIgnoreCase("cassandra")) {
-//				TODO add Cassandra code
+				db = new MyCassandraDB("127.0.0.1","db275");
 			} else if (dbType.equalsIgnoreCase("postgresql")) {				
 					db = new PostgreSQL(url, username, password, ssl);
 				} 
