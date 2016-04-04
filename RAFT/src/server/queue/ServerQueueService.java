@@ -27,6 +27,7 @@ public class ServerQueueService {
 	
 	private static ServerQueueService instance = null;	
 	private Channel channel = null;
+	private Channel get_channel = null;
 	private QueueingConsumer consumer = null;
 	private QueueingConsumer get_consumer = null;
 	public static ServerQueueService getInstance() {
@@ -49,10 +50,11 @@ public class ServerQueueService {
 			    channel.queueDeclare(INBOUND_QUEUE, true, false, false, null);	    
 			    channel.basicQos(1);
 			    
-			    channel.queueDeclare(GET_QUEUE, true, false, false, null);	    
-			    channel.basicQos(1);
+			    get_channel = connection.createChannel();
+			    get_channel.queueDeclare(GET_QUEUE, true, false, false, null);	    
+			    get_channel.basicQos(1);
 
-			    DefaultConsumer my_consumer = new DefaultConsumer(channel) {
+			    DefaultConsumer my_consumer = new DefaultConsumer(get_channel) {
 			        @Override
 			        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties props, byte[] body)
 			        	throws IOException {				        
@@ -67,13 +69,13 @@ public class ServerQueueService {
 					        	                                     .correlationId(props.getCorrelationId())
 					        	                                     .build();
 					        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
-					        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-					        	channel.basicAck(envelope.getDeliveryTag(), false);
+					        	get_channel.basicPublish( "", props.getReplyTo(), replyProps, image);
+					        	get_channel.basicAck(envelope.getDeliveryTag(), false);
 					        } 					        
 				        }
 			        }
 			      };
-			    channel.basicConsume(GET_QUEUE, false, my_consumer);
+			    get_channel.basicConsume(GET_QUEUE, false, my_consumer);
 			      
 			    consumer = new QueueingConsumer(channel);
 			    channel.basicConsume(INBOUND_QUEUE, false, consumer);
