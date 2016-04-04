@@ -113,6 +113,7 @@ public class MyCassandraDB implements DatabaseClient{
 			com.datastax.driver.core.ResultSet rs = session.execute(bs);
 	        for (Row row : rs) {
 	            timestamp = row.getLong(0);
+	            System.out.println(timestamp);
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -171,7 +172,7 @@ public class MyCassandraDB implements DatabaseClient{
 	public void post(String key, byte[] image, long timestamp) {
 		PreparedStatement ps = null;
 		try {
-			ps = session.prepare("UPDATE tablename SET image= ? , timestamp = ?  WHERE key = ?");
+			ps = session.prepare("INSERT INTO tablename ( key , image , timestamp ) VALUES (?, ?, ?);");
 			BoundStatement bs=new BoundStatement(ps);
 			ByteBuffer img= ByteBuffer.wrap(image);
 			com.datastax.driver.core.ResultSet rs = session.execute(bs);
