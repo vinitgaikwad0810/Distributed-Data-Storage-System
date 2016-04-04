@@ -26,13 +26,13 @@ public class ImageClient implements ImageClientAPI{
 	}
 	
 	@Override
-	public void get(String key, String outputPath) {
+	public void get(String key, String outputPath, String imageName) {
 		try {
 			byte[] byteArray = queue.getMessage(key);
 			if (byteArray == null)
 				return;
 			BufferedImage imag = ImageIO.read(new ByteArrayInputStream(byteArray));
-			ImageIO.write(imag, "jpg", new File(outputPath, "snap3.jpg"));
+			ImageIO.write(imag, "jpg", new File(outputPath, imageName));
 
 		} catch (Exception e) {
 			e.printStackTrace();
