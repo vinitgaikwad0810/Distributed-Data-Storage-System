@@ -73,7 +73,7 @@ public class ServerQueueService {
 				        }
 			        }
 			      };
-			    channel.basicConsume(GET_QUEUE, true, my_consumer);
+			    channel.basicConsume(GET_QUEUE, false, my_consumer);
 			      
 			    consumer = new QueueingConsumer(channel);
 			    channel.basicConsume(INBOUND_QUEUE, false, consumer);
