@@ -18,7 +18,7 @@ import raft.NodeState;
 
 public class ServerQueueService {
 	
-	private static final String INBOUND_QUEUE = "inbound_queue";
+	private static final String INBOUND_QUEUE = QueueOperationConstants.INBOUND_QUEUE;
 	private static final String QUEUE_URL = QueueConfiguration.getInstance().getQueueURL();
 	
 	private static ServerQueueService instance = null;	
@@ -36,6 +36,7 @@ public class ServerQueueService {
 	
 	public void createQueue() {			
 		    try {
+		    	//TODO INBOUND QUEUE IS DURABLE, OUTBOUND QUEUE IS NOT DURABLE
 		    	ConnectionFactory factory = new ConnectionFactory();
 				factory.setUri(QUEUE_URL);
 			    Connection connection = factory.newConnection();
@@ -90,8 +91,7 @@ public class ServerQueueService {
 		        	                                     .build();
 		        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-		        }
+		        } 
 		        
 		        if (request.equals(QueueOperationConstants.PUT))  {
 		        	byte[] image = delivery.getBody();
@@ -101,8 +101,7 @@ public class ServerQueueService {
 		        	                                     .correlationId(props.getCorrelationId())
 		        	                                     .build();
 
-		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
+		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);  	
 		        }
 		        
 		        if (request.equals(QueueOperationConstants.POST))  {
@@ -111,17 +110,16 @@ public class ServerQueueService {
 		        	                                     .Builder()
 		        	                                     .correlationId(props.getCorrelationId())
 		        	                                     .build();
-
 		        	
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
 		        }
+		        
 		        if (request.equals(QueueOperationConstants.DELETE))  {
 	        		String key = new String(delivery.getBody());
 	        		NodeState.getService().handleDelete(key);
 		        }
-
 	        }	
+        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 	    }	        
 	 }
 

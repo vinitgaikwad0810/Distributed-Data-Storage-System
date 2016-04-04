@@ -57,10 +57,12 @@ public class ClientQueueService {
 	    connection.close();
 	}
 		
-	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException {		
+	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException {
+		String corrId = java.util.UUID.randomUUID().toString();
 	    BasicProperties props = new BasicProperties
 	                                .Builder()
 	                                .type(QueueOperationConstants.PUT)
+	                                .correlationId(corrId)
 	                                .userId(key)
 	                                .replyTo(callbackQueueName)
 	                                .build();
@@ -79,10 +81,13 @@ public class ClientQueueService {
 	                                .build();
 	    System.out.println("Client Queue Server post");
 		channel.basicPublish("", QueueOperationConstants.INBOUND_QUEUE, props, message.getImageData().toByteArray());
+		System.out.println(channel.getConnection().getAddress());
 		while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
-	            return new String(delivery.getBody());
+	            String key = new String(delivery.getBody());
+//	            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+	            return key;
 	        }
 	    }
 	}
@@ -111,7 +116,9 @@ public class ClientQueueService {
 		while (true) {
 	        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 	        if (delivery.getProperties().getCorrelationId().equals(corrId)) {
-	            return delivery.getBody();
+	            byte[] data = delivery.getBody();
+//	            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+	            return data;
 	        }
 	    }
 	}	

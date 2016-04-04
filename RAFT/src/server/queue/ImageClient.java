@@ -12,7 +12,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 import raft.proto.ImageTransfer;
 
-public class ImageClient implements ClientAPI{
+public class ImageClient implements ImageClientAPI{
 	
 	ClientQueueService queue = null;
 	
@@ -29,6 +29,8 @@ public class ImageClient implements ClientAPI{
 	public void get(String key, String outputPath) {
 		try {
 			byte[] byteArray = queue.getMessage(key);
+			if (byteArray == null)
+				return;
 			BufferedImage imag = ImageIO.read(new ByteArrayInputStream(byteArray));
 			ImageIO.write(imag, "jpg", new File(outputPath, "snap3.jpg"));
 

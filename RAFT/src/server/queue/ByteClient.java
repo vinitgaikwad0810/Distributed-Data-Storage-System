@@ -11,7 +11,7 @@ import raft.proto.ImageTransfer;
 
 public class ByteClient implements ByteClientAPI {
 
-	private ClientQueueServiceNew queue = null;
+	private ClientQueueService queue = null;
 	
 	public ByteClient(String fileName) throws Exception {
 		if (fileName == null) {
@@ -19,7 +19,7 @@ public class ByteClient implements ByteClientAPI {
 		}
 		
 		QueueConfiguration.getInstance().loadProperties(new File(fileName));
-		queue = ClientQueueServiceNew.getInstance();
+		queue = ClientQueueService.getInstance();
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class ByteClient implements ByteClientAPI {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return new byte[1];
+		return null;
 	}
 
 	@Override
