@@ -12,7 +12,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 import raft.proto.ImageTransfer;
 
-public class ImageClient implements ClientAPI{
+public class ImageClient implements ImageClientAPI{
 	
 	ClientQueueService queue = null;
 	
@@ -21,7 +21,7 @@ public class ImageClient implements ClientAPI{
 			throw new Exception("Queue Configurataion file not found");
 		}
 		
-		QueueConfiguration.getInstance().loadProperties(new File(fileName));
+		ConfigurationReader.getInstance().loadProperties(new File(fileName));
 		queue = ClientQueueService.getInstance();
 	}
 	
@@ -29,6 +29,8 @@ public class ImageClient implements ClientAPI{
 	public void get(String key, String outputPath) {
 		try {
 			byte[] byteArray = queue.getMessage(key);
+			if (byteArray == null)
+				return;
 			BufferedImage imag = ImageIO.read(new ByteArrayInputStream(byteArray));
 			ImageIO.write(imag, "jpg", new File(outputPath, "snap3.jpg"));
 
@@ -50,6 +52,9 @@ public class ImageClient implements ClientAPI{
 		}catch (ConsumerCancelledException e) {
 			e.printStackTrace();
 		} catch (ShutdownSignalException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 	}

@@ -33,7 +33,7 @@ import logger.Logger;
 import raft.NodeState;
 import router.container.RoutingConf;
 import server.edges.EdgeMonitor;
-import server.queue.QueueConfiguration;
+import server.queue.ConfigurationReader;
 
 public class MessageServer {
 	//protected static Logger logger = LoggerFactory.getLogger("server");
@@ -53,9 +53,9 @@ public class MessageServer {
 	 */
 	public MessageServer(File cfg, File qConf) {
 		init(cfg);
-		QueueConfiguration.getInstance().loadProperties(qConf);
+		ConfigurationReader.getInstance().loadProperties(qConf);
 		//TODO REMOVE THIS (just for testing queue service)
-//		NodeState.getInstance().setState(NodeState.LEADER);
+		NodeState.getInstance().setState(NodeState.LEADER);
 	}
 
 	public MessageServer(RoutingConf conf) {
@@ -120,9 +120,7 @@ public class MessageServer {
 		}
 		
 		//LEADER ELECTION
-		NodeState.getInstance().setState(NodeState.FOLLOWER);
-		
-		
+//		NodeState.getInstance().setState(NodeState.FOLLOWER);				
 		
 	}
 

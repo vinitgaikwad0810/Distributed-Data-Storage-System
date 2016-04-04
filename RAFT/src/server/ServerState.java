@@ -2,12 +2,12 @@ package server;
 
 import router.container.RoutingConf;
 import server.edges.EdgeMonitor;
-import server.queue.QueueConfiguration;
+import server.queue.ConfigurationReader;
 
 public class ServerState {
 	private RoutingConf conf;
 	private EdgeMonitor emon;
-	private QueueConfiguration queueConf = QueueConfiguration.getInstance();
+	private ConfigurationReader queueConf = ConfigurationReader.getInstance();
 //	private TaskList tasks;
 
 
@@ -28,7 +28,7 @@ public class ServerState {
 		this.emon = emon;
 	}
 	
-	public QueueConfiguration getQueueConf() {
+	public ConfigurationReader getQueueConf() {
 		return queueConf;
 	}
 

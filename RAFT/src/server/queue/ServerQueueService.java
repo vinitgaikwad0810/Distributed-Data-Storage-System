@@ -1,5 +1,6 @@
 package server.queue;
 
+import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
@@ -18,8 +19,8 @@ import raft.NodeState;
 
 public class ServerQueueService {
 	
-	private static final String INBOUND_QUEUE = "inbound_queue";
-	private static final String QUEUE_URL = QueueConfiguration.getInstance().getQueueURL();
+	private static final String INBOUND_QUEUE = SystemConstants.INBOUND_QUEUE;
+	private static final String QUEUE_URL = ConfigurationReader.getInstance().getQueueURL();
 	
 	private static ServerQueueService instance = null;	
 	private Channel channel = null;
@@ -36,6 +37,7 @@ public class ServerQueueService {
 	
 	public void createQueue() {			
 		    try {
+		    	//TODO INBOUND QUEUE IS DURABLE, OUTBOUND QUEUE IS NOT DURABLE
 		    	ConnectionFactory factory = new ConnectionFactory();
 				factory.setUri(QUEUE_URL);
 			    Connection connection = factory.newConnection();
@@ -82,7 +84,7 @@ public class ServerQueueService {
 	        System.out.println(request);
 
 	        if (request != null) {
-	        	if (request.equals(QueueOperationConstants.GET))  {
+	        	if (request.equals(SystemConstants.GET))  {
 	        		String key = new String(delivery.getBody());	        		        	
 		        	BasicProperties replyProps = new BasicProperties
 		        	                                     .Builder()
@@ -90,38 +92,28 @@ public class ServerQueueService {
 		        	                                     .build();
 		        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+		        } 
+		        
+		        if (request.equals(SystemConstants.PUT))  {
+		        	NodeState.getService().handlePutMessage(props.getUserId(), delivery.getBody(), System.currentTimeMillis());
 		        }
 		        
-		        if (request.equals(QueueOperationConstants.PUT))  {
-		        	byte[] image = delivery.getBody();
-		        	NodeState.getService().handlePutMessage(props.getUserId(), image, System.currentTimeMillis());
-		        	BasicProperties replyProps = new BasicProperties
-		        	                                     .Builder()
-		        	                                     .correlationId(props.getCorrelationId())
-		        	                                     .build();
-
-		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
-		        }
-		        
-		        if (request.equals(QueueOperationConstants.POST))  {
+		        if (request.equals(SystemConstants.POST))  {
 		        	String key = NodeState.getService().handlePostMessage(delivery.getBody(), System.currentTimeMillis());
 		        	BasicProperties replyProps = new BasicProperties
 		        	                                     .Builder()
 		        	                                     .correlationId(props.getCorrelationId())
 		        	                                     .build();
-
 		        	
 		        	channel.basicPublish( "", props.getReplyTo(), replyProps, key.getBytes());
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);	        	
 		        }
-		        if (request.equals(QueueOperationConstants.DELETE))  {
+		        
+		        if (request.equals(SystemConstants.DELETE))  {
 	        		String key = new String(delivery.getBody());
 	        		NodeState.getService().handleDelete(key);
 		        }
-
-	        }	
+	        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+	        }	        	
 	    }	        
 	 }
 

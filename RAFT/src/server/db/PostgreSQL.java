@@ -14,7 +14,7 @@ import java.util.UUID;
 public class PostgreSQL implements DatabaseClient {
 	Connection conn = null;
 
-	public PostgreSQL(String url, String username, String password, String dbname, String ssl) throws SQLException {
+	public PostgreSQL(String url, String username, String password, String ssl) throws SQLException {
 		
 		Properties props = new Properties();
 		props.setProperty("user", username);

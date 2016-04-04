@@ -17,7 +17,7 @@ public class DatabaseTest {
 	
 	public DatabaseTest() {
 		try {
-			postgre= new PostgreSQL(url, username, password, dbname, ssl);
+			postgre= new PostgreSQL(url, username, password, ssl);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

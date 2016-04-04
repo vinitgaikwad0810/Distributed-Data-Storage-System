@@ -4,11 +4,11 @@ import java.sql.SQLException;
 
 public class DatabaseService {
 	
-	protected PostgreSQL postgre;
-	protected String url="jdbc:postgresql://localhost:5432/db275";
-	protected String username="jagruti";
-	protected String password="linux2015";
-	protected String dbname="db275";
+	protected DatabaseClient db;
+	private String url = null;
+	private String username = null;
+	private String password = null;
+	private String dbType = null;
 	protected String ssl="false";
 
 	private static DatabaseService instance = null;
@@ -21,14 +21,31 @@ public class DatabaseService {
 	}
 	
 	private DatabaseService() {
-		try {
-			postgre = new PostgreSQL(url, username, password, dbname, ssl);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public DatabaseClient getDb() {
-		return postgre;
+		try {
+		if (db == null) {
+			if (dbType.equalsIgnoreCase("cassandra")) {
+//				TODO add Cassandra code
+			} else if (dbType.equalsIgnoreCase("postgresql")) {				
+					db = new PostgreSQL(url, username, password, ssl);
+				} 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return db;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void dbConfiguration(String type, String url, String username, String password) {
+		this.dbType = type;
+		this.url = url;
+		this.username = username;
+		this.password = password;
 	}
 }

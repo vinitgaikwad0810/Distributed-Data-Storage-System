@@ -1,7 +1,6 @@
 package server.queue;
 
-public interface ClientAPI {
-
+public interface ImageClientAPI {
 	
 	void get(String key, String outputPath);
 
