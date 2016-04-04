@@ -1,7 +1,8 @@
-package adapter.server;
+package adapter.client;
 
+import adapter.server.AdapterInit;
+import adapter.server.AdapterUtils;
 import adapter.server.proto.Global;
-import deven.monitor.client.MonitorClient.ClientClosedListener;
 import deven.monitor.server.MonitorInit;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -10,15 +11,20 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class AdapterClient {
+public class AdapterClientAPI {
+	
+	static String host;
+	static int port;
+	static ChannelFuture channel;
+	
+	 static EventLoopGroup group;
+	
 
-	private static EventLoopGroup group;
-
-	public static void sendGlobalCommandMessage(Global.GlobalCommandMessage globalCommandMessage, String host,
-			int port) {
-
-		System.out.println("--> initializing connection to " + host + ":" + port);
-
+	
+	public static void init(String host_received, int port_received)
+	{
+		host = host_received;
+		port = port_received;
 		group = new NioEventLoopGroup();
 		try {
 			AdapterInit si = new AdapterInit(false);
@@ -29,9 +35,9 @@ public class AdapterClient {
 			b.option(ChannelOption.SO_KEEPALIVE, true);
 
 			// Make the connection attempt.
-			ChannelFuture channel = b.connect(host, port).syncUninterruptibly();
+			 channel = b.connect(host, port).syncUninterruptibly();
 
-			channel.channel().writeAndFlush(globalCommandMessage);
+			
 			// want to monitor the connection to the server s.t. if we loose the
 			// connection, we can try to re-establish it.
 			// ClientClosedListener ccl = new ClientClosedListener(this);
@@ -45,6 +51,41 @@ public class AdapterClient {
 			ex.printStackTrace();
 		}
 
+	}
+
+	
+	
+	
+	public static void get(String key){
+		
+		Global.GlobalCommandMessage  getRequest = AdapterUtils.prepareClusterRouteRequestForGET(0, key);
+		
+		channel.channel().writeAndFlush(getRequest);
+		
+		
+	}
+	
+	public static void post(byte[] image){
+		
+		
+	}
+	
+
+	public static void main(String[] args) {
+		
+		String host = "127.0.0.1";
+		int port = 4000;
+		
+		AdapterClientAPI.init(host, port);
+		
+		AdapterClientAPI.get("ec1a8dfa-5a90-4e13-9101-c92ebe6611f5");
+	//	AdapterClientAPI.post("abc".getBytes());;
+	
+		while(true){
+			
+		}
+		// TODO Auto-generated method stub
+		
 	}
 
 }

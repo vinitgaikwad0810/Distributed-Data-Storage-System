@@ -17,7 +17,8 @@ public class AdapterUtils {
 		Global.GlobalCommandMessage.Builder globalCommandMessage = Global.GlobalCommandMessage.newBuilder();
 
 		Common.Header.Builder header = Common.Header.newBuilder();
-	
+		header.setNodeId(1);
+		header.setTime(ServerUtils.getCurrentUnixTimeStamp());
 
 		header.setDestination(destination);
 
@@ -32,6 +33,29 @@ public class AdapterUtils {
 		return globalCommandMessage.build();
 
 	}
+	
+	public static Global.GlobalCommandMessage prepareClusterRouteRequestForPOST(int destination, byte[] imageArray) {
+
+		Global.GlobalCommandMessage.Builder globalCommandMessage = Global.GlobalCommandMessage.newBuilder();
+
+		Common.Header.Builder header = Common.Header.newBuilder();
+	
+
+		header.setDestination(destination);
+
+		globalCommandMessage.setHeader(header);
+
+		Storage.Query.Builder query = Storage.Query.newBuilder();
+		query.setAction(Storage.Action.STORE);
+		query.setKey("123");
+		query.setData(ByteString.copyFrom(imageArray));
+
+		globalCommandMessage.setQuery(query);
+
+		return globalCommandMessage.build();
+
+	}
+	
 	
 	public static GlobalCommandMessage ReponseBuilderForGET(byte[] imageArray){
 		Global.GlobalCommandMessage.Builder globalmsg = Global.GlobalCommandMessage.newBuilder();
@@ -51,7 +75,27 @@ public class AdapterUtils {
 		return globalmsg.build();
 		
 	}
-	
+
+		
+	public static GlobalCommandMessage ReponseBuilderForPOST(String key){
+		Global.GlobalCommandMessage.Builder globalmsg = Global.GlobalCommandMessage.newBuilder();
+		Header.Builder header = Header.newBuilder();
+		header.setNodeId(AdapterServer.conf.getNodeId());
+		header.setTime(ServerUtils.getCurrentUnixTimeStamp());
+		
+		Storage.Response.Builder response = Storage.Response.newBuilder();
+		response.setAction(Storage.Action.STORE);
+		response.setKey(key);
+		
+		
+		globalmsg.setHeader(header);
+		globalmsg.setResponse(response);
+		
+		
+		//globalmsg.setHeader(
+		return globalmsg.build();
+	}
+
 	
 
 }

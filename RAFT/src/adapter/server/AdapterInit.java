@@ -1,7 +1,7 @@
 package adapter.server;
 
 import adapter.server.proto.Global;
-import deven.monitor.server.MonitorHandler;
+
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -11,7 +11,7 @@ import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import raft.proto.Monitor.ClusterMonitor;
+
 
 public class AdapterInit extends ChannelInitializer<SocketChannel>  {
 	boolean compress = false;

@@ -17,7 +17,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import router.container.RoutingConf;
 import server.MessageServer;
 import server.MessageServer.JsonUtil;
-import server.queue.QueueConfiguration;
+import server.queue.ConfigurationReader;
 
 public class AdapterServer {
 	protected static AdapterServerConf conf;
@@ -72,9 +72,9 @@ public class AdapterServer {
 //			svr.startServer();
 			
 			init(adaptercf);
-			QueueConfiguration.getInstance().loadProperties(queueConf);
+			ConfigurationReader.getInstance().loadProperties(queueConf);
 			System.out.println("This is the adaper connection:"+AdapterServer.conf.getRouting().get(0).getId());
-			System.out.println("This is the Q URL--"+QueueConfiguration.getInstance().getQueueURL());
+			System.out.println("This is the Q URL--"+ConfigurationReader.getInstance().getQueueURL());
 			AdapterServer.startServer();
 			
 		} catch (Exception e) {

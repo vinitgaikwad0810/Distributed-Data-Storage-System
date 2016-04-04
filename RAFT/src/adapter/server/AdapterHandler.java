@@ -15,8 +15,15 @@
  */
 package adapter.server;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import javax.imageio.ImageIO;
+
+import com.google.protobuf.ByteString;
 
 import adapter.server.proto.Global;
 import adapter.server.proto.Global.GlobalCommandMessage;
@@ -30,6 +37,8 @@ public class AdapterHandler extends SimpleChannelInboundHandler<Global.GlobalCom
 
 	// protected ConcurrentMap<String, MonitorListener> listeners = new
 	// ConcurrentHashMap<String, MonitorListener>();
+	String outputPath = "/home/vinit";
+
 	public AdapterHandler() {
 	}
 
@@ -45,14 +54,39 @@ public class AdapterHandler extends SimpleChannelInboundHandler<Global.GlobalCom
 		if (globalCommandMessage.hasQuery()) {
 
 			if (globalCommandMessage.getQuery().getAction() == Storage.Action.GET) {
-				GlobalCommandMessage response =QueryMessageHandler.getHandler(globalCommandMessage);
+				GlobalCommandMessage response = QueryMessageHandler.getHandler(globalCommandMessage);
 
-			ctx.channel().writeAndFlush(response);
+				ctx.channel().writeAndFlush(response);
+			
+			
+			}else if (globalCommandMessage.getQuery().getAction() == Storage.Action.STORE) {
+				GlobalCommandMessage response = QueryMessageHandler.postHandler(globalCommandMessage);
+
+				ctx.channel().writeAndFlush(response);
+			}
+			
+		}
+			
+			
+			
+			
+
+			if (globalCommandMessage.hasResponse()) {
+			Logger.DEBUG("Inter-Cluster message response from " + globalCommandMessage.getHeader().getNodeId());
+			if(globalCommandMessage.getResponse().getAction() == Storage.Action.GET){	
+				
+				ByteString imageByteString = globalCommandMessage.getResponse().getData();
+				byte[] imageArray = imageByteString.toByteArray();
+				System.out.write(imageArray);
+			//	BufferedImage imag = ImageIO.read(new ByteArrayInputStream(imageArray));
+		//		ImageIO.write(imag, "jpg",new File(outputPath, "received.jpg"));
+			}
+			else if(globalCommandMessage.getResponse().getAction() == Storage.Action.STORE){
+				String key = globalCommandMessage.getResponse().getKey();
+				System.out.println("The Key recieved from adapter layer is" + key);
 			}
 
 		}
-	
-		
 
 	}
 
