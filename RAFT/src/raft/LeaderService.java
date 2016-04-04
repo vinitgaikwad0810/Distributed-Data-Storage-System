@@ -154,11 +154,13 @@ public class LeaderService extends Service implements Runnable {
 	}
 
 	public byte[] handleGetMessage(String key) {
+		System.out.println("GET Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
 		NodeState.updateTaskCount();
 		return DatabaseService.getInstance().getDb().get(key);
 	}
 	
 	public String handlePostMessage(byte[] image, long timestamp) {
+		System.out.println("POST Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
 		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(timestamp);
 		String key = DatabaseService.getInstance().getDb().post(image, timestamp);
@@ -168,6 +170,7 @@ public class LeaderService extends Service implements Runnable {
 	}
 
 	public void handlePutMessage(String key, byte[] image, long timestamp) {
+		System.out.println("PUT Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
 		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(timestamp);
 		DatabaseService.getInstance().getDb().put(key, image, timestamp);
@@ -177,6 +180,7 @@ public class LeaderService extends Service implements Runnable {
 	
 	@Override
 	public void handleDelete(String key) {
+		System.out.println("DELETE Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
 		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(System.currentTimeMillis());
 		DatabaseService.getInstance().getDb().delete(key);

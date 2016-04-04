@@ -55,7 +55,7 @@ public class MessageServer {
 		init(cfg);
 		ConfigurationReader.getInstance().loadProperties(qConf);
 		//TODO REMOVE THIS (just for testing queue service)
-//		NodeState.getInstance().setState(NodeState.LEADER);
+		NodeState.getInstance().setState(NodeState.LEADER);
 	}
 
 	public MessageServer(RoutingConf conf) {
@@ -120,8 +120,7 @@ public class MessageServer {
 		}
 		
 		//LEADER ELECTION
-		NodeState.getInstance().setState(NodeState.FOLLOWER);				
-		
+//		NodeState.getInstance().setState(NodeState.FOLLOWER);						
 	}
 
 	private boolean verifyConf(RoutingConf conf) {

@@ -6,11 +6,14 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.ConsumerCancelledException;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
@@ -49,6 +52,29 @@ public class ServerQueueService {
 			    channel.queueDeclare(GET_QUEUE, true, false, false, null);	    
 			    channel.basicQos(1);
 
+			    DefaultConsumer my_consumer = new DefaultConsumer(channel) {
+			        @Override
+			        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties props, byte[] body)
+			        	throws IOException {				        
+				        String request = props.getType();
+				        System.out.println(request);
+
+				        if (request != null) {
+				        	if (request.equals(SystemConstants.GET))  {
+				        		String key = new String(body);	        		        	
+					        	BasicProperties replyProps = new BasicProperties
+					        	                                     .Builder()
+					        	                                     .correlationId(props.getCorrelationId())
+					        	                                     .build();
+					        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
+					        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
+					        	channel.basicAck(envelope.getDeliveryTag(), false);
+					        } 					        
+				        }
+			        }
+			      };
+			    channel.basicConsume(GET_QUEUE, true, my_consumer);
+			      
 			    consumer = new QueueingConsumer(channel);
 			    channel.basicConsume(INBOUND_QUEUE, false, consumer);
 			    processQueue();
