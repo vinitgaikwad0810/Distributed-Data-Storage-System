@@ -66,7 +66,8 @@ public class AdapterClientAPI {
 	}
 	
 	public static void post(byte[] image){
-		
+		Global.GlobalCommandMessage  postRequest = AdapterUtils.prepareClusterRouteRequestForPOST(0, image);
+		channel.channel().writeAndFlush(postRequest);
 		
 	}
 	
@@ -79,7 +80,7 @@ public class AdapterClientAPI {
 		AdapterClientAPI.init(host, port);
 		
 		AdapterClientAPI.get("ec1a8dfa-5a90-4e13-9101-c92ebe6611f5");
-	//	AdapterClientAPI.post("abc".getBytes());;
+		AdapterClientAPI.post("vinit_adapter".getBytes());;
 	
 		while(true){
 			

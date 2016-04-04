@@ -15,6 +15,8 @@ public class NodeState {
 
 	private static long timeStampOnLatestUpdate = 0;
 	
+	private static long noTaskProcessed = 0;
+	
 	public static long getTimeStampOnLatestUpdate() {
 		if (timeStampOnLatestUpdate == 0) {
 			timeStampOnLatestUpdate = DatabaseService.getInstance().getDb().getCurrentTimeStamp();
@@ -26,10 +28,17 @@ public class NodeState {
 		NodeState.timeStampOnLatestUpdate = timeStampOnLatestUpdate;
 	}
 
+	public static void updateTaskCount() {
+		noTaskProcessed++;
+	}
+		
 	public static Service getService() {
 		return service;
 	}	
-
+	
+	public static int getupdatedTaskCount() {
+		return (int)noTaskProcessed;
+	}
 	private static Service service;
 
 	private static NodeState instance = null;

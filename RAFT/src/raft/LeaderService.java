@@ -2,13 +2,17 @@ package raft;
 
 import java.util.List;
 
+import deven.monitor.client.MonitorClient;
+import deven.monitor.client.MonitorClientApp;
 import io.netty.channel.ChannelFuture;
 import logger.Logger;
 import raft.proto.AppendEntriesRPC.AppendEntries.RequestType;
+import raft.proto.Monitor.ClusterMonitor;
 import raft.proto.Work.WorkMessage;
 import server.db.DatabaseService;
 import server.db.Record;
 import server.edges.EdgeInfo;
+import server.queue.ConfigurationReader;
 import server.queue.ServerQueueService;
 
 public class LeaderService extends Service implements Runnable {
@@ -116,13 +120,48 @@ public class LeaderService extends Service implements Runnable {
 				}
 			}
 		}
+		if (ConfigurationReader.getInstance().getMonitorHost() != null && ConfigurationReader.getInstance().getMonitorPort() != null) {
+			sendClusterMonitor(ConfigurationReader.getInstance().getMonitorHost(), ConfigurationReader.getInstance().getMonitorPort());
+		}		
+	}
+	
+	public void sendClusterMonitor(String host, int port) {
+		try {
+			MonitorClient mc = new MonitorClient(host, port);
+			MonitorClientApp ma = new MonitorClientApp(mc);
+			// do stuff w/ the connection
+			System.out.println("Creating message");
+			ClusterMonitor msg = ma.sendDummyMessage(countActiveNodes(),NodeState.getupdatedTaskCount());
+			System.out.println("Sending generated message");
+			mc.write(msg);	
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	public int countActiveNodes() {
+		int count = 0;
+		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap()
+				.values()) {
+
+			if (ei.isActive() && ei.getChannel() != null) {				
+				count++;
+				
+			}
+		}
+		return count;
 	}
 
 	public byte[] handleGetMessage(String key) {
+		System.out.println("GET Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
+		NodeState.updateTaskCount();
 		return DatabaseService.getInstance().getDb().get(key);
 	}
 	
 	public String handlePostMessage(byte[] image, long timestamp) {
+		System.out.println("POST Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
+		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(timestamp);
 		String key = DatabaseService.getInstance().getDb().post(image, timestamp);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, image, timestamp, RequestType.POST);
@@ -131,6 +170,8 @@ public class LeaderService extends Service implements Runnable {
 	}
 
 	public void handlePutMessage(String key, byte[] image, long timestamp) {
+		System.out.println("PUT Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
+		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(timestamp);
 		DatabaseService.getInstance().getDb().put(key, image, timestamp);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, image, timestamp, RequestType.PUT);
@@ -139,6 +180,8 @@ public class LeaderService extends Service implements Runnable {
 	
 	@Override
 	public void handleDelete(String key) {
+		System.out.println("DELETE Request Processed by Node: " + NodeState.getInstance().getServerState().getConf().getNodeId());
+		NodeState.updateTaskCount();
 		NodeState.setTimeStampOnLatestUpdate(System.currentTimeMillis());
 		DatabaseService.getInstance().getDb().delete(key);
 		WorkMessage wm = ServiceUtils.prepareAppendEntriesPacket(key, null, 0 ,RequestType.DELETE);
