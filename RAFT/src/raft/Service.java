@@ -41,5 +41,22 @@ public class Service {
 	public void handleAppendEntries(WorkMessage wm) {
 
 	}
+	
+	public byte[] handleGetMessage(String key) {
+		return new byte[1];
+	}
+	
+	public String handlePostMessage(byte[] image, long timestamp) {
+		return null;
+	}
+
+	public void handlePutMessage(String key, byte[] image, long timestamp) {
+		
+	}
+	
+	public void handleDelete(String key) {
+		
+	}
+
 
 }
