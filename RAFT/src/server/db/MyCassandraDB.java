@@ -151,7 +151,6 @@ public class MyCassandraDB implements DatabaseClient{
 
 	@Override
 	public List<Record> getAllEntries() {
-		Statement stmt = null;
 		List<Record> list = new ArrayList<Record>();
 		try {
 			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM tablename");			
@@ -170,15 +169,10 @@ public class MyCassandraDB implements DatabaseClient{
 
 	@Override
 	public void post(String key, byte[] image, long timestamp) {
-		PreparedStatement ps = null;
-		try {
-			ps = session.prepare("INSERT INTO tablename ( key , image , timestamp ) VALUES (?, ?, ?);");
+		PreparedStatement ps = session.prepare("INSERT INTO tablename ( key , image , timestamp ) VALUES (?, ?, ?);");
 			BoundStatement bs=new BoundStatement(ps);
 			ByteBuffer img= ByteBuffer.wrap(image);
-			com.datastax.driver.core.ResultSet rs = session.execute(bs);
 			session.execute(bs.bind(key,img,timestamp));
-		} finally {
-		}
 	}
 
 }
