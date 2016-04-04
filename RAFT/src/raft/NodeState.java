@@ -1,6 +1,7 @@
 package raft;
 
 import server.ServerState;
+import server.db.DatabaseService;
 
 public class NodeState {
 
@@ -12,9 +13,12 @@ public class NodeState {
 
 	private static int state = 2;
 
-	private static long timeStampOnLatestUpdate;
+	private static long timeStampOnLatestUpdate = 0;
 	
 	public static long getTimeStampOnLatestUpdate() {
+		if (timeStampOnLatestUpdate == 0) {
+			timeStampOnLatestUpdate = DatabaseService.getInstance().getDb().getCurrentTimeStamp();
+		}
 		return timeStampOnLatestUpdate;
 	}
 
@@ -24,9 +28,7 @@ public class NodeState {
 
 	public static Service getService() {
 		return service;
-	}
-
-	
+	}	
 
 	private static Service service;
 

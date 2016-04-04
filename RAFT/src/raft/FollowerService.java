@@ -68,8 +68,7 @@ public class FollowerService extends Service implements Runnable {
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
 
 		// TODO
-		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < DatabaseService
-				.getInstance().getDb().getCurrentTimeStamp()) {
+		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < NodeState.getTimeStampOnLatestUpdate()) {
 			Logger.DEBUG(NodeState.getInstance().getServerState().getConf().getNodeId() + " has replied NO");
 			return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.NO);
 
@@ -107,19 +106,21 @@ public class FollowerService extends Service implements Runnable {
 		RequestType type = wm.getAppendEntriesPacket().getAppendEntries().getRequestType();
 		
 		if (type == RequestType.GET) {
-			//TODO
+			//TODO 
 			DatabaseService.getInstance().getDb().get(key);
 		} else if (type == RequestType.POST) {
+			NodeState.setTimeStampOnLatestUpdate(unixTimeStamp);
 			DatabaseService.getInstance().getDb().post(key, image, unixTimeStamp);
 		} else if (type == RequestType.PUT) {
+			NodeState.setTimeStampOnLatestUpdate(unixTimeStamp);
 			DatabaseService.getInstance().getDb().put(key, image, unixTimeStamp);
 		} else if (type == RequestType.DELETE) {
+			NodeState.setTimeStampOnLatestUpdate(System.currentTimeMillis());
 			DatabaseService.getInstance().getDb().delete(key);
 		}
 		
 		Logger.DEBUG("Inserted entry with key " + key + " received from "
 				+ wm.getAppendEntriesPacket().getAppendEntries().getLeaderId());
-
 	}
 	
 

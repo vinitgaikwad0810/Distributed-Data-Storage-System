@@ -107,14 +107,11 @@ public class CandidateService extends Service implements Runnable {
 
 	@Override
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
-	//TODO
-		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < DatabaseService
-				.getInstance().getDb().getCurrentTimeStamp()) {
+		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < NodeState.getTimeStampOnLatestUpdate()) {
 			return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.NO);
 
 		}
 		return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.YES);
-
 	}
 
 	@Override
