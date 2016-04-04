@@ -14,7 +14,7 @@ import server.queue.ServerQueueService;
 public class LeaderService extends Service implements Runnable {
 
 	private static LeaderService INSTANCE = null;
-
+	Thread heartBt = null;
 	private LeaderService() {
 		// TODO Auto-generated constructor stub
 
@@ -31,20 +31,23 @@ public class LeaderService extends Service implements Runnable {
 	public void run() {
 		Logger.DEBUG("-----------------------LEADER SERVICE STARTED ----------------------------");
 		initLatestTimeStampOnUpdate();
+		heartBt = new Thread(){
+		    public void run(){
+				while (running) {
+					try {
+						Thread.sleep(NodeState.getInstance().getServerState().getConf().getHeartbeatDt());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					sendHeartBeat();
+					// TODO Append Messages are to be sent only when master receives
+					// update message from queue
+				}
+		    }
+		 };
+
+		heartBt.start();
 		ServerQueueService.getInstance().createQueue();
-		while (running) {
-
-			try {
-				Thread.sleep(NodeState.getInstance().getServerState().getConf().getHeartbeatDt());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			sendHeartBeat();
-			// TODO Append Messages are to be sent only when master recieves
-			// update message from queue
-
-		}
 	}
 
 	private void initLatestTimeStampOnUpdate() {
