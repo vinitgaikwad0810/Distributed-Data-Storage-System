@@ -83,6 +83,7 @@ public class FollowerService extends Service implements Runnable {
 
 	public void handleHeartBeat(WorkMessage wm) {
 		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
+		NodeState.currentTerm = wm.getHeartBeatPacket().getHeartbeat().getTerm();
 		onReceivingHeartBeatPacket();
 		WorkMessage heartBeatResponse = ServiceUtils.prepareHeartBeatResponse();
 

@@ -46,7 +46,8 @@ public class CandidateService extends Service implements Runnable {
 	private void startElection() {
 		numberOfYESResponses = 0;
 		TotalResponses = 0;
-
+		NodeState.currentTerm++;
+		
 		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
 
 			if (ei.isActive() && ei.getChannel() != null) {

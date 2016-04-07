@@ -6,7 +6,7 @@ public class Service {
 
 	protected volatile Boolean running = Boolean.TRUE;
 	static Thread cthread;
-
+	
 	public void startService(Service service) {
 
 	}

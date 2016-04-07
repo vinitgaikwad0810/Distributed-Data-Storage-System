@@ -12,6 +12,8 @@ public class NodeState {
 	public static final int FOLLOWER = 2;
 
 	private static int state = 2;
+	
+	static int currentTerm = 0;
 
 	private static long timeStampOnLatestUpdate = 0;
 	

@@ -107,6 +107,28 @@ public class LeaderService extends Service implements Runnable {
 		}
 
 	}
+	
+	public void handleHeartBeat(WorkMessage wm) {
+		Logger.DEBUG("HeartbeatPacket received from leader :" + wm.getHeartBeatPacket().getHeartbeat().getLeaderId());
+		//onReceivingHeartBeatPacket();
+		WorkMessage heartBeatResponse = ServiceUtils.prepareHeartBeatResponse();
+		
+		for (EdgeInfo ei : NodeState.getInstance().getServerState().getEmon().getOutboundEdges().getMap().values()) {
+
+			if (ei.isActive() && ei.getChannel() != null
+					&& ei.getRef() == wm.getHeartBeatPacket().getHeartbeat().getLeaderId()) {
+					if(wm.getHeartBeatPacket().getHeartbeat().getTerm()>NodeState.currentTerm) {
+						NodeState.getInstance().setState(NodeState.FOLLOWER);
+					}
+//				Logger.DEBUG("Sent HeartBeatResponse to " + ei.getRef());
+//				ChannelFuture cf = ei.getChannel().writeAndFlush(heartBeatResponse);
+//				if (cf.isDone() && !cf.isSuccess()) {
+//					Logger.DEBUG("failed to send message (HeartBeatResponse) to server");
+//				}
+			}
+		}
+
+	}
 
 	@Override
 	public void sendHeartBeat() {

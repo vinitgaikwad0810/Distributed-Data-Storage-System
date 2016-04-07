@@ -29,14 +29,14 @@ public class ServiceUtils {
 		RequestVoteRPC.Builder requestVoteRPC = RequestVoteRPC.newBuilder();
 		requestVoteRPC.setTerm(NodeState.getInstance().getServerState().getConf().getNodeId());
 		requestVoteRPC.setCandidateId("" + NodeState.getInstance().getServerState().getConf().getNodeId());
-
+		requestVoteRPC.setTerm(NodeState.currentTerm);
 		requestVoteRPC.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
 		// requestVoteRPC.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 
 		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
 		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		voteRPCPacket.setRequestVoteRPC(requestVoteRPC);
-
+		
 		work.setVoteRPCPacket(voteRPCPacket);
 
 		return work.build();
@@ -74,7 +74,7 @@ public class ServiceUtils {
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
 		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
-
+		
 		work.setHeartBeatPacket(heartBeatPacket);
 
 		return work.build();
