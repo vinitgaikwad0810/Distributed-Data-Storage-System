@@ -70,9 +70,9 @@ public class ServerQueueService {
 					        	                                     .build();
 					        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
 					        	get_channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-					        	get_channel.basicAck(envelope.getDeliveryTag(), false);
 					        } 					        
 				        }
+			        	get_channel.basicAck(envelope.getDeliveryTag(), false);
 			        }
 			      };
 			    get_channel.basicConsume(GET_QUEUE, false, my_consumer);
@@ -128,10 +128,8 @@ public class ServerQueueService {
 		} catch (ShutdownSignalException e) {
 			e.printStackTrace();
 		} catch (ConsumerCancelledException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 }
@@ -150,9 +148,9 @@ public class ServerQueueService {
 		        	                                     .correlationId(props.getCorrelationId())
 		        	                                     .build();
 		        	byte[] image = NodeState.getService().handleGetMessage(key); 		        			
-		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);
-		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+		        	channel.basicPublish( "", props.getReplyTo(), replyProps, image);		        	
 		        }
+	        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 	        }	        		
 	}
 
@@ -177,6 +175,7 @@ public class ServerQueueService {
 		        
 		        if (request.equals(SystemConstants.PUT))  {
 		        	NodeState.getService().handlePutMessage(props.getCorrelationId(), delivery.getBody(), System.currentTimeMillis());
+		        	channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		        }
 		        
 		        if (request.equals(SystemConstants.POST))  {
@@ -193,6 +192,7 @@ public class ServerQueueService {
 		        if (request.equals(SystemConstants.DELETE))  {
 	        		String key = new String(delivery.getBody());
 	        		NodeState.getService().handleDelete(key);
+	        		channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		        }
 	        }	        	
 	    }	        
