@@ -49,7 +49,7 @@ public class MyCassandraDB implements DatabaseClient{
 			// TODO connection handling
 		}
 		
-		return image;	
+		return temp;	
 	}
 
 	@Override
@@ -105,7 +105,6 @@ public class MyCassandraDB implements DatabaseClient{
 
 	@Override
 	public long getCurrentTimeStamp() {
-		Statement stmt = null;
 		long timestamp = 0; 
 		try {
 			PreparedStatement ps= session.prepare("Select max(timestamp) FROM tablename");			
@@ -130,7 +129,7 @@ public class MyCassandraDB implements DatabaseClient{
 		try {
 			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM tablename where timestamp > ?");			
 			BoundStatement bs=new BoundStatement(ps);
-			com.datastax.driver.core.ResultSet rs = session.execute(bs);
+			com.datastax.driver.core.ResultSet rs = session.execute(bs.bind(staleTimestamp));
 			for (Row row : rs) {
 				list.add(new Record(row.getString("key"), Bytes.getArray(row.getBytes("image")), row.getLong("timestamp")));
 	        }
