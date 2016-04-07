@@ -7,7 +7,6 @@ import raft.proto.Work;
 import raft.proto.AppendEntriesRPC.AppendEntriesPacket;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse.IsUpdated;
-import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
 import raft.proto.VoteRPC.ResponseVoteRPC;

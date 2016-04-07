@@ -9,15 +9,15 @@ message GlobalCommandMessage {
 
     oneof payload {
       // a client (external) sanity check for testing
-      bool ping = 3;
+      bool ping = 2;
 
-      string message = 4;
+      string message = 3;
       
-      Failure err = 5;
+      Failure err = 4;
 
-	  Query query = 6;
+	  Query query = 5;
 	  
-	  Response response = 7;
+	  Response response = 6;
 
    }
 }

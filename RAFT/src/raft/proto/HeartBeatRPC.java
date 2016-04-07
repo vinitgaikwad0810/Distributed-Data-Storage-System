@@ -13,37 +13,22 @@ public final class HeartBeatRPC {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required int32 leaderId = 1;</code>
+     * <code>required int32 term = 1;</code>
+     */
+    boolean hasTerm();
+    /**
+     * <code>required int32 term = 1;</code>
+     */
+    int getTerm();
+
+    /**
+     * <code>required int32 leaderId = 2;</code>
      */
     boolean hasLeaderId();
     /**
-     * <code>required int32 leaderId = 1;</code>
+     * <code>required int32 leaderId = 2;</code>
      */
     int getLeaderId();
-
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    java.util.List<AppendEntriesRPC.LogEntries> 
-        getLogEntriesList();
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    AppendEntriesRPC.LogEntries getLogEntries(int index);
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    int getLogEntriesCount();
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-        getLogEntriesOrBuilderList();
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-        int index);
 
     /**
      * <code>required int64 timeStampOnLatestUpdate = 3;</code>
@@ -108,19 +93,16 @@ public final class HeartBeatRPC {
             }
             case 8: {
               bitField0_ |= 0x00000001;
+              term_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
               leaderId_ = input.readInt32();
               break;
             }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                logEntries_ = new java.util.ArrayList<AppendEntriesRPC.LogEntries>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
-              break;
-            }
             case 24: {
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000004;
               timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
@@ -132,9 +114,6 @@ public final class HeartBeatRPC {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          logEntries_ = java.util.Collections.unmodifiableList(logEntries_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -167,54 +146,34 @@ public final class HeartBeatRPC {
     }
 
     private int bitField0_;
-    public static final int LEADERID_FIELD_NUMBER = 1;
-    private int leaderId_;
+    public static final int TERM_FIELD_NUMBER = 1;
+    private int term_;
     /**
-     * <code>required int32 leaderId = 1;</code>
+     * <code>required int32 term = 1;</code>
      */
-    public boolean hasLeaderId() {
+    public boolean hasTerm() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 leaderId = 1;</code>
+     * <code>required int32 term = 1;</code>
+     */
+    public int getTerm() {
+      return term_;
+    }
+
+    public static final int LEADERID_FIELD_NUMBER = 2;
+    private int leaderId_;
+    /**
+     * <code>required int32 leaderId = 2;</code>
+     */
+    public boolean hasLeaderId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int32 leaderId = 2;</code>
      */
     public int getLeaderId() {
       return leaderId_;
-    }
-
-    public static final int LOGENTRIES_FIELD_NUMBER = 2;
-    private java.util.List<AppendEntriesRPC.LogEntries> logEntries_;
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    public java.util.List<AppendEntriesRPC.LogEntries> getLogEntriesList() {
-      return logEntries_;
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    public java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-        getLogEntriesOrBuilderList() {
-      return logEntries_;
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    public int getLogEntriesCount() {
-      return logEntries_.size();
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    public AppendEntriesRPC.LogEntries getLogEntries(int index) {
-      return logEntries_.get(index);
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 2;</code>
-     */
-    public AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-        int index) {
-      return logEntries_.get(index);
     }
 
     public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 3;
@@ -223,7 +182,7 @@ public final class HeartBeatRPC {
      * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     public boolean hasTimeStampOnLatestUpdate() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required int64 timeStampOnLatestUpdate = 3;</code>
@@ -233,8 +192,8 @@ public final class HeartBeatRPC {
     }
 
     private void initFields() {
+      term_ = 0;
       leaderId_ = 0;
-      logEntries_ = java.util.Collections.emptyList();
       timeStampOnLatestUpdate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
@@ -243,6 +202,10 @@ public final class HeartBeatRPC {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
+      if (!hasTerm()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!hasLeaderId()) {
         memoizedIsInitialized = 0;
         return false;
@@ -250,12 +213,6 @@ public final class HeartBeatRPC {
       if (!hasTimeStampOnLatestUpdate()) {
         memoizedIsInitialized = 0;
         return false;
-      }
-      for (int i = 0; i < getLogEntriesCount(); i++) {
-        if (!getLogEntries(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -265,12 +222,12 @@ public final class HeartBeatRPC {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, leaderId_);
-      }
-      for (int i = 0; i < logEntries_.size(); i++) {
-        output.writeMessage(2, logEntries_.get(i));
+        output.writeInt32(1, term_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, leaderId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt64(3, timeStampOnLatestUpdate_);
       }
       getUnknownFields().writeTo(output);
@@ -284,13 +241,13 @@ public final class HeartBeatRPC {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, leaderId_);
-      }
-      for (int i = 0; i < logEntries_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, logEntries_.get(i));
+          .computeInt32Size(1, term_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, leaderId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(3, timeStampOnLatestUpdate_);
       }
@@ -403,7 +360,6 @@ public final class HeartBeatRPC {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getLogEntriesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -412,14 +368,10 @@ public final class HeartBeatRPC {
 
       public Builder clear() {
         super.clear();
-        leaderId_ = 0;
+        term_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        if (logEntriesBuilder_ == null) {
-          logEntries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        } else {
-          logEntriesBuilder_.clear();
-        }
+        leaderId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
         timeStampOnLatestUpdate_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
@@ -453,18 +405,13 @@ public final class HeartBeatRPC {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.leaderId_ = leaderId_;
-        if (logEntriesBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            logEntries_ = java.util.Collections.unmodifiableList(logEntries_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.logEntries_ = logEntries_;
-        } else {
-          result.logEntries_ = logEntriesBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+        result.term_ = term_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
+        }
+        result.leaderId_ = leaderId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
         }
         result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
         result.bitField0_ = to_bitField0_;
@@ -483,34 +430,11 @@ public final class HeartBeatRPC {
 
       public Builder mergeFrom(HeartBeatRPC.HeartBeat other) {
         if (other == HeartBeatRPC.HeartBeat.getDefaultInstance()) return this;
+        if (other.hasTerm()) {
+          setTerm(other.getTerm());
+        }
         if (other.hasLeaderId()) {
           setLeaderId(other.getLeaderId());
-        }
-        if (logEntriesBuilder_ == null) {
-          if (!other.logEntries_.isEmpty()) {
-            if (logEntries_.isEmpty()) {
-              logEntries_ = other.logEntries_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureLogEntriesIsMutable();
-              logEntries_.addAll(other.logEntries_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.logEntries_.isEmpty()) {
-            if (logEntriesBuilder_.isEmpty()) {
-              logEntriesBuilder_.dispose();
-              logEntriesBuilder_ = null;
-              logEntries_ = other.logEntries_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              logEntriesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getLogEntriesFieldBuilder() : null;
-            } else {
-              logEntriesBuilder_.addAllMessages(other.logEntries_);
-            }
-          }
         }
         if (other.hasTimeStampOnLatestUpdate()) {
           setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
@@ -520,6 +444,10 @@ public final class HeartBeatRPC {
       }
 
       public final boolean isInitialized() {
+        if (!hasTerm()) {
+          
+          return false;
+        }
         if (!hasLeaderId()) {
           
           return false;
@@ -527,12 +455,6 @@ public final class HeartBeatRPC {
         if (!hasTimeStampOnLatestUpdate()) {
           
           return false;
-        }
-        for (int i = 0; i < getLogEntriesCount(); i++) {
-          if (!getLogEntries(i).isInitialized()) {
-            
-            return false;
-          }
         }
         return true;
       }
@@ -556,276 +478,68 @@ public final class HeartBeatRPC {
       }
       private int bitField0_;
 
-      private int leaderId_ ;
+      private int term_ ;
       /**
-       * <code>required int32 leaderId = 1;</code>
+       * <code>required int32 term = 1;</code>
        */
-      public boolean hasLeaderId() {
+      public boolean hasTerm() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 leaderId = 1;</code>
+       * <code>required int32 term = 1;</code>
+       */
+      public int getTerm() {
+        return term_;
+      }
+      /**
+       * <code>required int32 term = 1;</code>
+       */
+      public Builder setTerm(int value) {
+        bitField0_ |= 0x00000001;
+        term_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 term = 1;</code>
+       */
+      public Builder clearTerm() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        term_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int leaderId_ ;
+      /**
+       * <code>required int32 leaderId = 2;</code>
+       */
+      public boolean hasLeaderId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int32 leaderId = 2;</code>
        */
       public int getLeaderId() {
         return leaderId_;
       }
       /**
-       * <code>required int32 leaderId = 1;</code>
+       * <code>required int32 leaderId = 2;</code>
        */
       public Builder setLeaderId(int value) {
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
         leaderId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 leaderId = 1;</code>
+       * <code>required int32 leaderId = 2;</code>
        */
       public Builder clearLeaderId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         leaderId_ = 0;
         onChanged();
         return this;
-      }
-
-      private java.util.List<AppendEntriesRPC.LogEntries> logEntries_ =
-        java.util.Collections.emptyList();
-      private void ensureLogEntriesIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          logEntries_ = new java.util.ArrayList<AppendEntriesRPC.LogEntries>(logEntries_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder> logEntriesBuilder_;
-
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public java.util.List<AppendEntriesRPC.LogEntries> getLogEntriesList() {
-        if (logEntriesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(logEntries_);
-        } else {
-          return logEntriesBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public int getLogEntriesCount() {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.size();
-        } else {
-          return logEntriesBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public AppendEntriesRPC.LogEntries getLogEntries(int index) {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.get(index);
-        } else {
-          return logEntriesBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder setLogEntries(
-          int index, AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.set(index, value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder setLogEntries(
-          int index, AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder addLogEntries(AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.add(value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder addLogEntries(
-          int index, AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.add(index, value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder addLogEntries(
-          AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.add(builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder addLogEntries(
-          int index, AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder addAllLogEntries(
-          java.lang.Iterable<? extends AppendEntriesRPC.LogEntries> values) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, logEntries_);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder clearLogEntries() {
-        if (logEntriesBuilder_ == null) {
-          logEntries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          logEntriesBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public Builder removeLogEntries(int index) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.remove(index);
-          onChanged();
-        } else {
-          logEntriesBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder getLogEntriesBuilder(
-          int index) {
-        return getLogEntriesFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-          int index) {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.get(index);  } else {
-          return logEntriesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-           getLogEntriesOrBuilderList() {
-        if (logEntriesBuilder_ != null) {
-          return logEntriesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(logEntries_);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder addLogEntriesBuilder() {
-        return getLogEntriesFieldBuilder().addBuilder(
-            AppendEntriesRPC.LogEntries.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder addLogEntriesBuilder(
-          int index) {
-        return getLogEntriesFieldBuilder().addBuilder(
-            index, AppendEntriesRPC.LogEntries.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 2;</code>
-       */
-      public java.util.List<AppendEntriesRPC.LogEntries.Builder> 
-           getLogEntriesBuilderList() {
-        return getLogEntriesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder> 
-          getLogEntriesFieldBuilder() {
-        if (logEntriesBuilder_ == null) {
-          logEntriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder>(
-                  logEntries_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
-                  getParentForChildren(),
-                  isClean());
-          logEntries_ = null;
-        }
-        return logEntriesBuilder_;
       }
 
       private long timeStampOnLatestUpdate_ ;
@@ -876,44 +590,29 @@ public final class HeartBeatRPC {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required int32 nodeId = 1;</code>
+     * <code>required int32 term = 1;</code>
+     */
+    boolean hasTerm();
+    /**
+     * <code>required int32 term = 1;</code>
+     */
+    int getTerm();
+
+    /**
+     * <code>required int32 nodeId = 2;</code>
      */
     boolean hasNodeId();
     /**
-     * <code>required int32 nodeId = 1;</code>
+     * <code>required int32 nodeId = 2;</code>
      */
     int getNodeId();
 
     /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    java.util.List<AppendEntriesRPC.LogEntries> 
-        getLogEntriesList();
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    AppendEntriesRPC.LogEntries getLogEntries(int index);
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    int getLogEntriesCount();
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-        getLogEntriesOrBuilderList();
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-        int index);
-
-    /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     boolean hasTimeStampOnLatestUpdate();
     /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     long getTimeStampOnLatestUpdate();
   }
@@ -971,19 +670,16 @@ public final class HeartBeatRPC {
             }
             case 8: {
               bitField0_ |= 0x00000001;
+              term_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
               nodeId_ = input.readInt32();
               break;
             }
-            case 26: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                logEntries_ = new java.util.ArrayList<AppendEntriesRPC.LogEntries>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000002;
+            case 24: {
+              bitField0_ |= 0x00000004;
               timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
@@ -995,9 +691,6 @@ public final class HeartBeatRPC {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          logEntries_ = java.util.Collections.unmodifiableList(logEntries_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -1112,74 +805,54 @@ public final class HeartBeatRPC {
     }
 
     private int bitField0_;
-    public static final int NODEID_FIELD_NUMBER = 1;
-    private int nodeId_;
+    public static final int TERM_FIELD_NUMBER = 1;
+    private int term_;
     /**
-     * <code>required int32 nodeId = 1;</code>
+     * <code>required int32 term = 1;</code>
      */
-    public boolean hasNodeId() {
+    public boolean hasTerm() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 nodeId = 1;</code>
+     * <code>required int32 term = 1;</code>
+     */
+    public int getTerm() {
+      return term_;
+    }
+
+    public static final int NODEID_FIELD_NUMBER = 2;
+    private int nodeId_;
+    /**
+     * <code>required int32 nodeId = 2;</code>
+     */
+    public boolean hasNodeId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int32 nodeId = 2;</code>
      */
     public int getNodeId() {
       return nodeId_;
     }
 
-    public static final int LOGENTRIES_FIELD_NUMBER = 3;
-    private java.util.List<AppendEntriesRPC.LogEntries> logEntries_;
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public java.util.List<AppendEntriesRPC.LogEntries> getLogEntriesList() {
-      return logEntries_;
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-        getLogEntriesOrBuilderList() {
-      return logEntries_;
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public int getLogEntriesCount() {
-      return logEntries_.size();
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public AppendEntriesRPC.LogEntries getLogEntries(int index) {
-      return logEntries_.get(index);
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-        int index) {
-      return logEntries_.get(index);
-    }
-
-    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 4;
+    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 3;
     private long timeStampOnLatestUpdate_;
     /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     public boolean hasTimeStampOnLatestUpdate() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     public long getTimeStampOnLatestUpdate() {
       return timeStampOnLatestUpdate_;
     }
 
     private void initFields() {
+      term_ = 0;
       nodeId_ = 0;
-      logEntries_ = java.util.Collections.emptyList();
       timeStampOnLatestUpdate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
@@ -1188,6 +861,10 @@ public final class HeartBeatRPC {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
+      if (!hasTerm()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!hasNodeId()) {
         memoizedIsInitialized = 0;
         return false;
@@ -1195,12 +872,6 @@ public final class HeartBeatRPC {
       if (!hasTimeStampOnLatestUpdate()) {
         memoizedIsInitialized = 0;
         return false;
-      }
-      for (int i = 0; i < getLogEntriesCount(); i++) {
-        if (!getLogEntries(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -1210,13 +881,13 @@ public final class HeartBeatRPC {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, nodeId_);
-      }
-      for (int i = 0; i < logEntries_.size(); i++) {
-        output.writeMessage(3, logEntries_.get(i));
+        output.writeInt32(1, term_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt64(4, timeStampOnLatestUpdate_);
+        output.writeInt32(2, nodeId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt64(3, timeStampOnLatestUpdate_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1229,15 +900,15 @@ public final class HeartBeatRPC {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, nodeId_);
-      }
-      for (int i = 0; i < logEntries_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, logEntries_.get(i));
+          .computeInt32Size(1, term_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, timeStampOnLatestUpdate_);
+          .computeInt32Size(2, nodeId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, timeStampOnLatestUpdate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1348,7 +1019,6 @@ public final class HeartBeatRPC {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getLogEntriesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1357,14 +1027,10 @@ public final class HeartBeatRPC {
 
       public Builder clear() {
         super.clear();
-        nodeId_ = 0;
+        term_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        if (logEntriesBuilder_ == null) {
-          logEntries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        } else {
-          logEntriesBuilder_.clear();
-        }
+        nodeId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
         timeStampOnLatestUpdate_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
@@ -1398,18 +1064,13 @@ public final class HeartBeatRPC {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.nodeId_ = nodeId_;
-        if (logEntriesBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            logEntries_ = java.util.Collections.unmodifiableList(logEntries_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.logEntries_ = logEntries_;
-        } else {
-          result.logEntries_ = logEntriesBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+        result.term_ = term_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
+        }
+        result.nodeId_ = nodeId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
         }
         result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
         result.bitField0_ = to_bitField0_;
@@ -1428,34 +1089,11 @@ public final class HeartBeatRPC {
 
       public Builder mergeFrom(HeartBeatRPC.HeartBeatResponse other) {
         if (other == HeartBeatRPC.HeartBeatResponse.getDefaultInstance()) return this;
+        if (other.hasTerm()) {
+          setTerm(other.getTerm());
+        }
         if (other.hasNodeId()) {
           setNodeId(other.getNodeId());
-        }
-        if (logEntriesBuilder_ == null) {
-          if (!other.logEntries_.isEmpty()) {
-            if (logEntries_.isEmpty()) {
-              logEntries_ = other.logEntries_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureLogEntriesIsMutable();
-              logEntries_.addAll(other.logEntries_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.logEntries_.isEmpty()) {
-            if (logEntriesBuilder_.isEmpty()) {
-              logEntriesBuilder_.dispose();
-              logEntriesBuilder_ = null;
-              logEntries_ = other.logEntries_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              logEntriesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getLogEntriesFieldBuilder() : null;
-            } else {
-              logEntriesBuilder_.addAllMessages(other.logEntries_);
-            }
-          }
         }
         if (other.hasTimeStampOnLatestUpdate()) {
           setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
@@ -1465,6 +1103,10 @@ public final class HeartBeatRPC {
       }
 
       public final boolean isInitialized() {
+        if (!hasTerm()) {
+          
+          return false;
+        }
         if (!hasNodeId()) {
           
           return false;
@@ -1472,12 +1114,6 @@ public final class HeartBeatRPC {
         if (!hasTimeStampOnLatestUpdate()) {
           
           return false;
-        }
-        for (int i = 0; i < getLogEntriesCount(); i++) {
-          if (!getLogEntries(i).isInitialized()) {
-            
-            return false;
-          }
         }
         return true;
       }
@@ -1501,293 +1137,85 @@ public final class HeartBeatRPC {
       }
       private int bitField0_;
 
-      private int nodeId_ ;
+      private int term_ ;
       /**
-       * <code>required int32 nodeId = 1;</code>
+       * <code>required int32 term = 1;</code>
        */
-      public boolean hasNodeId() {
+      public boolean hasTerm() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 nodeId = 1;</code>
+       * <code>required int32 term = 1;</code>
+       */
+      public int getTerm() {
+        return term_;
+      }
+      /**
+       * <code>required int32 term = 1;</code>
+       */
+      public Builder setTerm(int value) {
+        bitField0_ |= 0x00000001;
+        term_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 term = 1;</code>
+       */
+      public Builder clearTerm() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        term_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int nodeId_ ;
+      /**
+       * <code>required int32 nodeId = 2;</code>
+       */
+      public boolean hasNodeId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int32 nodeId = 2;</code>
        */
       public int getNodeId() {
         return nodeId_;
       }
       /**
-       * <code>required int32 nodeId = 1;</code>
+       * <code>required int32 nodeId = 2;</code>
        */
       public Builder setNodeId(int value) {
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
         nodeId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 nodeId = 1;</code>
+       * <code>required int32 nodeId = 2;</code>
        */
       public Builder clearNodeId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         nodeId_ = 0;
         onChanged();
         return this;
       }
 
-      private java.util.List<AppendEntriesRPC.LogEntries> logEntries_ =
-        java.util.Collections.emptyList();
-      private void ensureLogEntriesIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          logEntries_ = new java.util.ArrayList<AppendEntriesRPC.LogEntries>(logEntries_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder> logEntriesBuilder_;
-
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public java.util.List<AppendEntriesRPC.LogEntries> getLogEntriesList() {
-        if (logEntriesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(logEntries_);
-        } else {
-          return logEntriesBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public int getLogEntriesCount() {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.size();
-        } else {
-          return logEntriesBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries getLogEntries(int index) {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.get(index);
-        } else {
-          return logEntriesBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder setLogEntries(
-          int index, AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.set(index, value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder setLogEntries(
-          int index, AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.add(value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(
-          int index, AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.add(index, value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(
-          AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.add(builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(
-          int index, AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addAllLogEntries(
-          java.lang.Iterable<? extends AppendEntriesRPC.LogEntries> values) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, logEntries_);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder clearLogEntries() {
-        if (logEntriesBuilder_ == null) {
-          logEntries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          logEntriesBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder removeLogEntries(int index) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.remove(index);
-          onChanged();
-        } else {
-          logEntriesBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder getLogEntriesBuilder(
-          int index) {
-        return getLogEntriesFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-          int index) {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.get(index);  } else {
-          return logEntriesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-           getLogEntriesOrBuilderList() {
-        if (logEntriesBuilder_ != null) {
-          return logEntriesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(logEntries_);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder addLogEntriesBuilder() {
-        return getLogEntriesFieldBuilder().addBuilder(
-            AppendEntriesRPC.LogEntries.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder addLogEntriesBuilder(
-          int index) {
-        return getLogEntriesFieldBuilder().addBuilder(
-            index, AppendEntriesRPC.LogEntries.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public java.util.List<AppendEntriesRPC.LogEntries.Builder> 
-           getLogEntriesBuilderList() {
-        return getLogEntriesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder> 
-          getLogEntriesFieldBuilder() {
-        if (logEntriesBuilder_ == null) {
-          logEntriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder>(
-                  logEntries_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
-                  getParentForChildren(),
-                  isClean());
-          logEntries_ = null;
-        }
-        return logEntriesBuilder_;
-      }
-
       private long timeStampOnLatestUpdate_ ;
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public boolean hasTimeStampOnLatestUpdate() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public long getTimeStampOnLatestUpdate() {
         return timeStampOnLatestUpdate_;
       }
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public Builder setTimeStampOnLatestUpdate(long value) {
         bitField0_ |= 0x00000004;
@@ -1796,7 +1224,7 @@ public final class HeartBeatRPC {
         return this;
       }
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public Builder clearTimeStampOnLatestUpdate() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -2734,16 +2162,15 @@ public final class HeartBeatRPC {
   static {
     java.lang.String[] descriptorData = {
       "\n\022HeartBeatRPC.proto\032\026AppendEntriesRPC.p" +
-      "roto\"_\n\tHeartBeat\022\020\n\010leaderId\030\001 \002(\005\022\037\n\nl" +
-      "ogEntries\030\002 \003(\0132\013.LogEntries\022\037\n\027timeStam" +
-      "pOnLatestUpdate\030\003 \002(\003\"\201\001\n\021HeartBeatRespo" +
-      "nse\022\016\n\006nodeId\030\001 \002(\005\022\037\n\nlogEntries\030\003 \003(\0132" +
-      "\013.LogEntries\022\037\n\027timeStampOnLatestUpdate\030" +
-      "\004 \002(\003\"\032\n\007IsAlive\022\007\n\003YES\020\001\022\006\n\002NO\020\002\"\205\001\n\017He" +
-      "artBeatPacket\022\025\n\runixTimestamp\030\001 \002(\003\022\037\n\t" +
-      "heartbeat\030\002 \001(\0132\n.HeartBeatH\000\022/\n\021heartBe" +
-      "atResponse\030\003 \001(\0132\022.HeartBeatResponseH\000B\t",
-      "\n\007payload"
+      "roto\"L\n\tHeartBeat\022\014\n\004term\030\001 \002(\005\022\020\n\010leade" +
+      "rId\030\002 \002(\005\022\037\n\027timeStampOnLatestUpdate\030\003 \002" +
+      "(\003\"n\n\021HeartBeatResponse\022\014\n\004term\030\001 \002(\005\022\016\n" +
+      "\006nodeId\030\002 \002(\005\022\037\n\027timeStampOnLatestUpdate" +
+      "\030\003 \002(\003\"\032\n\007IsAlive\022\007\n\003YES\020\001\022\006\n\002NO\020\002\"\205\001\n\017H" +
+      "eartBeatPacket\022\025\n\runixTimestamp\030\001 \002(\003\022\037\n" +
+      "\theartbeat\030\002 \001(\0132\n.HeartBeatH\000\022/\n\021heartB" +
+      "eatResponse\030\003 \001(\0132\022.HeartBeatResponseH\000B" +
+      "\t\n\007payload"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2763,13 +2190,13 @@ public final class HeartBeatRPC {
     internal_static_HeartBeat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_HeartBeat_descriptor,
-        new java.lang.String[] { "LeaderId", "LogEntries", "TimeStampOnLatestUpdate", });
+        new java.lang.String[] { "Term", "LeaderId", "TimeStampOnLatestUpdate", });
     internal_static_HeartBeatResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_HeartBeatResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_HeartBeatResponse_descriptor,
-        new java.lang.String[] { "NodeId", "LogEntries", "TimeStampOnLatestUpdate", });
+        new java.lang.String[] { "Term", "NodeId", "TimeStampOnLatestUpdate", });
     internal_static_HeartBeatPacket_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_HeartBeatPacket_fieldAccessorTable = new

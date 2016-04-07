@@ -2,7 +2,7 @@ package deven.monitor.server;
 
 public class MoniterServerApp {
 		public static void main(String[] args) {
-			int port = 5000;
+			int port = 4001;
 
 			try {
 				MonitorServer svr = new MonitorServer(port);

@@ -80,7 +80,7 @@ public class AdapterClientAPI {
 		AdapterClientAPI.init(host, port);
 		
 		AdapterClientAPI.get("ec1a8dfa-5a90-4e13-9101-c92ebe6611f5");
-		AdapterClientAPI.post("vinit_adapter".getBytes());;
+		//AdapterClientAPI.post("vinit_adapter".getBytes());;
 	
 		while(true){
 			

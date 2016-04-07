@@ -1,9 +1,5 @@
 option optimize_for = SPEED;
 
-message LogEntries{
-	required string key = 1;
-	required int64 unixTimeStamp = 2;
-}
 
 message ImageMsg{
 	required string key = 1;
@@ -13,9 +9,8 @@ message ImageMsg{
 message AppendEntries{
 	required int32 leaderId = 1;
 	required ImageMsg imageMsg = 2;
-	repeated LogEntries logEntries = 3;
-	required int64 timeStampOnLatestUpdate = 4;		
-	required RequestType requestType = 5;	
+	required int64 timeStampOnLatestUpdate = 3;		
+	required RequestType requestType = 4;	
 
 	enum RequestType{
 	

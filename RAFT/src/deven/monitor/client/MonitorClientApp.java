@@ -41,7 +41,7 @@ public class MonitorClientApp implements MonitorListener{
 		//Build the message to be sent to monitor server
 		ClusterMonitor.Builder cm = ClusterMonitor.newBuilder();
 		//your cluster ID
-		cm.setClusterId(NodeState.getInstance().getServerState().getConf().getNodeId());
+		cm.setClusterId(989);
 		//No of nodes in your cluster
 		cm.setNumNodes(noOfNodes);
 		//Node Id = Process Id

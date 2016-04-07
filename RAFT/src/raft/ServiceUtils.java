@@ -8,7 +8,6 @@ import raft.proto.AppendEntriesRPC.AppendEntries.RequestType;
 import raft.proto.AppendEntriesRPC.AppendEntriesPacket;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse;
 import raft.proto.AppendEntriesRPC.AppendEntriesResponse.IsUpdated;
-import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeat;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
@@ -31,15 +30,9 @@ public class ServiceUtils {
 		requestVoteRPC.setTerm(NodeState.getInstance().getServerState().getConf().getNodeId());
 		requestVoteRPC.setCandidateId("" + NodeState.getInstance().getServerState().getConf().getNodeId());
 
-		LogEntries.Builder logEntries = LogEntries.newBuilder();
-		logEntries.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-		logEntries.setKey("1234");
+		requestVoteRPC.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
+		// requestVoteRPC.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 
-		requestVoteRPC.addLogEntriesBuilder(0);
-		requestVoteRPC.setLogEntries(0, logEntries);
-		// TODO requestVoteRPC.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
-		requestVoteRPC.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
-		
 		VoteRPCPacket.Builder voteRPCPacket = VoteRPCPacket.newBuilder();
 		voteRPCPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		voteRPCPacket.setRequestVoteRPC(requestVoteRPC);
@@ -76,15 +69,8 @@ public class ServiceUtils {
 		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
 		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
 
-		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey("1");
-		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
-		heartbeatResponse.addLogEntries(logEntry);
-
-		// TODO
-		// heartbeatResponse.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
-		heartbeatResponse.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
+		heartbeatResponse.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
+		// heartbeatResponse.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
 		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		heartBeatPacket.setHeartBeatResponse(heartbeatResponse);
@@ -102,16 +88,11 @@ public class ServiceUtils {
 		HeartBeat.Builder heartbeat = HeartBeat.newBuilder();
 		heartbeat.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
 
-		//Optional
-		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey("1");
-		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
+		// Optional
 
-		heartbeat.addLogEntries(logEntry);
-		// TODO
-		// heartbeat.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
+		heartbeat.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
 
-		heartbeat.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
+		// heartbeat.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
 		heartBeatPacket.setUnixTimestamp(ServerUtils.getCurrentUnixTimeStamp());
 		heartBeatPacket.setHeartbeat(heartbeat);
@@ -121,17 +102,14 @@ public class ServiceUtils {
 		return work.build();
 	}
 
-	public static WorkMessage prepareAppendEntriesPacket(String key, byte[] imageData, long timestamp, RequestType type) {
+	public static WorkMessage prepareAppendEntriesPacket(String key, byte[] imageData, long timestamp,
+			RequestType type) {
 
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		AppendEntriesPacket.Builder appendEntriesPacket = AppendEntriesPacket.newBuilder();
 		appendEntriesPacket.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-		
-		LogEntries.Builder logEntry = LogEntries.newBuilder();
-		logEntry.setKey(key);
-		logEntry.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		AppendEntriesRPC.ImageMsg.Builder imageMsg = AppendEntriesRPC.ImageMsg.newBuilder();
 		// TO-DO
@@ -145,13 +123,12 @@ public class ServiceUtils {
 			byteString = ByteString.copyFrom(imageData);
 		}
 		imageMsg.setImageData(byteString);
-		
 
 		AppendEntries.Builder appendEntries = AppendEntries.newBuilder();
 		appendEntries.setTimeStampOnLatestUpdate(timestamp);
 		appendEntries.setImageMsg(imageMsg);
 		appendEntries.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
-		appendEntries.addLogEntries(logEntry);
+
 		appendEntries.setRequestType(type);
 		appendEntriesPacket.setAppendEntries(appendEntries);
 
@@ -160,9 +137,8 @@ public class ServiceUtils {
 		return work.build();
 
 	}
-	
-	public static WorkMessage prepareResponseVoteRPC(IsVoteGranted decision)
-	{
+
+	public static WorkMessage prepareResponseVoteRPC(IsVoteGranted decision) {
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 

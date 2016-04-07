@@ -3,9 +3,8 @@ import "AppendEntriesRPC.proto";
 message RequestVoteRPC{
 
 required int32 term = 1;
-required string candidateId = 2;
-repeated LogEntries logEntries = 3;	
-required int64 timeStampOnLatestUpdate = 4;
+required string candidateId = 2;	
+required int64 timeStampOnLatestUpdate = 3;
 
 }
 

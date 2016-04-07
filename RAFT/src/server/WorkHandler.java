@@ -28,7 +28,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import logger.Logger;
 import raft.FollowerService;
 import raft.NodeState;
-import raft.proto.AppendEntriesRPC.LogEntries;
 import raft.proto.HeartBeatRPC.HeartBeatPacket;
 import raft.proto.HeartBeatRPC.HeartBeatResponse;
 import raft.proto.Work.WorkMessage;

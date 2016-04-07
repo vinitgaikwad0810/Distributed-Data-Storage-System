@@ -20,24 +20,17 @@ import raft.proto.Work.WorkMessage;
 public class PrintUtil {
 	private static final String gap = "   ";
 
-
-
-
-
 	public static void printWork(WorkMessage msg) {
 
 		System.out.print("\nWork: ");
-		if (msg.hasHeartBeatPacket())
-		{
+		if (msg.hasHeartBeatPacket()) {
 			System.out.println("\n--------------HeartBeatPacket---------------\n");
 			System.out.println(msg.getHeartBeatPacket().getUnixTimestamp());
-			if(msg.getHeartBeatPacket().hasHeartbeat())
-			{
+			if (msg.getHeartBeatPacket().hasHeartbeat()) {
 				System.out.println(msg.getHeartBeatPacket().getHeartbeat().getLeaderId());
-				System.out.println(msg.getHeartBeatPacket().getHeartbeat().getLogEntriesList());
+
 			}
 		}
-		}
+	}
 
-	
 }

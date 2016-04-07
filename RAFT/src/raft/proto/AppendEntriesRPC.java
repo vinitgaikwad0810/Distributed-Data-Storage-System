@@ -8,576 +8,6 @@ public final class AppendEntriesRPC {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface LogEntriesOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:LogEntries)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required string key = 1;</code>
-     */
-    boolean hasKey();
-    /**
-     * <code>required string key = 1;</code>
-     */
-    java.lang.String getKey();
-    /**
-     * <code>required string key = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getKeyBytes();
-
-    /**
-     * <code>required int64 unixTimeStamp = 2;</code>
-     */
-    boolean hasUnixTimeStamp();
-    /**
-     * <code>required int64 unixTimeStamp = 2;</code>
-     */
-    long getUnixTimeStamp();
-  }
-  /**
-   * Protobuf type {@code LogEntries}
-   */
-  public static final class LogEntries extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:LogEntries)
-      LogEntriesOrBuilder {
-    // Use LogEntries.newBuilder() to construct.
-    private LogEntries(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private LogEntries(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final LogEntries defaultInstance;
-    public static LogEntries getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public LogEntries getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private LogEntries(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              key_ = bs;
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              unixTimeStamp_ = input.readInt64();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return AppendEntriesRPC.internal_static_LogEntries_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return AppendEntriesRPC.internal_static_LogEntries_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              AppendEntriesRPC.LogEntries.class, AppendEntriesRPC.LogEntries.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<LogEntries> PARSER =
-        new com.google.protobuf.AbstractParser<LogEntries>() {
-      public LogEntries parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new LogEntries(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<LogEntries> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    public static final int KEY_FIELD_NUMBER = 1;
-    private java.lang.Object key_;
-    /**
-     * <code>required string key = 1;</code>
-     */
-    public boolean hasKey() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string key = 1;</code>
-     */
-    public java.lang.String getKey() {
-      java.lang.Object ref = key_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          key_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string key = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        key_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int UNIXTIMESTAMP_FIELD_NUMBER = 2;
-    private long unixTimeStamp_;
-    /**
-     * <code>required int64 unixTimeStamp = 2;</code>
-     */
-    public boolean hasUnixTimeStamp() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required int64 unixTimeStamp = 2;</code>
-     */
-    public long getUnixTimeStamp() {
-      return unixTimeStamp_;
-    }
-
-    private void initFields() {
-      key_ = "";
-      unixTimeStamp_ = 0L;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasKey()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasUnixTimeStamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getKeyBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt64(2, unixTimeStamp_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getKeyBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(2, unixTimeStamp_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static AppendEntriesRPC.LogEntries parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static AppendEntriesRPC.LogEntries parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static AppendEntriesRPC.LogEntries parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static AppendEntriesRPC.LogEntries parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(AppendEntriesRPC.LogEntries prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code LogEntries}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:LogEntries)
-        AppendEntriesRPC.LogEntriesOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return AppendEntriesRPC.internal_static_LogEntries_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return AppendEntriesRPC.internal_static_LogEntries_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                AppendEntriesRPC.LogEntries.class, AppendEntriesRPC.LogEntries.Builder.class);
-      }
-
-      // Construct using AppendEntriesRPC.LogEntries.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        key_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        unixTimeStamp_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return AppendEntriesRPC.internal_static_LogEntries_descriptor;
-      }
-
-      public AppendEntriesRPC.LogEntries getDefaultInstanceForType() {
-        return AppendEntriesRPC.LogEntries.getDefaultInstance();
-      }
-
-      public AppendEntriesRPC.LogEntries build() {
-        AppendEntriesRPC.LogEntries result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public AppendEntriesRPC.LogEntries buildPartial() {
-        AppendEntriesRPC.LogEntries result = new AppendEntriesRPC.LogEntries(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.key_ = key_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.unixTimeStamp_ = unixTimeStamp_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof AppendEntriesRPC.LogEntries) {
-          return mergeFrom((AppendEntriesRPC.LogEntries)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(AppendEntriesRPC.LogEntries other) {
-        if (other == AppendEntriesRPC.LogEntries.getDefaultInstance()) return this;
-        if (other.hasKey()) {
-          bitField0_ |= 0x00000001;
-          key_ = other.key_;
-          onChanged();
-        }
-        if (other.hasUnixTimeStamp()) {
-          setUnixTimeStamp(other.getUnixTimeStamp());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasKey()) {
-          
-          return false;
-        }
-        if (!hasUnixTimeStamp()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        AppendEntriesRPC.LogEntries parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (AppendEntriesRPC.LogEntries) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.lang.Object key_ = "";
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public boolean hasKey() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public java.lang.String getKey() {
-        java.lang.Object ref = key_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            key_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getKeyBytes() {
-        java.lang.Object ref = key_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          key_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public Builder setKey(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        key_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        key_ = getDefaultInstance().getKey();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public Builder setKeyBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        key_ = value;
-        onChanged();
-        return this;
-      }
-
-      private long unixTimeStamp_ ;
-      /**
-       * <code>required int64 unixTimeStamp = 2;</code>
-       */
-      public boolean hasUnixTimeStamp() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required int64 unixTimeStamp = 2;</code>
-       */
-      public long getUnixTimeStamp() {
-        return unixTimeStamp_;
-      }
-      /**
-       * <code>required int64 unixTimeStamp = 2;</code>
-       */
-      public Builder setUnixTimeStamp(long value) {
-        bitField0_ |= 0x00000002;
-        unixTimeStamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int64 unixTimeStamp = 2;</code>
-       */
-      public Builder clearUnixTimeStamp() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        unixTimeStamp_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:LogEntries)
-    }
-
-    static {
-      defaultInstance = new LogEntries(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:LogEntries)
-  }
-
   public interface ImageMsgOrBuilder extends
       // @@protoc_insertion_point(interface_extends:ImageMsg)
       com.google.protobuf.MessageOrBuilder {
@@ -1178,44 +608,20 @@ public final class AppendEntriesRPC {
     AppendEntriesRPC.ImageMsgOrBuilder getImageMsgOrBuilder();
 
     /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    java.util.List<AppendEntriesRPC.LogEntries> 
-        getLogEntriesList();
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    AppendEntriesRPC.LogEntries getLogEntries(int index);
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    int getLogEntriesCount();
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-        getLogEntriesOrBuilderList();
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-        int index);
-
-    /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     boolean hasTimeStampOnLatestUpdate();
     /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     long getTimeStampOnLatestUpdate();
 
     /**
-     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     * <code>required .AppendEntries.RequestType requestType = 4;</code>
      */
     boolean hasRequestType();
     /**
-     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     * <code>required .AppendEntries.RequestType requestType = 4;</code>
      */
     AppendEntriesRPC.AppendEntries.RequestType getRequestType();
   }
@@ -1289,24 +695,16 @@ public final class AppendEntriesRPC {
               bitField0_ |= 0x00000002;
               break;
             }
-            case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                logEntries_ = new java.util.ArrayList<AppendEntriesRPC.LogEntries>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              logEntries_.add(input.readMessage(AppendEntriesRPC.LogEntries.PARSER, extensionRegistry));
-              break;
-            }
-            case 32: {
+            case 24: {
               bitField0_ |= 0x00000004;
               timeStampOnLatestUpdate_ = input.readInt64();
               break;
             }
-            case 40: {
+            case 32: {
               int rawValue = input.readEnum();
               AppendEntriesRPC.AppendEntries.RequestType value = AppendEntriesRPC.AppendEntries.RequestType.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
+                unknownFields.mergeVarintField(4, rawValue);
               } else {
                 bitField0_ |= 0x00000008;
                 requestType_ = value;
@@ -1321,9 +719,6 @@ public final class AppendEntriesRPC {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          logEntries_ = java.util.Collections.unmodifiableList(logEntries_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -1492,66 +887,31 @@ public final class AppendEntriesRPC {
       return imageMsg_;
     }
 
-    public static final int LOGENTRIES_FIELD_NUMBER = 3;
-    private java.util.List<AppendEntriesRPC.LogEntries> logEntries_;
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public java.util.List<AppendEntriesRPC.LogEntries> getLogEntriesList() {
-      return logEntries_;
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-        getLogEntriesOrBuilderList() {
-      return logEntries_;
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public int getLogEntriesCount() {
-      return logEntries_.size();
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public AppendEntriesRPC.LogEntries getLogEntries(int index) {
-      return logEntries_.get(index);
-    }
-    /**
-     * <code>repeated .LogEntries logEntries = 3;</code>
-     */
-    public AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-        int index) {
-      return logEntries_.get(index);
-    }
-
-    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 4;
+    public static final int TIMESTAMPONLATESTUPDATE_FIELD_NUMBER = 3;
     private long timeStampOnLatestUpdate_;
     /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     public boolean hasTimeStampOnLatestUpdate() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+     * <code>required int64 timeStampOnLatestUpdate = 3;</code>
      */
     public long getTimeStampOnLatestUpdate() {
       return timeStampOnLatestUpdate_;
     }
 
-    public static final int REQUESTTYPE_FIELD_NUMBER = 5;
+    public static final int REQUESTTYPE_FIELD_NUMBER = 4;
     private AppendEntriesRPC.AppendEntries.RequestType requestType_;
     /**
-     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     * <code>required .AppendEntries.RequestType requestType = 4;</code>
      */
     public boolean hasRequestType() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .AppendEntries.RequestType requestType = 5;</code>
+     * <code>required .AppendEntries.RequestType requestType = 4;</code>
      */
     public AppendEntriesRPC.AppendEntries.RequestType getRequestType() {
       return requestType_;
@@ -1560,7 +920,6 @@ public final class AppendEntriesRPC {
     private void initFields() {
       leaderId_ = 0;
       imageMsg_ = AppendEntriesRPC.ImageMsg.getDefaultInstance();
-      logEntries_ = java.util.Collections.emptyList();
       timeStampOnLatestUpdate_ = 0L;
       requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
     }
@@ -1590,12 +949,6 @@ public final class AppendEntriesRPC {
         memoizedIsInitialized = 0;
         return false;
       }
-      for (int i = 0; i < getLogEntriesCount(); i++) {
-        if (!getLogEntries(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1609,14 +962,11 @@ public final class AppendEntriesRPC {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, imageMsg_);
       }
-      for (int i = 0; i < logEntries_.size(); i++) {
-        output.writeMessage(3, logEntries_.get(i));
-      }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt64(4, timeStampOnLatestUpdate_);
+        output.writeInt64(3, timeStampOnLatestUpdate_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, requestType_.getNumber());
+        output.writeEnum(4, requestType_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1635,17 +985,13 @@ public final class AppendEntriesRPC {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, imageMsg_);
       }
-      for (int i = 0; i < logEntries_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, logEntries_.get(i));
-      }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, timeStampOnLatestUpdate_);
+          .computeInt64Size(3, timeStampOnLatestUpdate_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, requestType_.getNumber());
+          .computeEnumSize(4, requestType_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1757,7 +1103,6 @@ public final class AppendEntriesRPC {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getImageMsgFieldBuilder();
-          getLogEntriesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1774,16 +1119,10 @@ public final class AppendEntriesRPC {
           imageMsgBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
-        if (logEntriesBuilder_ == null) {
-          logEntries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-        } else {
-          logEntriesBuilder_.clear();
-        }
         timeStampOnLatestUpdate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -1824,20 +1163,11 @@ public final class AppendEntriesRPC {
         } else {
           result.imageMsg_ = imageMsgBuilder_.build();
         }
-        if (logEntriesBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            logEntries_ = java.util.Collections.unmodifiableList(logEntries_);
-            bitField0_ = (bitField0_ & ~0x00000004);
-          }
-          result.logEntries_ = logEntries_;
-        } else {
-          result.logEntries_ = logEntriesBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
         result.timeStampOnLatestUpdate_ = timeStampOnLatestUpdate_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
         result.requestType_ = requestType_;
@@ -1862,32 +1192,6 @@ public final class AppendEntriesRPC {
         }
         if (other.hasImageMsg()) {
           mergeImageMsg(other.getImageMsg());
-        }
-        if (logEntriesBuilder_ == null) {
-          if (!other.logEntries_.isEmpty()) {
-            if (logEntries_.isEmpty()) {
-              logEntries_ = other.logEntries_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-            } else {
-              ensureLogEntriesIsMutable();
-              logEntries_.addAll(other.logEntries_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.logEntries_.isEmpty()) {
-            if (logEntriesBuilder_.isEmpty()) {
-              logEntriesBuilder_.dispose();
-              logEntriesBuilder_ = null;
-              logEntries_ = other.logEntries_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-              logEntriesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getLogEntriesFieldBuilder() : null;
-            } else {
-              logEntriesBuilder_.addAllMessages(other.logEntries_);
-            }
-          }
         }
         if (other.hasTimeStampOnLatestUpdate()) {
           setTimeStampOnLatestUpdate(other.getTimeStampOnLatestUpdate());
@@ -1919,12 +1223,6 @@ public final class AppendEntriesRPC {
         if (!getImageMsg().isInitialized()) {
           
           return false;
-        }
-        for (int i = 0; i < getLogEntriesCount(); i++) {
-          if (!getLogEntries(i).isInitialized()) {
-            
-            return false;
-          }
         }
         return true;
       }
@@ -2096,273 +1394,33 @@ public final class AppendEntriesRPC {
         return imageMsgBuilder_;
       }
 
-      private java.util.List<AppendEntriesRPC.LogEntries> logEntries_ =
-        java.util.Collections.emptyList();
-      private void ensureLogEntriesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          logEntries_ = new java.util.ArrayList<AppendEntriesRPC.LogEntries>(logEntries_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder> logEntriesBuilder_;
-
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public java.util.List<AppendEntriesRPC.LogEntries> getLogEntriesList() {
-        if (logEntriesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(logEntries_);
-        } else {
-          return logEntriesBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public int getLogEntriesCount() {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.size();
-        } else {
-          return logEntriesBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries getLogEntries(int index) {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.get(index);
-        } else {
-          return logEntriesBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder setLogEntries(
-          int index, AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.set(index, value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder setLogEntries(
-          int index, AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.add(value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(
-          int index, AppendEntriesRPC.LogEntries value) {
-        if (logEntriesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLogEntriesIsMutable();
-          logEntries_.add(index, value);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(
-          AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.add(builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addLogEntries(
-          int index, AppendEntriesRPC.LogEntries.Builder builderForValue) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          logEntriesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder addAllLogEntries(
-          java.lang.Iterable<? extends AppendEntriesRPC.LogEntries> values) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, logEntries_);
-          onChanged();
-        } else {
-          logEntriesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder clearLogEntries() {
-        if (logEntriesBuilder_ == null) {
-          logEntries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-          onChanged();
-        } else {
-          logEntriesBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public Builder removeLogEntries(int index) {
-        if (logEntriesBuilder_ == null) {
-          ensureLogEntriesIsMutable();
-          logEntries_.remove(index);
-          onChanged();
-        } else {
-          logEntriesBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder getLogEntriesBuilder(
-          int index) {
-        return getLogEntriesFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntriesOrBuilder getLogEntriesOrBuilder(
-          int index) {
-        if (logEntriesBuilder_ == null) {
-          return logEntries_.get(index);  } else {
-          return logEntriesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public java.util.List<? extends AppendEntriesRPC.LogEntriesOrBuilder> 
-           getLogEntriesOrBuilderList() {
-        if (logEntriesBuilder_ != null) {
-          return logEntriesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(logEntries_);
-        }
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder addLogEntriesBuilder() {
-        return getLogEntriesFieldBuilder().addBuilder(
-            AppendEntriesRPC.LogEntries.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public AppendEntriesRPC.LogEntries.Builder addLogEntriesBuilder(
-          int index) {
-        return getLogEntriesFieldBuilder().addBuilder(
-            index, AppendEntriesRPC.LogEntries.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .LogEntries logEntries = 3;</code>
-       */
-      public java.util.List<AppendEntriesRPC.LogEntries.Builder> 
-           getLogEntriesBuilderList() {
-        return getLogEntriesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder> 
-          getLogEntriesFieldBuilder() {
-        if (logEntriesBuilder_ == null) {
-          logEntriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              AppendEntriesRPC.LogEntries, AppendEntriesRPC.LogEntries.Builder, AppendEntriesRPC.LogEntriesOrBuilder>(
-                  logEntries_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
-                  getParentForChildren(),
-                  isClean());
-          logEntries_ = null;
-        }
-        return logEntriesBuilder_;
-      }
-
       private long timeStampOnLatestUpdate_ ;
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public boolean hasTimeStampOnLatestUpdate() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public long getTimeStampOnLatestUpdate() {
         return timeStampOnLatestUpdate_;
       }
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public Builder setTimeStampOnLatestUpdate(long value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000004;
         timeStampOnLatestUpdate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int64 timeStampOnLatestUpdate = 4;</code>
+       * <code>required int64 timeStampOnLatestUpdate = 3;</code>
        */
       public Builder clearTimeStampOnLatestUpdate() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         timeStampOnLatestUpdate_ = 0L;
         onChanged();
         return this;
@@ -2370,34 +1428,34 @@ public final class AppendEntriesRPC {
 
       private AppendEntriesRPC.AppendEntries.RequestType requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
       /**
-       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       * <code>required .AppendEntries.RequestType requestType = 4;</code>
        */
       public boolean hasRequestType() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       * <code>required .AppendEntries.RequestType requestType = 4;</code>
        */
       public AppendEntriesRPC.AppendEntries.RequestType getRequestType() {
         return requestType_;
       }
       /**
-       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       * <code>required .AppendEntries.RequestType requestType = 4;</code>
        */
       public Builder setRequestType(AppendEntriesRPC.AppendEntries.RequestType value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         requestType_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .AppendEntries.RequestType requestType = 5;</code>
+       * <code>required .AppendEntries.RequestType requestType = 4;</code>
        */
       public Builder clearRequestType() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         requestType_ = AppendEntriesRPC.AppendEntries.RequestType.GET;
         onChanged();
         return this;
@@ -3804,11 +2862,6 @@ public final class AppendEntriesRPC {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_LogEntries_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_LogEntries_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ImageMsg_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3837,22 +2890,20 @@ public final class AppendEntriesRPC {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\026AppendEntriesRPC.proto\"0\n\nLogEntries\022\013" +
-      "\n\003key\030\001 \002(\t\022\025\n\runixTimeStamp\030\002 \002(\003\"*\n\010Im" +
-      "ageMsg\022\013\n\003key\030\001 \002(\t\022\021\n\timageData\030\002 \002(\014\"\350" +
-      "\001\n\rAppendEntries\022\020\n\010leaderId\030\001 \002(\005\022\033\n\010im" +
-      "ageMsg\030\002 \002(\0132\t.ImageMsg\022\037\n\nlogEntries\030\003 " +
-      "\003(\0132\013.LogEntries\022\037\n\027timeStampOnLatestUpd" +
-      "ate\030\004 \002(\003\022/\n\013requestType\030\005 \002(\0162\032.AppendE" +
-      "ntries.RequestType\"5\n\013RequestType\022\007\n\003GET" +
-      "\020\000\022\010\n\004POST\020\001\022\007\n\003PUT\020\002\022\n\n\006DELETE\020\003\"j\n\025App" +
-      "endEntriesResponse\0223\n\tisUpdated\030\001 \002(\0162 .",
-      "AppendEntriesResponse.IsUpdated\"\034\n\tIsUpd" +
-      "ated\022\007\n\003YES\020\000\022\006\n\002NO\020\001\"\231\001\n\023AppendEntriesP" +
-      "acket\022\025\n\runixTimeStamp\030\001 \002(\003\022\'\n\rappendEn" +
-      "tries\030\002 \001(\0132\016.AppendEntriesH\000\0227\n\025appendE" +
-      "ntriesResponse\030\003 \001(\0132\026.AppendEntriesResp" +
-      "onseH\000B\t\n\007payloadB\002H\001"
+      "\n\026AppendEntriesRPC.proto\"*\n\010ImageMsg\022\013\n\003" +
+      "key\030\001 \002(\t\022\021\n\timageData\030\002 \002(\014\"\307\001\n\rAppendE" +
+      "ntries\022\020\n\010leaderId\030\001 \002(\005\022\033\n\010imageMsg\030\002 \002" +
+      "(\0132\t.ImageMsg\022\037\n\027timeStampOnLatestUpdate" +
+      "\030\003 \002(\003\022/\n\013requestType\030\004 \002(\0162\032.AppendEntr" +
+      "ies.RequestType\"5\n\013RequestType\022\007\n\003GET\020\000\022" +
+      "\010\n\004POST\020\001\022\007\n\003PUT\020\002\022\n\n\006DELETE\020\003\"j\n\025Append" +
+      "EntriesResponse\0223\n\tisUpdated\030\001 \002(\0162 .App" +
+      "endEntriesResponse.IsUpdated\"\034\n\tIsUpdate" +
+      "d\022\007\n\003YES\020\000\022\006\n\002NO\020\001\"\231\001\n\023AppendEntriesPack",
+      "et\022\025\n\runixTimeStamp\030\001 \002(\003\022\'\n\rappendEntri" +
+      "es\030\002 \001(\0132\016.AppendEntriesH\000\0227\n\025appendEntr" +
+      "iesResponse\030\003 \001(\0132\026.AppendEntriesRespons" +
+      "eH\000B\t\n\007payloadB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3866,32 +2917,26 @@ public final class AppendEntriesRPC {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_LogEntries_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_LogEntries_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_LogEntries_descriptor,
-        new java.lang.String[] { "Key", "UnixTimeStamp", });
     internal_static_ImageMsg_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(0);
     internal_static_ImageMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ImageMsg_descriptor,
         new java.lang.String[] { "Key", "ImageData", });
     internal_static_AppendEntries_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_AppendEntries_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_AppendEntries_descriptor,
-        new java.lang.String[] { "LeaderId", "ImageMsg", "LogEntries", "TimeStampOnLatestUpdate", "RequestType", });
+        new java.lang.String[] { "LeaderId", "ImageMsg", "TimeStampOnLatestUpdate", "RequestType", });
     internal_static_AppendEntriesResponse_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_AppendEntriesResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_AppendEntriesResponse_descriptor,
         new java.lang.String[] { "IsUpdated", });
     internal_static_AppendEntriesPacket_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_AppendEntriesPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_AppendEntriesPacket_descriptor,
