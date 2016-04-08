@@ -124,21 +124,14 @@ public class MyCassandraDB implements DatabaseClient{
 
 	@Override
 	public List<Record> getNewEntries(long staleTimestamp) {
-		Statement stmt = null;
 		List<Record> list = new ArrayList<Record>();
-		try {
 			PreparedStatement ps= session.prepare("Select key, image, timestamp FROM tablename where timestamp > ?");			
 			BoundStatement bs=new BoundStatement(ps);
 			com.datastax.driver.core.ResultSet rs = session.execute(bs.bind(staleTimestamp));
 			for (Row row : rs) {
 				list.add(new Record(row.getString("key"), Bytes.getArray(row.getBytes("image")), row.getLong("timestamp")));
-	        }
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			// TODO connection handling
-		}
-		return list;
+			}
+				return list;
 	}
 
 	@Override

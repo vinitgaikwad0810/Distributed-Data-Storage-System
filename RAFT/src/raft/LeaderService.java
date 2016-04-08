@@ -34,6 +34,7 @@ public class LeaderService extends Service implements Runnable {
 	@Override
 	public void run() {
 		Logger.DEBUG("-----------------------LEADER SERVICE STARTED ----------------------------");
+		NodeState.currentTerm++;
 		initLatestTimeStampOnUpdate();
 		heartBt = new Thread(){
 		    public void run(){
