@@ -67,7 +67,6 @@ public class ClientQueueService {
 	    connection.close();
 	}
 		
-	//TODO POST Not working
 	public void putMessage(String key, ImageTransfer.ImageMsg message) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {		
 		 BasicProperties props = new BasicProperties
                  .Builder()
