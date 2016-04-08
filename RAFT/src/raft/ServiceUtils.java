@@ -50,7 +50,6 @@ public class ServiceUtils {
 
 		AppendEntriesResponse.Builder appendEntriesResponse = AppendEntriesResponse.newBuilder();
 
-		// TO-DO
 		appendEntriesResponse.setIsUpdated(IsUpdated.YES);
 
 		appendEntriesPacket.setAppendEntriesResponse(appendEntriesResponse);
@@ -111,10 +110,8 @@ public class ServiceUtils {
 		appendEntriesPacket.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 
 		AppendEntriesRPC.ImageMsg.Builder imageMsg = AppendEntriesRPC.ImageMsg.newBuilder();
-		// TO-DO
 		imageMsg.setKey(key);
 
-		// TO-DO
 		ByteString byteString = null;
 		if (imageData == null) {
 			byteString = ByteString.copyFrom(new byte[1]);
