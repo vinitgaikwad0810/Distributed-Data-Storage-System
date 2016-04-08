@@ -65,10 +65,10 @@ public class ServiceUtils {
 	public static WorkMessage prepareHeartBeatResponse() {
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-
+		
 		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
 		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
-
+		heartbeatResponse.setTerm(NodeState.currentTerm);
 		heartbeatResponse.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
 		// heartbeatResponse.setTimeStampOnLatestUpdate(DatabaseService.getInstance().getDb().getCurrentTimeStamp());
 		HeartBeatPacket.Builder heartBeatPacket = HeartBeatPacket.newBuilder();
@@ -87,7 +87,7 @@ public class ServiceUtils {
 
 		HeartBeat.Builder heartbeat = HeartBeat.newBuilder();
 		heartbeat.setLeaderId(NodeState.getInstance().getServerState().getConf().getNodeId());
-
+		heartbeat.setTerm(NodeState.currentTerm);
 		// Optional
 
 		heartbeat.setTimeStampOnLatestUpdate(NodeState.getTimeStampOnLatestUpdate());
