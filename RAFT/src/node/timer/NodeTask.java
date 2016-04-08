@@ -15,7 +15,6 @@ public class NodeTask extends TimerTask{
 	
 	@Override
 	public void run() {
-		//TODO change state to candidate, keep centralized state somewhere
 		task.run();
 	}
 

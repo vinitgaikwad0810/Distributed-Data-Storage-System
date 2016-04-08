@@ -113,7 +113,6 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 					} else {
 						onAdd(ei);
 
-						// TODO create a client to the node
 						// Logger.DEBUG("Connection made 1234" +
 						// ei.getChannel().config().hashCode());
 					}
@@ -158,6 +157,5 @@ public class EdgeMonitor implements EdgeListener, Runnable {
 
 	@Override
 	public synchronized void onRemove(EdgeInfo ei) {
-		// TODO ?
 	}
 }

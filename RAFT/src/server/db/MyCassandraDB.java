@@ -46,7 +46,6 @@ public class MyCassandraDB implements DatabaseClient{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		
 		return temp;	
@@ -96,7 +95,6 @@ public class MyCassandraDB implements DatabaseClient{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO close connection, decide if need to keep open all time or
 			// initiate new everytime
 		}
 	}
@@ -117,7 +115,6 @@ public class MyCassandraDB implements DatabaseClient{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		return timestamp;	
 	}
@@ -154,7 +151,6 @@ public class MyCassandraDB implements DatabaseClient{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		return list;	
 	}

@@ -46,7 +46,6 @@ public class ServerQueueService {
 	
 	public void createQueue() {			
 		    try {
-		    	//TODO INBOUND QUEUE IS DURABLE, OUTBOUND QUEUE IS NOT DURABLE
 		    	ConnectionFactory factory = new ConnectionFactory();
 				factory.setUri(QUEUE_URL);
 			    Connection connection = factory.newConnection();
@@ -109,7 +108,6 @@ public class ServerQueueService {
 
 	public void createGetQueue() {			
 	    try {
-	    	//TODO INBOUND QUEUE IS DURABLE, OUTBOUND QUEUE IS NOT DURABLE
 	    	ConnectionFactory factory = new ConnectionFactory();
 			factory.setUri(QUEUE_URL);
 		    Connection connection = factory.newConnection();

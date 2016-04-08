@@ -22,7 +22,6 @@ import server.db.DatabaseService;
 public class ServiceUtils {
 
 	public static WorkMessage prepareRequestVoteRPC() {
-		// TO-DO
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
 

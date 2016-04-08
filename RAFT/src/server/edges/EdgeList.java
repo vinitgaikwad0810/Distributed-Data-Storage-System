@@ -36,7 +36,6 @@ public class EdgeList {
 
 	public EdgeInfo addNode(int ref, String host, int port) {
 		if (!verify(ref, host, port)) {
-			// TODO log error
 			throw new RuntimeException("Invalid node info");
 		}
 
