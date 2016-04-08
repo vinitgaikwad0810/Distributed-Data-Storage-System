@@ -1,8 +1,8 @@
 package server;
 
+import common.ConfigurationReader;
 import router.container.RoutingConf;
 import server.edges.EdgeMonitor;
-import server.queue.ConfigurationReader;
 
 public class ServerState {
 	private RoutingConf conf;

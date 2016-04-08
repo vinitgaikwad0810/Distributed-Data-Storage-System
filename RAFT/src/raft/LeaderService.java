@@ -2,6 +2,7 @@ package raft;
 
 import java.util.List;
 
+import common.ConfigurationReader;
 import deven.monitor.client.MonitorClient;
 import deven.monitor.client.MonitorClientApp;
 import io.netty.channel.ChannelFuture;
@@ -12,7 +13,6 @@ import raft.proto.Work.WorkMessage;
 import server.db.DatabaseService;
 import server.db.Record;
 import server.edges.EdgeInfo;
-import server.queue.ConfigurationReader;
 import server.queue.ServerQueueService;
 
 public class LeaderService extends Service implements Runnable {

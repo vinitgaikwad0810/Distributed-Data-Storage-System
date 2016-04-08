@@ -8,6 +8,10 @@ import java.sql.SQLException;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.AMQP.BasicProperties;
+
+import common.ConfigurationReader;
+import common.SystemConstants;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

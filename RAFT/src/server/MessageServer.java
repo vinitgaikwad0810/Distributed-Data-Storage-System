@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import common.ConfigurationReader;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -33,7 +34,6 @@ import logger.Logger;
 import raft.NodeState;
 import router.container.RoutingConf;
 import server.edges.EdgeMonitor;
-import server.queue.ConfigurationReader;
 
 public class MessageServer {
 	//protected static Logger logger = LoggerFactory.getLogger("server");
@@ -54,8 +54,6 @@ public class MessageServer {
 	public MessageServer(File cfg, File qConf) {
 		init(cfg);
 		ConfigurationReader.getInstance().loadProperties(qConf);
-		//TODO REMOVE THIS (just for testing queue service)
-//		NodeState.getInstance().setState(NodeState.LEADER);
 	}
 
 	public MessageServer(RoutingConf conf) {
@@ -72,18 +70,6 @@ public class MessageServer {
 		// We always start the worker in the background
 		Thread cthread = new Thread(comm);
 		cthread.start();
-
-		/*
-		if (!conf.isInternalNode()) {
-			StartCommandCommunication comm2 = new StartCommandCommunication(conf);
-			logger.info("Command starting");
-
-			if (background) {
-				Thread cthread2 = new Thread(comm2);
-				cthread2.start();
-			} else
-				comm2.run();
-		}*/
 	}
 
 	/**

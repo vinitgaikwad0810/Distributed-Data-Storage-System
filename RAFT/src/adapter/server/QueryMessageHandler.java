@@ -2,7 +2,7 @@ package adapter.server;
 
 import adapter.server.proto.Global;
 import adapter.server.proto.Global.GlobalCommandMessage;
-import server.queue.ByteClient;
+import client.api.impl.ByteClient;
 
 public class QueryMessageHandler {
 

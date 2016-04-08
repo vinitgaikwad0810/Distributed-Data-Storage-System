@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import common.ConfigurationReader;
 import deven.monitor.server.MonitorInit;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -17,7 +18,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import router.container.RoutingConf;
 import server.MessageServer;
 import server.MessageServer.JsonUtil;
-import server.queue.ConfigurationReader;
 
 public class AdapterServer {
 	protected static AdapterServerConf conf;
