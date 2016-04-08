@@ -1,10 +1,28 @@
 option optimize_for = SPEED;
+//										//ImageMsg//
+//-------------------------------------------------------------------------------------
 
+//   		Stores the image information in bytes and is identified by unique key
+
+//--------------------------------------------------------------------------------------
 
 message ImageMsg{
 	required string key = 1;
 	required bytes imageData = 2;
 }
+
+
+//									//AppendEntries//
+//-------------------------------------------------------------------------------------
+
+/*						Message sent by leader to check the followers' data
+						and to keep it up to date.
+						Contains LeaderId to identify the leader
+						RequestType lets the follower know what needs to be done
+*/				
+
+//--------------------------------------------------------------------------------------
+
 
 message AppendEntries{
 	required int32 leaderId = 1;
@@ -21,6 +39,13 @@ message AppendEntries{
 	}
 }
 
+
+//									//AppendEntriesResponse//
+//-------------------------------------------------------------------------------------
+/*					Lets the leader know if the data it(Follower) has is upto date.
+*/				
+//-------------------------------------------------------------------------------------
+
 message AppendEntriesResponse{
 	required IsUpdated isUpdated = 1;
 	
@@ -31,6 +56,12 @@ message AppendEntriesResponse{
 	
 	}
 }
+
+//									//AppendEntriesPacket//
+//-------------------------------------------------------------------------------------
+/*					
+*/				
+//--------------------------------------------------------------------------------------
 
 message AppendEntriesPacket{
 
