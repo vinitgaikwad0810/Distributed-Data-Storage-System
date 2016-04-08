@@ -1,6 +1,6 @@
 package test;
 
-import server.queue.ImageClient;
+import client.api.impl.ImageClient;
 
 public class DemoClient {	
 	

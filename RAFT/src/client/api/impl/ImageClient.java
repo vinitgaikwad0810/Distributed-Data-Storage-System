@@ -1,4 +1,4 @@
-package server.queue;
+package client.api.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -10,6 +10,10 @@ import javax.imageio.ImageIO;
 import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.ShutdownSignalException;
 
+import client.api.ImageClientAPI;
+import client.queue.ClientQueueService;
+import common.ConfigurationReader;
+import common.ImageReader;
 import raft.proto.ImageTransfer;
 
 public class ImageClient implements ImageClientAPI{

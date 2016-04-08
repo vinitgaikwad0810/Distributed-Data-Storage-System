@@ -1,4 +1,4 @@
-package server.queue;
+package common;
 
 public class SystemConstants {
 	public static final String GET = "get";

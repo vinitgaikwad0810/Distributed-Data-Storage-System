@@ -1,4 +1,4 @@
-package server.queue;
+package client.api.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,9 @@ import com.google.protobuf.ByteString;
 import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.ShutdownSignalException;
 
+import client.api.ByteClientAPI;
+import client.queue.ClientQueueService;
+import common.ConfigurationReader;
 import raft.proto.ImageTransfer;
 
 public class ByteClient implements ByteClientAPI {

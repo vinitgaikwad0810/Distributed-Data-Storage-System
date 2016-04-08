@@ -1,4 +1,4 @@
-package server.queue;
+package client.queue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -6,6 +6,10 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
+
+import common.ConfigurationReader;
+import common.SystemConstants;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

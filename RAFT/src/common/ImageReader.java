@@ -1,4 +1,4 @@
-package server.queue;
+package common;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

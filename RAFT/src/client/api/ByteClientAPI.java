@@ -1,4 +1,4 @@
-package server.queue;
+package client.api;
 
 public interface ByteClientAPI {
 	
