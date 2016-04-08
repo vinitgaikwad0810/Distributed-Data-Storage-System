@@ -117,7 +117,7 @@ public class LeaderService extends Service implements Runnable {
 
 			if (ei.isActive() && ei.getChannel() != null
 					&& ei.getRef() == wm.getHeartBeatPacket().getHeartbeat().getLeaderId()) {
-					if(wm.getHeartBeatPacket().getHeartbeat().getTerm()>NodeState.currentTerm) {
+					if(wm.getHeartBeatPacket().getHeartbeat().getTerm()>=NodeState.currentTerm) {
 						NodeState.getInstance().setState(NodeState.FOLLOWER);
 					}
 //				Logger.DEBUG("Sent HeartBeatResponse to " + ei.getRef());
