@@ -12,7 +12,7 @@ INBOUND_QUEUE = "inbound_queue"
 GET_QUEUE = "get_queue"
 
 class QueueRpcClient(object):
-    def __init__(self):
+	def __init__(self):
 		self.connection = pika.BlockingConnection(pika.ConnectionParameters(
                 host='localhost'))
 
@@ -28,33 +28,27 @@ class QueueRpcClient(object):
 		if self.corr_id == props.correlation_id:
 			self.response = body
 
-	def get	(self,key):
-	"This is GET API"
+	def get(self,key):
 		self.response = None
-        self.corr_id = str(uuid.uuid4())
-        self.channel.basic_publish(exchange='',
-                                   routing_key=GET_QUEUE',
-                                   properties=pika.BasicProperties(
+		self.corr_id = str(uuid.uuid4())
+		self.channel.basic_publish(exchange='',
+                                   routing_key=GET_QUEUE,properties=pika.BasicProperties( 
                                    		 type = GET,
                                          reply_to = self.callback_queue,
                                          correlation_id = self.corr_id,
-
                                          ),
                                    body=str(key))
-        while self.response is None:
-            self.connection.process_data_events()
+		while self.response is None:
+			self.connection.process_data_events()
 
-        return str(self.response)
+		return str(self.response)
 
 
-
-	return arr
 
 	def post(imageByteArray):
-	"This is POST API"
 		self.response = None
-        self.corr_id = str(uuid.uuid4())
-        self.channel.basic_publish(exchange='',
+		self.corr_id = str(uuid.uuid4())
+		self.channel.basic_publish(exchange='',
                                    routing_key=INBOUND_QUEUE,
                                    properties=pika.BasicProperties(
                                    		 type = POST,
@@ -63,16 +57,13 @@ class QueueRpcClient(object):
 
                                          ),
                                    body=imageByteArray)
-          while self.response is None:
-            self.connection.process_data_events()
+		while self.response is None:
+			self.connection.process_data_events()
 
-        return str(self.response)
+		return str(self.response)
 		
 
-		return  
-
 	def delete(key):
-	"This is DELETE API"
 		self.channel.basic_publish(exchange='',
                                    routing_key=INBOUND_QUEUE,
                                    properties=pika.BasicProperties(
@@ -82,7 +73,6 @@ class QueueRpcClient(object):
 
 
 	def put(key, imageByteArray):
-	"This is PUT API"
 		self.channel.basic_publish(exchange='',
                                    routing_key=INBOUND_QUEUE,
                                    properties=pika.BasicProperties(
@@ -96,8 +86,14 @@ class QueueRpcClient(object):
 
 
 if __name__ == "__main__":
-	arr =get(key="12")
-	for v in arr: print(v)
-	print(QUEUE_URL)
+	#arr =get(key="12")
+	with open("snap3.jpg", "rb") as imageFile:
+		f = imageFile.read()
+  		imageByteArray = bytearray(f)
 
-	printme("Vinit")
+  	queueRpcClient = QueueRpcClient()
+
+  	print queueRpcClient.post(imageByteArray);
+
+
+	print b
