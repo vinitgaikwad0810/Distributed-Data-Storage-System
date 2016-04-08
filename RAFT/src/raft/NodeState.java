@@ -13,7 +13,7 @@ public class NodeState {
 
 	private static int state = 2;
 	
-	static int currentTerm = 0;
+	public static int currentTerm = 0;
 
 	private static long timeStampOnLatestUpdate = 0;
 	

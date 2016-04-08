@@ -65,7 +65,7 @@ public class ServiceUtils {
 	public static WorkMessage prepareHeartBeatResponse() {
 		WorkMessage.Builder work = WorkMessage.newBuilder();
 		work.setUnixTimeStamp(ServerUtils.getCurrentUnixTimeStamp());
-		
+
 		HeartBeatResponse.Builder heartbeatResponse = HeartBeatResponse.newBuilder();
 		heartbeatResponse.setNodeId(NodeState.getInstance().getServerState().getConf().getNodeId());
 		heartbeatResponse.setTerm(NodeState.currentTerm);
