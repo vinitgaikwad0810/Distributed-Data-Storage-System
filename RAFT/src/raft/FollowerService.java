@@ -70,7 +70,6 @@ public class FollowerService extends Service implements Runnable {
 	@Override
 	public WorkMessage handleRequestVoteRPC(WorkMessage workMessage) {
 
-		// TODO
 		if (workMessage.getVoteRPCPacket().getRequestVoteRPC().getTimeStampOnLatestUpdate() < NodeState.getTimeStampOnLatestUpdate()) {
 			Logger.DEBUG(NodeState.getInstance().getServerState().getConf().getNodeId() + " has replied NO");
 			return ServiceUtils.prepareResponseVoteRPC(ResponseVoteRPC.IsVoteGranted.NO);
@@ -110,7 +109,6 @@ public class FollowerService extends Service implements Runnable {
 		RequestType type = wm.getAppendEntriesPacket().getAppendEntries().getRequestType();
 		
 		if (type == RequestType.GET) {
-			//TODO 
 			DatabaseService.getInstance().getDb().get(key);
 		} else if (type == RequestType.POST) {
 			NodeState.setTimeStampOnLatestUpdate(unixTimeStamp);

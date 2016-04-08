@@ -39,7 +39,6 @@ public class PostgreSQL implements DatabaseClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		return image;		
 	}
@@ -59,7 +58,6 @@ public class PostgreSQL implements DatabaseClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		return list;		
 	}
@@ -80,7 +78,6 @@ public class PostgreSQL implements DatabaseClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		return list;		
 	}
@@ -101,7 +98,6 @@ public class PostgreSQL implements DatabaseClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO connection handling
 		}
 		return timestamp;		
 	}
@@ -119,7 +115,6 @@ public class PostgreSQL implements DatabaseClient {
 			ResultSet set = ps.executeQuery();
 			
 		} catch (SQLException e) {
-			//TODO handle exception if no result
 		} finally {
 			try {
 				if (ps != null)
@@ -144,7 +139,6 @@ public class PostgreSQL implements DatabaseClient {
 			ResultSet set = ps.executeQuery();
 			
 		} catch (SQLException e) {
-			//TODO handle exception if no result
 		} finally {
 			try {
 				if (ps != null)
@@ -166,7 +160,6 @@ public class PostgreSQL implements DatabaseClient {
 			ResultSet set = ps.executeQuery();
 			
 		} catch (SQLException e) {
-			//TODO handle exception if no result
 		} finally {
 			try {
 				if (ps != null)
@@ -199,7 +192,6 @@ public class PostgreSQL implements DatabaseClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// TODO close connection, decide if need to keep open all time or
 			// initiate new everytime
 		}
 	}

@@ -30,7 +30,7 @@ import raft.proto.Work.WorkMessage;
 /**
  * The message handler processes json messages that are delimited by a 'newline'
  * 
- * TODO replace println with logging!
+ * 
  * 
  * @author gash
  * 
@@ -53,7 +53,6 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 	 */
 	public void handleMessage(WorkMessage msg, Channel channel) {
 		if (msg == null) {
-			// TODO add logging
 			System.out.println("ERROR: Unexpected content - " + msg);
 			return;
 		}
@@ -61,7 +60,6 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 		// if (debug)
 		PrintUtil.printWork(msg);
 
-		// TODO How can you implement this without if-else statements?
 		try {
 			if (msg.hasTrivialPing()) {
 				Logger.DEBUG(" The node: " + msg.getTrivialPing().getNodeId() + " Is Active to this IP: "

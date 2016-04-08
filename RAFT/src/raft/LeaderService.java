@@ -34,7 +34,7 @@ public class LeaderService extends Service implements Runnable {
 	@Override
 	public void run() {
 		Logger.DEBUG("-----------------------LEADER SERVICE STARTED ----------------------------");
-		NodeState.currentTerm++;
+//		NodeState.currentTerm++;
 		initLatestTimeStampOnUpdate();
 		heartBt = new Thread(){
 		    public void run(){
@@ -45,8 +45,6 @@ public class LeaderService extends Service implements Runnable {
 						e.printStackTrace();
 					}
 					sendHeartBeat();
-					// TODO Append Messages are to be sent only when master receives
-					// update message from queue
 				}
 		    }
 		 };
@@ -91,7 +89,6 @@ public class LeaderService extends Service implements Runnable {
 				if (ei.isActive() && ei.getChannel() != null
 						&& ei.getRef() == wm.getHeartBeatPacket().getHeartBeatResponse().getNodeId()) {
 
-					//TODO decide it will be post or put
 					for (Record record : laterEntries) {
 						WorkMessage workMessage = ServiceUtils.prepareAppendEntriesPacket(record.getKey(),
 								record.getImage(), record.getTimestamp(), RequestType.POST);
