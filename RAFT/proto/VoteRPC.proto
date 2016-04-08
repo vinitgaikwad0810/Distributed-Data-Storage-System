@@ -11,6 +11,7 @@ import "AppendEntriesRPC.proto";
 //--------------------------------------------------------------------------------------
 
 
+
 message RequestVoteRPC{
 
 required int32 term = 1;
@@ -18,6 +19,7 @@ required string candidateId = 2;
 required int64 timeStampOnLatestUpdate = 3;
 
 }
+
 
 //									//ResponseVote//
 //-------------------------------------------------------------------------------------
@@ -42,10 +44,11 @@ enum IsVoteGranted{
 
 }
 
+
 //									//VoteRpcPacket//
 //-------------------------------------------------------------------------------------
 
-/*  Either the RequestVote or ResponseVote is created and sent through this message
+/*  Either of the RequestVote or ResponseVote is created and sent through this message
 */				
 
 //--------------------------------------------------------------------------------------

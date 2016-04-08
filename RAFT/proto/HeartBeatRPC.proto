@@ -26,8 +26,7 @@ message HeartBeatResponse{
 	required int32 term = 1;
 	required int32 nodeId = 2;
 	required int64 timeStampOnLatestUpdate = 3;
-	
-	
+		
 	enum IsAlive{
 	
 	YES = 1;
@@ -35,6 +34,7 @@ message HeartBeatResponse{
 	
 	}
 }
+
 
 //									//HeartBeatPacket//
 //-------------------------------------------------------------------------------------

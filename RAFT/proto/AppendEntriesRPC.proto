@@ -6,10 +6,12 @@ option optimize_for = SPEED;
 
 //--------------------------------------------------------------------------------------
 
+
 message ImageMsg{
 	required string key = 1;
 	required bytes imageData = 2;
 }
+
 
 
 //									//AppendEntries//
@@ -59,7 +61,8 @@ message AppendEntriesResponse{
 
 //									//AppendEntriesPacket//
 //-------------------------------------------------------------------------------------
-/*					
+/*	 Either of the AppendEntries or AppendEntries Response is created 
+	 and sent through this message
 */				
 //--------------------------------------------------------------------------------------
 
