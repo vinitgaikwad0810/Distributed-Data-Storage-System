@@ -15,8 +15,6 @@
  */
 package server;
 
-import java.util.Date;
-
 //import java.util.logging.Logger;
 
 //import org.slf4j.Logger;
@@ -26,10 +24,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import logger.Logger;
-import raft.FollowerService;
 import raft.NodeState;
-import raft.proto.HeartBeatRPC.HeartBeatPacket;
-import raft.proto.HeartBeatRPC.HeartBeatResponse;
 import raft.proto.Work.WorkMessage;
 
 /**
@@ -71,6 +66,7 @@ public class WorkHandler extends SimpleChannelInboundHandler<WorkMessage> {
 			if (msg.hasTrivialPing()) {
 				Logger.DEBUG(" The node: " + msg.getTrivialPing().getNodeId() + " Is Active to this IP: "
 						+ msg.getTrivialPing().getIP());
+				Logger.DEBUG("Currrent Term " + NodeState.currentTerm);
 				NodeState.getInstance().getServerState().getEmon().getOutboundEdges()
 						.getNode(msg.getTrivialPing().getNodeId()).setChannel(channel);
 
