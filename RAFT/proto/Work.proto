@@ -3,6 +3,7 @@ import "HeartBeatRPC.proto";
 import "VoteRPC.proto";
 import "Ping.proto";	
 
+
 //									//WorkMessage//
 //-------------------------------------------------------------------------------------
 

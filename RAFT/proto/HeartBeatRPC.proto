@@ -1,4 +1,5 @@
 import "AppendEntriesRPC.proto";
+
 //									//HeartBeat//
 //-------------------------------------------------------------------------------------
 
@@ -12,6 +13,7 @@ message HeartBeat{
 	required int32 leaderId = 2;
 	required int64 timeStampOnLatestUpdate = 3;
 }
+
 
 //									//HeartBeatResponse//
 //-------------------------------------------------------------------------------------
