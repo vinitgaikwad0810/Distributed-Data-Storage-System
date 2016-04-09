@@ -1,3 +1,4 @@
+option java_package = "raft.proto";
 import "AppendEntriesRPC.proto";
 import "HeartBeatRPC.proto";
 import "VoteRPC.proto";

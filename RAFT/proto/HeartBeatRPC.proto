@@ -1,4 +1,4 @@
-import "AppendEntriesRPC.proto";
+option java_package = "raft.proto";
 
 //									//HeartBeat//
 //-------------------------------------------------------------------------------------

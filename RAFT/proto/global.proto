@@ -1,5 +1,5 @@
 option optimize_for = SPEED;
-
+option java_package = "adapter.server.proto";
 
 import "common.proto";
 import "storage.proto";

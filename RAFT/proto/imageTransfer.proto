@@ -1,3 +1,5 @@
+option java_package = "raft.proto";
+
 //									//ImageMsg//
 //-------------------------------------------------------------------------------------
 /* 							Image is stored in bytes
