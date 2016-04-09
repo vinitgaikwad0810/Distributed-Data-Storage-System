@@ -106,7 +106,7 @@ public class MessageServer {
 		}
 		
 		//LEADER ELECTION
-//		NodeState.getInstance().setState(NodeState.FOLLOWER);						
+		NodeState.getInstance().setState(NodeState.FOLLOWER);						
 	}
 
 	private boolean verifyConf(RoutingConf conf) {
