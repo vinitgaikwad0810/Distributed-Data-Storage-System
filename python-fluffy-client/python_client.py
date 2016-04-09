@@ -1,7 +1,10 @@
-import QueueConsumer
-import QueuePublisher
 import pika
 import uuid
+import sys
+import Image
+import os
+import io
+from array import array
 
 QUEUE_URL="amqp://jagruti:jagruti@192.168.1.111:5672"
 GET = "get"
@@ -13,8 +16,7 @@ GET_QUEUE = "get_queue"
 
 class QueueRpcClient(object):
 	def __init__(self):
-		self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-                host='localhost'))
+		self.connection = pika.BlockingConnection(pika.URLParameters(QUEUE_URL))
 
 		self.channel = self.connection.channel()
 
@@ -45,7 +47,7 @@ class QueueRpcClient(object):
 
 
 
-	def post(imageByteArray):
+	def post(self,imageByteArray):
 		self.response = None
 		self.corr_id = str(uuid.uuid4())
 		self.channel.basic_publish(exchange='',
@@ -56,11 +58,11 @@ class QueueRpcClient(object):
                                          correlation_id = self.corr_id,
 
                                          ),
-                                   body=imageByteArray)
+                                   body=str(imageByteArray))
 		while self.response is None:
 			self.connection.process_data_events()
 
-		return str(self.response)
+		return self.response
 		
 
 	def delete(key):
@@ -87,13 +89,52 @@ class QueueRpcClient(object):
 
 if __name__ == "__main__":
 	#arr =get(key="12")
-	with open("snap3.jpg", "rb") as imageFile:
-		f = imageFile.read()
-  		imageByteArray = bytearray(f)
+	print """
+	------------------------------------------------------------------------------------------------------	
+		Sample Commands to Python Client API
+			
+			***GET API***python python_client.py get 232dd-fdfs-fdfsf /home/vinit/picked_image.jpeg
+			***POST API***python python_client.py post /home/vinit/toBePosted.jpeg
+			***PUT API***python python_client.py put 232dd-fdfs-fdfsf /home/vinit/toBeUpdatedImage.jpeg
+			***DELETE API***python python_client.py delete 232dd-fdfs-fdfsf
+	-------------------------------------------------------------------------------------------------------
 
-  	queueRpcClient = QueueRpcClient()
+	"""
 
-  	print queueRpcClient.post(imageByteArray);
+	queueRpcClient = QueueRpcClient()
+	if(sys.argv[1]=="get"):
+		key=sys.argv[2]
+		savepath =sys.argv[3]
+		print "Getting an image from Project Fluffy with key = "+key
+		print "Image will be saved at this path =" +savepath
+		response=queueRpcClient.get(key)
+		image=Image.open(io.BytesIO(response))
+		image.save(sys.argv[3])
+		
+	elif(sys.argv[1]=="post"):
+		imagePath=sys.argv[2]
+		print "Posting an image having path as = "+imagePath
+		with open(imagePath, "rb") as imageFile:
+			f = imageFile.read()
+			imageByteArray = bytearray(f)
+		key = queueRpcClient.post(imageByteArray)
+		print "Image is posted and can be retrieved with key ="+key
+	elif(sys.argv[1]=="put"):
+		key=sys.argv[2]
+		imagePath=sys.argv[3]
+		print "Updating an image with key = " + key +" with a different image located at = " + imagePath
+		with open(imagePath, "rb") as imageFile:
+			f = imageFile.read()
+			imageByteArray = bytearray(f)
+		queueRpcClient.put(key,imageByteArray)
 
+	elif(sys.argv[1]=="delete"):
+		key=sys.argv[2]
+		print "Deleting an image from Project Fluffy with key = "+key
+		queueRpcClient.delete(key)
 
-	print b
+	print """
+
+	Exiting the client .....
+
+	"""
