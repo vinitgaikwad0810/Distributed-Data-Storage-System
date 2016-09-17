@@ -14,7 +14,6 @@ Project Requirements for the course:
 
 Project Fluffy
 
-Project Fluffy
 
 Storing data in the cloud or on a network of servers share a common challenge -
 how to securely share, store, and survive failures and corruption of data. There are
